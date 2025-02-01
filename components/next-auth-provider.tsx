@@ -8,5 +8,7 @@ export default function NextAuthProvider({
 }: {
   children: ReactNode;
 }) {
+  console.log("[Debug] NextAuthProvider initializing");
+
   return <SessionProvider>{children}</SessionProvider>;
 }

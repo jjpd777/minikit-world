@@ -15,6 +15,8 @@ const authOptions: NextAuthOptions = {
       idToken: true,
       checks: ["state", "nonce", "pkce"],
       profile(profile) {
+        console.log("[Debug] Profile data:", profile);
+
         return {
           id: profile.sub,
           name: profile.sub,
