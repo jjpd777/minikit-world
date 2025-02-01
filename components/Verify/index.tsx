@@ -15,7 +15,7 @@ export type VerifyCommandInput = {
 };
 
 const verifyPayload: VerifyCommandInput = {
-  action: "test-action", // This is your action ID from the Developer Portal
+  action: process.env.NEXT_PUBLIC_ACTION_NAME!, // Your action name from Developer Portal
   signal: "",
   verification_level: VerificationLevel.Orb, // Orb | Device
 };
