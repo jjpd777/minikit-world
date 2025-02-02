@@ -1,3 +1,4 @@
+
 "use client";
 import { IDKitWidget } from "@worldcoin/idkit";
 import { useState } from "react";
@@ -7,6 +8,9 @@ export const VerifyBlock = () => {
 
   const handleVerify = async (proof: any) => {
     try {
+      console.log('Starting verification with proof:', proof);
+      console.log('Action name:', process.env.NEXT_PUBLIC_ACTION_NAME);
+
       const response = await fetch('/api/verify', {
         method: 'POST',
         headers: {
@@ -15,15 +19,22 @@ export const VerifyBlock = () => {
         body: JSON.stringify({
           proof,
           action: process.env.NEXT_PUBLIC_ACTION_NAME,
-          signal: "",
+          signal: undefined
         }),
       });
 
       const data = await response.json();
-      setResult(data.success ? "Verification successful!" : "Verification failed");
+      console.log('Verification response:', data);
+
+      if (data.verifyRes?.success) {
+        setResult("Verification successful!");
+        window.location.href = '/'; // Redirect to home page after success
+      } else {
+        setResult(`Verification failed: ${data.verifyRes?.error || 'Unknown error'}`);
+      }
     } catch (error) {
-      console.error(error);
-      setResult("Verification failed");
+      console.error('Verification error:', error);
+      setResult(`Verification failed: ${error.message}`);
     }
   };
 
@@ -36,7 +47,7 @@ export const VerifyBlock = () => {
         action={process.env.NEXT_PUBLIC_ACTION_NAME as string}
         onSuccess={handleVerify}
         handleVerify={handleVerify}
-        verification_level="orb"
+        verification_level="device"
       >
         {({ open }) => (
           <button

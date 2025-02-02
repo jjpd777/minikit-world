@@ -14,14 +14,18 @@ interface IRequestPayload {
 export async function POST(req: NextRequest) {
   const { payload, action, signal } = (await req.json()) as IRequestPayload;
   const app_id = process.env.APP_ID as `app_${string}`;
+  console.log('Verify endpoint - Received payload:', payload);
+  console.log('Verify endpoint - App ID:', app_id);
+  console.log('Verify endpoint - Action:', action);
+  
   const verifyRes = (await verifyCloudProof(
     payload,
     app_id,
     action,
     signal
-  )) as IVerifyResponse; // Wrapper on this
+  )) as IVerifyResponse;
   
-  console.log(verifyRes);
+  console.log('Verify endpoint - Verification response:', verifyRes);
 
   if (verifyRes.success) {
     // This is where you should perform backend actions if the verification succeeds
