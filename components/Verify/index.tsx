@@ -1,8 +1,7 @@
-"use client";
-import { IDKitWidget, ISuccessResult } from "@worldcoin/idkit";
-import { useState } from "react";
 
-type CredentialType = "orb" | "phone";
+"use client";
+import { IDKitWidget } from "@worldcoin/idkit";
+import { useState } from "react";
 
 export const VerifyBlock = () => {
   const [result, setResult] = useState<string>("");
@@ -12,32 +11,25 @@ export const VerifyBlock = () => {
       console.log('Starting verification with proof:', proof);
       console.log('Action name:', process.env.NEXT_PUBLIC_ACTION_NAME);
 
-      const payload = {
-        payload: proof,
-        action: process.env.NEXT_PUBLIC_ACTION_NAME,
-        signal: undefined
-      };
-
-      console.log('Sending payload:', payload);
-
       const response = await fetch('/api/verify', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(payload),
+        body: JSON.stringify({
+          proof,
+          action: process.env.NEXT_PUBLIC_ACTION_NAME,
+          signal: undefined
+        }),
       });
 
-      console.log('Raw response:', response);
       const data = await response.json();
-      console.log('Parsed verification response:', data);
-      console.log('Verification success status:', data.verifyRes?.success);
+      console.log('Verification response:', data);
 
       if (data.verifyRes?.success) {
-        console.log('Verification successful');
         setResult("Verification successful!");
+        window.location.href = '/'; // Redirect to home page after success
       } else {
-        console.log('Verification failed:', data.verifyRes?.error);
         setResult(`Verification failed: ${data.verifyRes?.error || 'Unknown error'}`);
       }
     } catch (error) {
@@ -56,7 +48,6 @@ export const VerifyBlock = () => {
         onSuccess={handleVerify}
         handleVerify={handleVerify}
         verification_level="device"
-        credential_types={["orb", "phone"] as CredentialType[]}
       >
         {({ open }) => (
           <button
