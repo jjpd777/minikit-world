@@ -1,7 +1,7 @@
 import NextAuth, { NextAuthOptions } from "next-auth";
 
 const authOptions: NextAuthOptions = {
-  secret: process.env.NEXTAUTH_SECRET,
+  secret: process.env.NEXTAUTH_SECRET || "your-development-secret-here",
 
   providers: [
     {
@@ -27,8 +27,18 @@ const authOptions: NextAuthOptions = {
     },
   ],
   callbacks: {
-    async signIn({ user }) {
+    async signIn({ user, account, profile, email, credentials }) {
+      console.log("[Debug] Sign in attempt:", { user, account, profile });
       return true;
+    },
+    async redirect({ url, baseUrl }) {
+      console.log("[Debug] Redirect:", { url, baseUrl });
+      return url;
+    },
+  },
+  events: {
+    async error(error) {
+      console.error("[Auth Error]", error);
     },
   },
   debug: process.env.NODE_ENV === "development",
