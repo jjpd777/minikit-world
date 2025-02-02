@@ -1,7 +1,7 @@
 import NextAuth, { NextAuthOptions } from "next-auth";
 
 const authOptions: NextAuthOptions = {
-  secret: process.env.NEXTAUTH_SECRET,
+  secret: process.env.NEXTAUTH_SECRET || "your-development-secret-here",
 
   providers: [
     {
@@ -9,11 +9,23 @@ const authOptions: NextAuthOptions = {
       name: "Worldcoin",
       type: "oauth",
       wellKnown: "https://id.worldcoin.org/.well-known/openid-configuration",
-      authorization: { params: { scope: "openid" } },
+      authorization: { 
+        params: { 
+          scope: "openid",
+          response_type: "code",
+        }
+      },
       clientId: process.env.WLD_CLIENT_ID,
       clientSecret: process.env.WLD_CLIENT_SECRET,
       idToken: true,
-      checks: ["state", "nonce", "pkce"],
+      profile(profile) {
+        console.log("[Debug] Raw profile:", profile);
+        return {
+          id: profile.sub,
+          name: profile.sub,
+        };
+      },
+      checks: ["pkce", "state"],
       profile(profile) {
         console.log("[Debug] Profile data:", profile);
 
@@ -27,8 +39,18 @@ const authOptions: NextAuthOptions = {
     },
   ],
   callbacks: {
-    async signIn({ user }) {
+    async signIn({ user, account, profile, email, credentials }) {
+      console.log("[Debug] Sign in attempt:", { user, account, profile });
       return true;
+    },
+    async redirect({ url, baseUrl }) {
+      console.log("[Debug] Redirect:", { url, baseUrl });
+      return url;
+    },
+  },
+  events: {
+    async error(error) {
+      console.error("[Auth Error]", error);
     },
   },
   debug: process.env.NODE_ENV === "development",

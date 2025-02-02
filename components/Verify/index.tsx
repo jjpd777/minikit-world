@@ -1,79 +1,60 @@
 "use client";
-import {
-  MiniKit,
-  VerificationLevel,
-  ISuccessResult,
-  MiniAppVerifyActionErrorPayload,
-  IVerifyResponse,
-} from "@worldcoin/minikit-js";
-import { useCallback, useState } from "react";
-
-export type VerifyCommandInput = {
-  action: string;
-  signal?: string;
-  verification_level?: VerificationLevel; // Default: Orb
-};
-
-const verifyPayload: VerifyCommandInput = {
-  action: process.env.NEXT_PUBLIC_ACTION_NAME!, // Your action name from Developer Portal
-  signal: "",
-  verification_level: VerificationLevel.Orb, // Orb | Device
-};
+import { IDKitWidget } from "@worldcoin/idkit";
+import { useState } from "react";
 
 export const VerifyBlock = () => {
-  const [handleVerifyResponse, setHandleVerifyResponse] = useState<
-    MiniAppVerifyActionErrorPayload | IVerifyResponse | null
-  >(null);
+  const [result, setResult] = useState<string>("");
 
-  const handleVerify = useCallback(async () => {
-    if (!MiniKit.isInstalled()) {
-      console.warn("Tried to invoke 'verify', but MiniKit is not installed.");
-      return null;
+  const handleVerify = async (proof: any) => {
+    try {
+      const response = await fetch('/api/verify', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          proof,
+          action: process.env.NEXT_PUBLIC_ACTION_NAME,
+          signal: "",
+        }),
+      });
+
+      const data = await response.json();
+      setResult(data.success ? "Verification successful!" : "Verification failed");
+    } catch (error) {
+      console.error(error);
+      setResult("Verification failed");
     }
-
-    const { finalPayload } = await MiniKit.commandsAsync.verify(verifyPayload);
-
-    // no need to verify if command errored
-    if (finalPayload.status === "error") {
-      console.log("Command error");
-      console.log(finalPayload);
-
-      setHandleVerifyResponse(finalPayload);
-      return finalPayload;
-    }
-
-    // Verify the proof in the backend
-    const verifyResponse = await fetch(`/api/verify`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        payload: finalPayload as ISuccessResult, // Parses only the fields we need to verify
-        action: verifyPayload.action,
-        signal: verifyPayload.signal, // Optional
-      }),
-    });
-
-    // TODO: Handle Success!
-    const verifyResponseJson = await verifyResponse.json();
-
-    if (verifyResponseJson.status === 200) {
-      console.log("Verification success!");
-      console.log(finalPayload);
-    }
-
-    setHandleVerifyResponse(verifyResponseJson);
-    return verifyResponseJson;
-  }, []);
+  };
 
   return (
-    <div>
-      <h1>Verify Block</h1>
-      <button className="bg-green-500 p-4" onClick={handleVerify}>
-        Test Verify
-      </button>
-      <span>{JSON.stringify(handleVerifyResponse, null, 2)}</span>
+    <div className="flex flex-col items-center gap-4 p-4 border rounded-lg bg-white shadow-sm">
+      <h2 className="text-xl font-semibold">World ID Verification</h2>
+
+      <IDKitWidget
+        app_id={process.env.NEXT_PUBLIC_APP_ID as `app_${string}`}
+        action={process.env.NEXT_PUBLIC_ACTION_NAME as string}
+        onSuccess={handleVerify}
+        handleVerify={handleVerify}
+        verification_level="orb"
+      >
+        {({ open }) => (
+          <button
+            onClick={open}
+            className="px-6 py-3 rounded-lg font-medium bg-blue-500 hover:bg-blue-600 text-white"
+          >
+            Verify with World ID
+          </button>
+        )}
+      </IDKitWidget>
+
+      {result && (
+        <div className={`text-sm mt-2 text-center ${
+          result.includes("successful") ? "text-green-500" : "text-red-500"
+        }`}>
+          {result}
+        </div>
+      )}
     </div>
   );
 };
