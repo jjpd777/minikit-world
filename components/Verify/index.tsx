@@ -36,7 +36,7 @@ export const VerifyBlock = () => {
         action={process.env.NEXT_PUBLIC_ACTION_NAME as string}
         onSuccess={handleVerify}
         handleVerify={handleVerify}
-        verification_level="orb"
+        verification_level="device"
       >
         {({ open }) => (
           <button
