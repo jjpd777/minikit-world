@@ -14,7 +14,9 @@ export const SignIn = () => {
     return (
       <>
         Not signed in <br />
-        <button onClick={() => signIn("worldcoin", { callbackUrl: window.location.origin })}>
+        <button onClick={() => signIn("worldcoin", { 
+          callbackUrl: `${window.location.origin}/dashboard` 
+        })}>
           Sign in with Worldcoin
         </button>
       </>
