@@ -7,12 +7,16 @@ export const VerifyBlock = () => {
 
   const handleVerify = async (proof: any) => {
     try {
-      console.log('Sending proof:', proof);
+      console.log('Starting verification with proof:', proof);
+      console.log('Action name:', process.env.NEXT_PUBLIC_ACTION_NAME);
+      
       const payload = {
         payload: proof,
         action: process.env.NEXT_PUBLIC_ACTION_NAME,
         signal: undefined
       };
+      
+      console.log('Sending payload:', payload);
       
       const response = await fetch('/api/verify', {
         method: 'POST',
@@ -22,12 +26,21 @@ export const VerifyBlock = () => {
         body: JSON.stringify(payload),
       });
 
+      console.log('Raw response:', response);
       const data = await response.json();
-      console.log('Verification response:', data);
-      setResult(data.verifyRes?.success ? "Verification successful!" : "Verification failed");
+      console.log('Parsed verification response:', data);
+      console.log('Verification success status:', data.verifyRes?.success);
+      
+      if (data.verifyRes?.success) {
+        console.log('Verification successful');
+        setResult("Verification successful!");
+      } else {
+        console.log('Verification failed:', data.verifyRes?.error);
+        setResult(`Verification failed: ${data.verifyRes?.error || 'Unknown error'}`);
+      }
     } catch (error) {
       console.error('Verification error:', error);
-      setResult("Verification failed");
+      setResult(`Verification failed: ${error.message}`);
     }
   };
 
