@@ -1,6 +1,8 @@
 "use client";
-import { IDKitWidget, CredentialType } from "@worldcoin/idkit"; // Added CredentialType import
+import { IDKitWidget, ISuccessResult } from "@worldcoin/idkit";
 import { useState } from "react";
+
+type CredentialType = "orb" | "phone";
 
 export const VerifyBlock = () => {
   const [result, setResult] = useState<string>("");
@@ -54,7 +56,7 @@ export const VerifyBlock = () => {
         onSuccess={handleVerify}
         handleVerify={handleVerify}
         verification_level="device"
-        credential_types={[CredentialType.Orb, CredentialType.Phone]} // Added credential_types prop
+        credential_types={["orb", "phone"] as CredentialType[]}
       >
         {({ open }) => (
           <button
