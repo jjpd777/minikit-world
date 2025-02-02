@@ -11,11 +11,18 @@ export const SignIn = () => {
 
   if (session) {
     return (
-      <div className="flex flex-col items-center gap-2">
-        <div>Signed in as {session.user?.name}</div>
+      <div className="flex flex-col items-center gap-4 p-6 bg-gray-800 rounded-lg">
+        <h2 className="text-xl font-bold">User Information</h2>
+        <div className="space-y-2 text-center">
+          <p>Name: {session.user?.name}</p>
+          {session.user?.verificationLevel && (
+            <p>Verification Level: {session.user.verificationLevel}</p>
+          )}
+          <p>ID: {session.user?.id}</p>
+        </div>
         <button 
           onClick={() => signOut()}
-          className="px-4 py-2 bg-red-500 text-white rounded"
+          className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
         >
           Sign out
         </button>
@@ -26,7 +33,7 @@ export const SignIn = () => {
   return (
     <button
       onClick={() => signIn("worldcoin")}
-      className="px-4 py-2 bg-blue-500 text-white rounded"
+      className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
     >
       Sign in with World ID
     </button>
