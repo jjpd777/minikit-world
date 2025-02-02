@@ -33,10 +33,15 @@ export const VerifyBlock = () => {
 
     try {
       if (!MiniKit.isInstalled()) {
-        throw new Error("MiniKit is not installed. Please try again.");
+        setError("Please open this app in World App to verify");
+        return;
       }
 
-      const { finalPayload } = await MiniKit.commandsAsync.verify(verifyPayload);
+      console.log("Initiating verification with payload:", verifyPayload);
+      const response = await MiniKit.commandsAsync.verify(verifyPayload);
+      console.log("Verification response:", response);
+      
+      const { finalPayload } = response;
 
       if (finalPayload.status === "error") {
         console.error("Verification command error:", finalPayload);
