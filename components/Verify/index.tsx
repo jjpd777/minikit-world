@@ -1,5 +1,5 @@
 "use client";
-import { IDKitWidget } from "@worldcoin/idkit";
+import { IDKitWidget, CredentialType } from "@worldcoin/idkit"; // Added CredentialType import
 import { useState } from "react";
 
 export const VerifyBlock = () => {
@@ -9,15 +9,15 @@ export const VerifyBlock = () => {
     try {
       console.log('Starting verification with proof:', proof);
       console.log('Action name:', process.env.NEXT_PUBLIC_ACTION_NAME);
-      
+
       const payload = {
         payload: proof,
         action: process.env.NEXT_PUBLIC_ACTION_NAME,
         signal: undefined
       };
-      
+
       console.log('Sending payload:', payload);
-      
+
       const response = await fetch('/api/verify', {
         method: 'POST',
         headers: {
@@ -30,7 +30,7 @@ export const VerifyBlock = () => {
       const data = await response.json();
       console.log('Parsed verification response:', data);
       console.log('Verification success status:', data.verifyRes?.success);
-      
+
       if (data.verifyRes?.success) {
         console.log('Verification successful');
         setResult("Verification successful!");
@@ -54,6 +54,7 @@ export const VerifyBlock = () => {
         onSuccess={handleVerify}
         handleVerify={handleVerify}
         verification_level="device"
+        credential_types={[CredentialType.Orb, CredentialType.Phone]} // Added credential_types prop
       >
         {({ open }) => (
           <button
