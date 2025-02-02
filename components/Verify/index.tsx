@@ -7,22 +7,26 @@ export const VerifyBlock = () => {
 
   const handleVerify = async (proof: any) => {
     try {
+      console.log('Sending proof:', proof);
+      const payload = {
+        payload: proof,
+        action: process.env.NEXT_PUBLIC_ACTION_NAME,
+        signal: undefined
+      };
+      
       const response = await fetch('/api/verify', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          proof,
-          action: process.env.NEXT_PUBLIC_ACTION_NAME,
-          signal: "",
-        }),
+        body: JSON.stringify(payload),
       });
 
       const data = await response.json();
-      setResult(data.success ? "Verification successful!" : "Verification failed");
+      console.log('Verification response:', data);
+      setResult(data.verifyRes?.success ? "Verification successful!" : "Verification failed");
     } catch (error) {
-      console.error(error);
+      console.error('Verification error:', error);
       setResult("Verification failed");
     }
   };
