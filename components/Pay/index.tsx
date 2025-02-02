@@ -1,8 +1,11 @@
+
 "use client";
 import { MiniKit, tokenToDecimals, Tokens } from "@worldcoin/minikit-js";
 import { useState } from "react";
+import { useSession } from "next-auth/react";
 
 export const PayBlock = () => {
+  const { data: session } = useSession();
   const [amount, setAmount] = useState("0.1");
   const [address, setAddress] = useState("");
 
@@ -25,12 +28,18 @@ export const PayBlock = () => {
       const result = await MiniKit.commandsAsync.pay(payload);
       if (result?.finalPayload?.status === "success") {
         alert("Payment sent successfully!");
+        setAddress("");
+        setAmount("0.1");
       }
     } catch (error) {
       console.error("Payment failed:", error);
       alert("Payment failed");
     }
   };
+
+  if (!session) {
+    return null;
+  }
 
   return (
     <div className="flex flex-col gap-4 w-full max-w-md">
@@ -39,14 +48,14 @@ export const PayBlock = () => {
         value={address}
         onChange={(e) => setAddress(e.target.value)}
         placeholder="Enter recipient address"
-        className="p-2 border rounded"
+        className="p-2 border rounded text-black"
       />
       <input
         type="number"
         value={amount}
         onChange={(e) => setAmount(e.target.value)}
         placeholder="Amount in WLD"
-        className="p-2 border rounded"
+        className="p-2 border rounded text-black"
         step="0.1"
       />
       <button
