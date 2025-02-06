@@ -8,6 +8,7 @@ export const SignIn = () => {
   if (status === "loading") {
     return <div>Loading...</div>;
   }
+  console.log("[Debug] SignIn session:", session);
 
   if (session) {
     return (
