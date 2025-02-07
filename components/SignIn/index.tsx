@@ -23,7 +23,7 @@ export const SignIn = () => {
         data: {
           method: "claimReward",
           args: [
-            await MiniKit.address(), // signal (user's address)
+            await MiniKit.getAddressAsync(), // signal (user's address)
             "0", // root
             "0", // nullifierHash
             Array(8).fill("0") // proof
