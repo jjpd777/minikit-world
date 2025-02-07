@@ -13,32 +13,28 @@ export const SignIn = () => {
   const testNetwork = async () => {
     try {
       console.log("Testing connection to Hardhat node...");
-      
-      // Connect to the Hardhat node
       const provider = new ethers.JsonRpcProvider("http://127.0.0.1:8545");
-      const contract = new ethers.Contract(CONTRACT_ADDRESS, contractABI.abi, provider);
       
-      // Read contract state
-      try {
-        // Try a simple read operation first
-        const balance = await provider.getBalance(CONTRACT_ADDRESS);
-        console.log("Contract balance:", ethers.formatEther(balance), "ETH");
-        
-        // Get contract state
-        const contractCode = await provider.getCode(CONTRACT_ADDRESS);
-        if (contractCode === "0x") {
-          console.error("No contract found at address");
-          return;
-        }
-        
-        console.log("Contract found at address:", CONTRACT_ADDRESS);
-        alert("Successfully connected to contract!");
-      } catch (error) {
-        console.error("Contract interaction failed:", error);
-        alert("Failed to interact with contract: " + error.message);
+      // Simple connection test
+      const blockNumber = await provider.getBlockNumber();
+      console.log("Connected to network. Current block:", blockNumber);
+      
+      // Check contract existence
+      const contractCode = await provider.getCode(CONTRACT_ADDRESS);
+      console.log("Contract code length:", contractCode.length);
+      
+      if (contractCode === "0x") {
+        console.log("No contract found at", CONTRACT_ADDRESS);
+        alert("No contract found at the specified address");
+      } else {
+        console.log("Contract found at", CONTRACT_ADDRESS);
+        alert("Successfully verified contract existence!");
       }
-      
-      const contractCode = await MiniKit.commandsAsync.getCode({
+    } catch (error) {
+      console.error("Network test error:", error);
+      alert("Failed to connect to network: " + error.message);
+    }
+  };
         address: "0xe7f1725e7734ce288f8367e1bb143e90bb3f0512"
       });
       
