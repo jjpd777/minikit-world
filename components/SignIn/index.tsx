@@ -12,30 +12,29 @@ export const SignIn = () => {
   const testNetwork = async () => {
     try {
       console.log("Testing connection to Hardhat node...");
-      const userAddress = await MiniKit.getAddressAsync();
-      console.log("User Address:", userAddress);
       
-      // Validate contract interface
-      const claimFunction = contractABI.abi.find(x => x.name === "claimReward");
-      console.log("Claim function found:", claimFunction);
+      // Connect to the Hardhat node
+      const provider = new ethers.JsonRpcProvider("http://127.0.0.1:8545");
+      const contract = new ethers.Contract(CONTRACT_ADDRESS, contractABI.abi, provider);
       
-      // Basic payload structure
-      const payload = {
-        transaction: [{
-          address: CONTRACT_ADDRESS,
-          abi: [claimFunction],
-          functionName: "claimReward",
-          args: [userAddress, "0", "0", Array(8).fill("0")]
-        }]
-      };
-      console.log("Transaction payload:", payload);
-      
-      // Attempt transaction
+      // Read contract state
       try {
-        const result = await MiniKit.commandsAsync.sendTransaction(payload);
-        console.log("Transaction result:", result);
-      } catch (txError) {
-        console.error("Transaction failed:", txError);
+        // Try a simple read operation first
+        const balance = await provider.getBalance(CONTRACT_ADDRESS);
+        console.log("Contract balance:", ethers.formatEther(balance), "ETH");
+        
+        // Get contract state
+        const contractCode = await provider.getCode(CONTRACT_ADDRESS);
+        if (contractCode === "0x") {
+          console.error("No contract found at address");
+          return;
+        }
+        
+        console.log("Contract found at address:", CONTRACT_ADDRESS);
+        alert("Successfully connected to contract!");
+      } catch (error) {
+        console.error("Contract interaction failed:", error);
+        alert("Failed to interact with contract: " + error.message);
       }
       
       const contractCode = await MiniKit.commandsAsync.getCode({
@@ -57,30 +56,29 @@ export const SignIn = () => {
 const handleClaim = async () => {
     try {
       console.log("Starting claim process...");
-      if (!MiniKit.isInstalled()) {
-        console.log("MiniKit not installed");
-        alert("Please install World App to claim tokens");
-        return;
-      }
-
-      const payload = {
-        to: CONTRACT_ADDRESS,
-        data: {
-          method: "claimReward",
-          args: [
-            await MiniKit.getAddressAsync(), // signal (user's address)
-            "0", // root
-            "0", // nullifierHash
-            Array(8).fill("0") // proof
-          ],
-          abi: contractABI.abi
-        }
-      };
-
-      console.log("Sending transaction with payload:", payload);
-      const result = await MiniKit.commandsAsync.sendTransaction(payload);
       
-      if (result?.finalPayload?.status === "success") {
+      // Connect to the network
+      const provider = new ethers.JsonRpcProvider("http://127.0.0.1:8545");
+      const signer = await provider.getSigner();
+      const contract = new ethers.Contract(CONTRACT_ADDRESS, contractABI.abi, signer);
+      
+      // Prepare claim parameters
+      const userAddress = await signer.getAddress();
+      const root = "0";
+      const nullifierHash = "0";
+      const proof = Array(8).fill("0");
+      
+      console.log("Claiming with address:", userAddress);
+      
+      // Send transaction
+      const tx = await contract.claimReward(userAddress, root, nullifierHash, proof);
+      console.log("Transaction sent:", tx.hash);
+      
+      // Wait for confirmation
+      const receipt = await tx.wait();
+      console.log("Transaction confirmed:", receipt);
+      
+      if (receipt.status === 1) {
         console.log("Claim successful!");
         alert("Tokens claimed successfully!");
       }
