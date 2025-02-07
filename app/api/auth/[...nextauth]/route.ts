@@ -41,14 +41,19 @@ const authOptions: NextAuthOptions = {
   callbacks: {
     async signIn({ user, account, profile, email, credentials }) {
       console.log("[Debug] Sign in attempt:", { user, account, profile });
-      
       const verificationLevel = profile?.["https://id.worldcoin.org/v1"]?.verification_level;
-      if (verificationLevel !== "orb") {
-        console.log("[Debug] Rejecting non-orb verified user");
-        return false;
-      }
-      
+      user.verificationLevel = verificationLevel;
       return true;
+    },
+    async jwt({ token, user }) {
+      if (user) {
+        token.verificationLevel = user.verificationLevel;
+      }
+      return token;
+    },
+    async session({ session, token }) {
+      session.user.verificationLevel = token.verificationLevel;
+      return session;
     },
     async redirect({ url, baseUrl }) {
       console.log("[Debug] Redirect:", { url, baseUrl });
