@@ -2,13 +2,15 @@
 "use client";
 import { IDKitWidget } from "@worldcoin/idkit";
 import { useState } from "react";
+import { ClaimReward } from "../ClaimReward";
 
 export const VerifyBlock = () => {
   const [result, setResult] = useState<string>("");
+  const [proof, setProof] = useState<any>(null);
 
-  const handleVerify = async (proof: any) => {
+  const handleVerify = async (verificationProof: any) => {
     try {
-      console.log('Starting verification with proof:', proof);
+      console.log('Starting verification with proof:', verificationProof);
       console.log('Action name:', process.env.NEXT_PUBLIC_ACTION_NAME);
 
       const response = await fetch('/api/verify', {
@@ -17,7 +19,7 @@ export const VerifyBlock = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          proof,
+          proof: verificationProof,
           action: process.env.NEXT_PUBLIC_ACTION_NAME,
           signal: undefined
         }),
@@ -27,9 +29,11 @@ export const VerifyBlock = () => {
       console.log('Verification response:', data);
 
       if (data.verifyRes?.success) {
+        console.log('Setting proof state:', verificationProof);
+        setProof(verificationProof);
         setResult("Verification successful!");
-        setProof(proof); // Add this state with useState at the top
       } else {
+        console.log('Verification failed:', data.verifyRes?.error);
         setResult(`Verification failed: ${data.verifyRes?.error || 'Unknown error'}`);
       }
     } catch (error) {
@@ -66,7 +70,13 @@ export const VerifyBlock = () => {
           {result}
         </div>
       )}
-      {proof && <ClaimReward proof={proof} />}
+      
+      {proof && (
+        <>
+          <div>Proof received: {JSON.stringify(proof).substring(0, 50)}...</div>
+          <ClaimReward proof={proof} />
+        </>
+      )}
     </div>
   );
 };
