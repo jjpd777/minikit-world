@@ -11,27 +11,37 @@ export const SignIn = () => {
 
   const testNetwork = async () => {
     try {
-      console.log("Testing connection to Hardhat node...");
-      const provider = new ethers.JsonRpcProvider("http://127.0.0.1:8545");
+      if (!MiniKit.isInstalled()) {
+        console.log("MiniKit not installed - checking direct network connection...");
+        const provider = new ethers.JsonRpcProvider("http://0.0.0.0:8545");
 
-      // Simple connection test
-      const blockNumber = await provider.getBlockNumber();
-      console.log("Connected to network. Current block:", blockNumber);
+        // Simple connection test
+        const blockNumber = await provider.getBlockNumber();
+        console.log("Connected to network. Current block:", blockNumber);
 
-      // Check contract existence
-      const contractCode = await provider.getCode(CONTRACT_ADDRESS);
-      console.log("Contract code length:", contractCode.length);
+        // Check contract existence
+        const contractCode = await provider.getCode(CONTRACT_ADDRESS);
+        console.log("Contract code length:", contractCode.length);
 
-      if (contractCode === "0x") {
-        console.log("No contract found at", CONTRACT_ADDRESS);
-        alert("No contract found at the specified address");
+        if (contractCode === "0x") {
+          console.log("No contract found at", CONTRACT_ADDRESS);
+          alert("No contract found at the specified address");
+        } else {
+          console.log("Contract found at", CONTRACT_ADDRESS);
+          alert("Successfully verified contract existence!");
+        }
       } else {
-        console.log("Contract found at", CONTRACT_ADDRESS);
-        alert("Successfully verified contract existence!");
+        const response = await MiniKit.commandsAsync.getProvider();
+        if (response?.provider) {
+          console.log("Successfully connected via MiniKit");
+          alert("Successfully connected to network via World App!");
+        }
       }
     } catch (error) {
       console.error("Network test error:", error);
-      alert("Failed to connect to network: " + error.message);
+      const errorMessage = "Please make sure your Hardhat node is running and accessible. Error: " + error.message;
+      console.error(errorMessage);
+      alert(errorMessage);
     }
   };
 
