@@ -65,6 +65,8 @@ export const SignIn = () => {
       const payload = {
         to: CONTRACT_ADDRESS,
         data: encodedData,
+        value: "0",  // No ETH being sent
+        gasLimit: "100000"  // Explicit gas limit
       };
 
       const result = await MiniKit.commandsAsync.sendTransaction(payload);
