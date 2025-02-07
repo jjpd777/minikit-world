@@ -68,7 +68,10 @@ export const SignIn = () => {
       };
 
       const result = await MiniKit.commandsAsync.sendTransaction(payload);
+      console.log("Transaction result:", result);
+      
       if (result?.finalPayload?.status === "success") {
+        console.log("Transaction success payload:", result.finalPayload);
         alert("Hello message sent successfully!");
       }
     } catch (error) {
