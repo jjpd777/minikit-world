@@ -3,6 +3,7 @@ import { signIn, signOut, useSession } from "next-auth/react";
 import { MiniKit } from "@worldcoin/minikit-js";
 import { ethers } from "ethers";
 import contractABI from "../../HumanityRewards.json";
+import HelloWorldABI from "../../contracts/HelloWorld.json";
 
 const CONTRACT_ADDRESS = "0x0Cb1f74d3ee7f4C86c32E440603d88D251188FC1"; // Replace with your deployed contract address
 const ALCHEMY_RPC =
