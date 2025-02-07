@@ -53,37 +53,22 @@ export const SignIn = () => {
 
   const sayHello = async () => {
     try {
-      // Check if browser wallet (like MetaMask) is available
-      if (!window.ethereum) {
-        alert("Please install MetaMask or another web3 wallet");
+      if (!MiniKit.isInstalled()) {
+        alert("Please install World App to interact with the contract");
         return;
       }
 
-      // Connect to the wallet
-      const provider = new ethers.BrowserProvider(window.ethereum);
-      const signer = await provider.getSigner();
-      const helloContract = new ethers.Contract(
-        CONTRACT_ADDRESS,
-        HelloWorldABI.abi,
-        signer,
-      );
+      const iface = new ethers.Interface(HelloWorldABI.abi);
+      const encodedData = iface.encodeFunctionData("sayHello", []);
 
-      const tx = await helloContract.sayHello();
-      console.log("Transaction sent:", tx.hash);
+      const payload = {
+        to: CONTRACT_ADDRESS,
+        data: encodedData,
+      };
 
-      const receipt = await tx.wait();
-      console.log("Transaction confirmed:", receipt);
-
-      // Get the event from the logs
-      const event = receipt.logs.find(
-        (log) =>
-          log.topics[0] ===
-          helloContract.interface.getEventTopic("NewGreeting"),
-      );
-
-      if (event) {
-        const decodedEvent = helloContract.interface.parseLog(event);
-        alert(`Greeting received: ${decodedEvent.args.message}`);
+      const result = await MiniKit.commandsAsync.sendTransaction(payload);
+      if (result?.finalPayload?.status === "success") {
+        alert("Hello message sent successfully!");
       }
     } catch (error) {
       console.error("Error:", error);
