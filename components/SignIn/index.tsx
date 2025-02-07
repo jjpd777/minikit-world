@@ -9,7 +9,24 @@ const CONTRACT_ADDRESS = "0xe7f1725e7734ce288f8367e1bb143e90bb3f0512";
 export const SignIn = () => {
   const { data: session, status } = useSession();
 
-  const handleClaim = async () => {
+  const testNetwork = async () => {
+    try {
+      console.log("Testing connection to Hardhat node...");
+      const payload = {
+        to: "0x0000000000000000000000000000000000000000",
+        data: "0x",
+      };
+      
+      const result = await MiniKit.commandsAsync.sendTransaction(payload);
+      console.log("Network test result:", result);
+      alert("Successfully connected to network!");
+    } catch (error) {
+      console.error("Network test error:", error);
+      alert("Failed to connect to network: " + error.message);
+    }
+};
+
+const handleClaim = async () => {
     try {
       console.log("Starting claim process...");
       if (!MiniKit.isInstalled()) {
@@ -57,6 +74,12 @@ export const SignIn = () => {
         {isOrbVerified ? (
           <>
             <h1 className="text-3xl font-bold text-white">WELCOME TO BENDIGA</h1>
+            <button 
+              onClick={testNetwork}
+              className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 mb-2"
+            >
+              Test Network
+            </button>
             <button 
               onClick={handleClaim}
               className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
