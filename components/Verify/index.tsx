@@ -28,7 +28,7 @@ export const VerifyBlock = () => {
 
       if (data.verifyRes?.success) {
         setResult("Verification successful!");
-        window.location.href = '/'; // Redirect to home page after success
+        setProof(proof); // Add this state with useState at the top
       } else {
         setResult(`Verification failed: ${data.verifyRes?.error || 'Unknown error'}`);
       }
@@ -66,6 +66,7 @@ export const VerifyBlock = () => {
           {result}
         </div>
       )}
+      {proof && <ClaimReward proof={proof} />}
     </div>
   );
 };
