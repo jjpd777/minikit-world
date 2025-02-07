@@ -4,7 +4,8 @@ import { MiniKit } from "@worldcoin/minikit-js";
 import { ethers } from "ethers";
 import contractABI from '../../HumanityRewards.json';
 
-const CONTRACT_ADDRESS = "0xe7f1725e7734ce288f8367e1bb143e90bb3f0512";
+const CONTRACT_ADDRESS = "YOUR_CONTRACT_ADDRESS"; // Replace with your deployed contract address
+const ALCHEMY_RPC = "YOUR_ALCHEMY_RPC_URL"; // Replace with your Alchemy RPC URL
 
 export const SignIn = () => {
   const { data: session, status } = useSession();
@@ -42,6 +43,33 @@ export const SignIn = () => {
       const errorMessage = "Please make sure your Hardhat node is running and accessible. Error: " + error.message;
       console.error(errorMessage);
       alert(errorMessage);
+    }
+  };
+
+  const sayHello = async () => {
+    try {
+      const provider = new ethers.JsonRpcProvider(ALCHEMY_RPC);
+      const signer = await provider.getSigner();
+      const helloContract = new ethers.Contract(CONTRACT_ADDRESS, HelloWorldABI.abi, signer);
+      
+      const tx = await helloContract.sayHello();
+      console.log("Transaction sent:", tx.hash);
+      
+      const receipt = await tx.wait();
+      console.log("Transaction confirmed:", receipt);
+      
+      // Get the event from the logs
+      const event = receipt.logs.find(
+        log => log.topics[0] === helloContract.interface.getEventTopic('NewGreeting')
+      );
+      
+      if (event) {
+        const decodedEvent = helloContract.interface.parseLog(event);
+        alert(`Greeting received: ${decodedEvent.args.message}`);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      alert("Failed to say hello: " + error.message);
     }
   };
 
@@ -97,6 +125,12 @@ export const SignIn = () => {
               className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 mb-2"
             >
               Test Network
+            </button>
+            <button 
+              onClick={sayHello}
+              className="px-4 py-2 bg-purple-500 text-white rounded hover:bg-purple-600 mb-2"
+            >
+              Say Hello
             </button>
             <button 
               onClick={handleClaim}
