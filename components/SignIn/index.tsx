@@ -12,14 +12,17 @@ export const SignIn = () => {
   const testNetwork = async () => {
     try {
       console.log("Testing connection to Hardhat node...");
-      const payload = {
-        to: "0x0000000000000000000000000000000000000000",
-        data: "0x",
-      };
       
-      const result = await MiniKit.commandsAsync.sendTransaction(payload);
-      console.log("Network test result:", result);
-      alert("Successfully connected to network!");
+      const contractCode = await MiniKit.commandsAsync.getCode({
+        address: "0xe7f1725e7734ce288f8367e1bb143e90bb3f0512"
+      });
+      
+      console.log("Contract code:", contractCode);
+      if (contractCode && contractCode !== "0x") {
+        alert("Successfully found contract on network!");
+      } else {
+        alert("Contract not found at specified address");
+      }
     } catch (error) {
       console.error("Network test error:", error);
       alert("Failed to connect to network: " + error.message);
