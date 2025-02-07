@@ -1,6 +1,5 @@
 "use client";
 import { signIn, signOut, useSession } from "next-auth/react";
-import { VoiceRecorder } from "../VoiceRecorder";
 
 export const SignIn = () => {
   const { data: session, status } = useSession();
@@ -19,7 +18,6 @@ export const SignIn = () => {
             <p>Verification Level: {session.user.verificationLevel}</p>
           )}
           <p>ID: {session.user?.id}</p>
-          <VoiceRecorder />
         </div>
         <button 
           onClick={() => signOut()}
