@@ -12,6 +12,31 @@ export const SignIn = () => {
   const testNetwork = async () => {
     try {
       console.log("Testing connection to Hardhat node...");
+      const userAddress = await MiniKit.getAddressAsync();
+      console.log("User Address:", userAddress);
+      
+      // Validate contract interface
+      const claimFunction = contractABI.abi.find(x => x.name === "claimReward");
+      console.log("Claim function found:", claimFunction);
+      
+      // Basic payload structure
+      const payload = {
+        transaction: [{
+          address: CONTRACT_ADDRESS,
+          abi: [claimFunction],
+          functionName: "claimReward",
+          args: [userAddress, "0", "0", Array(8).fill("0")]
+        }]
+      };
+      console.log("Transaction payload:", payload);
+      
+      // Attempt transaction
+      try {
+        const result = await MiniKit.commandsAsync.sendTransaction(payload);
+        console.log("Transaction result:", result);
+      } catch (txError) {
+        console.error("Transaction failed:", txError);
+      }
       
       const contractCode = await MiniKit.commandsAsync.getCode({
         address: "0xe7f1725e7734ce288f8367e1bb143e90bb3f0512"
