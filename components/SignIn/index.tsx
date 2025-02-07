@@ -2,6 +2,7 @@
 "use client";
 import { signIn, signOut, useSession } from "next-auth/react";
 import { MiniKit } from "@worldcoin/minikit-js";
+import { ethers } from "ethers";
 import contractABI from '../../HumanityRewards.json';
 
 const CONTRACT_ADDRESS = "0xe7f1725e7734ce288f8367e1bb143e90bb3f0512";
