@@ -53,7 +53,14 @@ export const SignIn = () => {
 
   const sayHello = async () => {
     try {
-      const provider = new ethers.JsonRpcProvider(ALCHEMY_RPC);
+      // Check if browser wallet (like MetaMask) is available
+      if (!window.ethereum) {
+        alert("Please install MetaMask or another web3 wallet");
+        return;
+      }
+
+      // Connect to the wallet
+      const provider = new ethers.BrowserProvider(window.ethereum);
       const signer = await provider.getSigner();
       const helloContract = new ethers.Contract(
         CONTRACT_ADDRESS,
