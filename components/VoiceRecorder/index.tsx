@@ -83,16 +83,7 @@ export const VoiceRecorder = () => {
       </div>
       
       {(audioUrl || uploadedFile) && (
-        <>
-          <audio controls src={audioUrl || uploadedFile} className="mt-4" />
-          <a 
-            href="/audio_sample.mp3" 
-            download 
-            className="px-4 py-2 mt-4 rounded bg-blue-500 hover:bg-blue-600 text-white"
-          >
-            Download Audio
-          </a>
-        </>
+        <audio controls src={audioUrl || uploadedFile} className="mt-4" />
       )}
     </div>
   );
