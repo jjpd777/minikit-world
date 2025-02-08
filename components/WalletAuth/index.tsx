@@ -38,6 +38,16 @@ export const WalletAuth = () => {
     setWalletAddress("");
   };
 
+  const copyToClipboard = async () => {
+    try {
+      await navigator.clipboard.writeText(walletAddress);
+      alert("Address copied to clipboard!");
+    } catch (err) {
+      console.error("Failed to copy address:", err);
+      alert("Failed to copy address");
+    }
+  };
+
   return (
     <div className="flex items-center gap-2 margin-bottom-20">
       {!walletAddress ? (
@@ -49,9 +59,12 @@ export const WalletAuth = () => {
         </button>
       ) : (
         <div className="flex items-center gap-2">
-          <span className="text-xs text-green-400">
-            {walletAddress.substring(0, 6)}...{walletAddress.substring(38)}
-          </span>
+          <button
+            onClick={copyToClipboard}
+            className="px-4 py-2 text-sm rounded-lg font-medium bg-green-500/80 hover:bg-green-600 text-white transition-colors duration-200"
+          >
+            Copy Address
+          </button>
           <button
             onClick={handleDisconnect}
             className="px-3 py-1 text-sm rounded-lg font-medium bg-red-500/80 hover:bg-red-600 text-white transition-colors duration-200"
