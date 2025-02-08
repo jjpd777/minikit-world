@@ -50,13 +50,13 @@ export const SignIn = () => {
                   alert("Payment failed");
                 }
               }}
-              className="px-4 py-2 bg-green-500/80 text-white rounded-xl hover:bg-green-600 transition-colors duration-200 mr-2"
+              className="px-4 py-2 bg-purple-400/80 text-white rounded-xl hover:bg-purple-500 transition-colors duration-200 mr-2"
             >
               Donate WLD
             </button>
             <button
               onClick={() => signOut()}
-              className="px-4 py-2 bg-red-500/80 text-white rounded-xl hover:bg-red-600 transition-colors duration-200"
+              className="px-4 py-2 bg-purple-600/80 text-white rounded-xl hover:bg-purple-700 transition-colors duration-200"
             >
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
