@@ -1,4 +1,3 @@
-
 import { SignIn } from "@/components/SignIn";
 import { SignMessage } from "@/components/SignMessage";
 import Image from "next/image";
@@ -11,11 +10,12 @@ export default function Home() {
         <Image
           src="/bendiga_logo.png"
           alt="Bendiga Logo"
-          width={300}
-          height={300}
+          width={500}
+          height={500}
           priority
           className="mb-8"
         />
+        <>Build a daily prayer habit</>
         <SignIn />
         <SignMessage />
       </div>
