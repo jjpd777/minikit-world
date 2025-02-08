@@ -13,7 +13,15 @@ export const WalletAuth = () => {
         return;
       }
 
-      const result = await MiniKit.commandsAsync.walletAuth();
+      // Get nonce from our API
+      const nonceRes = await fetch('/api/nonce');
+      const { nonce } = await nonceRes.json();
+
+      const result = await MiniKit.commandsAsync.walletAuth({
+        nonce,
+        statement: "Sign in with your wallet to Bendiga",
+        expirationTime: new Date(Date.now() + 1 * 60 * 60 * 1000), // 1 hour from now
+      });
       
       if (result?.finalPayload?.status === "success") {
         setWalletAddress(result.finalPayload.address);
