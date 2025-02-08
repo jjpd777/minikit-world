@@ -2,9 +2,13 @@
 "use client";
 import { MiniKit } from "@worldcoin/minikit-js";
 import { useState } from "react";
+import { useSession } from "next-auth/react";
 
 export const SignMessage = () => {
+  const { data: session } = useSession();
   const [signature, setSignature] = useState("");
+
+  if (!session) return null;
 
   const handleSignMessage = async () => {
     try {
@@ -30,16 +34,16 @@ export const SignMessage = () => {
   };
 
   return (
-    <div className="flex flex-col items-center gap-4">
+    <div className="flex flex-col items-center gap-4 w-full">
       <button
         onClick={handleSignMessage}
-        className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
+        className="px-6 py-3 bg-green-600/80 text-white rounded-xl hover:bg-green-700 transition-colors duration-200"
       >
         Sign Test Message
       </button>
       {signature && (
-        <div className="mt-4 p-4 bg-gray-100 rounded-lg break-all">
-          <p className="text-sm font-mono">Signature: {signature}</p>
+        <div className="mt-4 p-4 bg-gray-700/50 rounded-xl break-all w-full">
+          <p className="text-sm font-mono text-gray-200">Signature: {signature}</p>
         </div>
       )}
     </div>
