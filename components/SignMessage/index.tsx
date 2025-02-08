@@ -3,11 +3,13 @@
 import { MiniKit } from "@worldcoin/minikit-js";
 import { useState } from "react";
 import { useSession } from "next-auth/react";
+import { WalletContext } from "../WalletAuth";
+import { useContext } from "react";
 
 export const SignMessage = () => {
   const [signature, setSignature] = useState("");
   const { data: session } = useSession();
-  const [walletAddress, setWalletAddress] = useState<string>("");
+  const { walletAddress } = useContext(WalletContext);
 
   const handleSignMessage = async () => {
     try {
