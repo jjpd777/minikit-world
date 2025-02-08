@@ -33,9 +33,10 @@ export const SignIn = () => {
             <Image
               src="/bendiga_logo.png"
               alt="Bendiga Logo"
-              width={150}
-              height={150}
+              width={450}
+              height={450}
               priority
+              style={{ marginTop:'-64px', marginBottom: "-44px" }}
             />
           </div>
           {isOrbVerified ? (
