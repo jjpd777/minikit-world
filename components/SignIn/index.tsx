@@ -20,9 +20,6 @@ export const SignIn = () => {
 
     return (
       <div className="flex flex-col items-center gap-4 p-8 bg-gray-800/50 backdrop-blur-sm rounded-2xl border border-purple-500/20 shadow-lg">
-        <div className="absolute top-4 right-4">
-          <WalletAuth />
-        </div>
         {isOrbVerified ? (
           <>
             <PrayerForm />
