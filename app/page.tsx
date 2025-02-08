@@ -18,9 +18,6 @@ export default function Home() {
           priority
           className="mb-4"
         />
-        <h1 className="text-2xl text-white text-center font-bold mb-8">
-          Build a prayer habit with A.I.
-        </h1>
         <SignIn />
       </div>
     </main>
