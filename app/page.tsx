@@ -1,7 +1,6 @@
 
 import { SignIn } from "@/components/SignIn";
 import { WalletAuth } from "@/components/WalletAuth";
-import { useSession } from "next-auth/react";
 import Image from "next/image";
 
 export default function Home() {
