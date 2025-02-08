@@ -1,17 +1,10 @@
 
 "use client";
 import { MiniKit } from "@worldcoin/minikit-js";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 export const WalletAuth = () => {
   const [walletAddress, setWalletAddress] = useState<string>("");
-
-  useEffect(() => {
-    const savedAddress = localStorage.getItem("walletAddress");
-    if (savedAddress) {
-      setWalletAddress(savedAddress);
-    }
-  }, []);
 
   const handleWalletAuth = async () => {
     try {
@@ -33,7 +26,6 @@ export const WalletAuth = () => {
       if (result?.finalPayload?.status === "success") {
         const address = result.finalPayload.address;
         setWalletAddress(address);
-        localStorage.setItem("walletAddress", address);
         alert("Wallet authenticated successfully!");
       }
     } catch (error) {
@@ -44,7 +36,6 @@ export const WalletAuth = () => {
 
   const handleDisconnect = () => {
     setWalletAddress("");
-    localStorage.removeItem("walletAddress");
   };
 
   return (
