@@ -39,25 +39,24 @@ export const WalletAuth = () => {
   };
 
   return (
-    <div className="flex flex-col items-center gap-4 p-4 border rounded-lg bg-white shadow-sm">
-      <h2 className="text-xl font-semibold">Wallet Authentication</h2>
+    <div className="flex items-center gap-2 margin-bottom-20">
       {!walletAddress ? (
         <button
           onClick={handleWalletAuth}
-          className="px-6 py-3 rounded-lg font-medium bg-blue-500 hover:bg-blue-600 text-white"
+          className="px-4 py-2 text-sm rounded-lg font-medium bg-purple-500/80 hover:bg-purple-600 text-white transition-colors duration-200"
         >
           Connect Wallet
         </button>
       ) : (
-        <div className="flex flex-col items-center gap-2">
-          <div className="text-sm text-green-500">
-            Connected: {walletAddress.substring(0, 6)}...{walletAddress.substring(38)}
-          </div>
+        <div className="flex items-center gap-2">
+          <span className="text-xs text-green-400">
+            {walletAddress.substring(0, 6)}...{walletAddress.substring(38)}
+          </span>
           <button
             onClick={handleDisconnect}
-            className="px-6 py-2 rounded-lg font-medium bg-red-500 hover:bg-red-600 text-white"
+            className="px-3 py-1 text-sm rounded-lg font-medium bg-red-500/80 hover:bg-red-600 text-white transition-colors duration-200"
           >
-            Disconnect Wallet
+            Disconnect
           </button>
         </div>
       )}

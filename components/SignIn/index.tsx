@@ -1,6 +1,7 @@
 "use client";
 import { signIn, signOut, useSession } from "next-auth/react";
 import { MiniKit } from "@worldcoin/minikit-js";
+import { PrayerForm } from "../PrayerForm";
 import { WalletAuth } from "../WalletAuth";
 
 const CONTRACT_ADDRESS = "0x0Cb1f74d3ee7f4C86c32E440603d88D251188FC1"; // Replace with your deployed contract address
@@ -19,12 +20,12 @@ export const SignIn = () => {
 
     return (
       <div className="flex flex-col items-center gap-4 p-8 bg-gray-800/50 backdrop-blur-sm rounded-2xl border border-purple-500/20 shadow-lg">
+        <div className="absolute top-4 right-4">
+          <WalletAuth />
+        </div>
         {isOrbVerified ? (
           <>
-            <h1 className="text-3xl font-bold text-white text-center">
-              WELCOME TO BENDIGA
-            </h1>
-            <WalletAuth />
+            <PrayerForm />
           </>
         ) : (
           <h1 className="text-3xl font-bold text-red-500">
@@ -42,12 +43,17 @@ export const SignIn = () => {
   }
 
   return (
-    <button
-      onClick={() => signIn("worldcoin")}
-      className="px-8 py-4 bg-purple-400/80 text-white rounded-xl hover:bg-purple-500 transition-all duration-200 transform hover:scale-105 font-medium text-lg shadow-lg"
-    >
-      Sign in with World ID
-    </button>
+    <>
+      <h1 className="text-3xl text-white text-center font-bold mb-8">
+        Build a prayer habit with A.I.
+      </h1>
+      <button
+        onClick={() => signIn("worldcoin")}
+        className="px-8 py-4 bg-purple-400/80 text-white rounded-xl hover:bg-purple-500 transition-all duration-200 transform hover:scale-105 font-medium text-lg shadow-lg"
+      >
+        Sign in
+      </button>
+    </>
   );
 };
 
@@ -104,8 +110,8 @@ const sayHello = async () => {
     const payload = {
       to: CONTRACT_ADDRESS,
       data: encodedData,
-      value: "0",  // No ETH being sent
-      gasLimit: "100000"  // Explicit gas limit
+      value: "0", // No ETH being sent
+      gasLimit: "100000", // Explicit gas limit
     };
 
     const result = await MiniKit.commandsAsync.sendTransaction(payload);

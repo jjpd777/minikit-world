@@ -1,13 +1,12 @@
 
 import { SignIn } from "@/components/SignIn";
-import { SignMessage } from "@/components/SignMessage";
+import { WalletAuth } from "@/components/WalletAuth";
 import Image from "next/image";
-import { useSession } from "next-auth/react";
 
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center p-8 bg-gradient-to-b from-gray-900 to-gray-800">
-      <div className="w-full max-w-md flex flex-col items-center gap-8">
+    <main className="min-h-screen flex flex-col items-center justify-center p-8 bg-gradient-to-b from-gray-900 to-gray-800">
+      <div className="w-full max-w-md flex flex-col items-center">
         <Image
           src="/bendiga_logo.png"
           alt="Bendiga Logo"
@@ -17,7 +16,6 @@ export default function Home() {
           className="mb-8"
         />
         <SignIn />
-        <SignMessage />
       </div>
     </main>
   );
