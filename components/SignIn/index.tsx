@@ -21,10 +21,48 @@ export const SignIn = () => {
           <div className="flex justify-end w-full gap-4 mt-0">
             <WalletAuth />
             <button
+              onClick={async () => {
+                if (!MiniKit.isInstalled()) {
+                  alert("Please install World App to make payments");
+                  return;
+                }
+                try {
+                  const initRes = await fetch('/api/initiate-payment', {
+                    method: 'POST',
+                  });
+                  const { id } = await initRes.json();
+                  
+                  const result = await MiniKit.commandsAsync.pay({
+                    reference: id,
+                    to: "0xaBF8609C0678948b1FA06498cB4508a65bB1a0f2",
+                    tokens: [{
+                      symbol: "WLD",
+                      token_amount: "100000000000000000" // 0.1 WLD
+                    }],
+                    description: "Donation to Bendiga"
+                  });
+
+                  if (result?.finalPayload?.status === "success") {
+                    alert("Thank you for your donation!");
+                  }
+                } catch (error) {
+                  console.error("Payment failed:", error);
+                  alert("Payment failed");
+                }
+              }}
+              className="px-4 py-2 bg-green-500/80 text-white rounded-xl hover:bg-green-600 transition-colors duration-200 mr-2"
+            >
+              Donate 0.1 WLD
+            </button>
+            <button
               onClick={() => signOut()}
               className="px-4 py-2 bg-red-500/80 text-white rounded-xl hover:bg-red-600 transition-colors duration-200"
             >
-              Sign out
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                <polyline points="16 17 21 12 16 7" />
+                <line x1="21" y1="12" x2="9" y2="12" />
+              </svg>
             </button>
           </div>
         )}
