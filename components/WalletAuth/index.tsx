@@ -1,9 +1,20 @@
 "use client";
 import { MiniKit } from "@worldcoin/minikit-js";
 import { useState } from "react";
+import Image from "next/image";
+
+// Create a global variable to track prayer signs
+let globalPrayerSigns = 0;
 
 export const WalletAuth = () => {
   const [walletAddress, setWalletAddress] = useState<string>("");
+  const [balance, setBalance] = useState(0.11);
+  
+  // Function to increment balance, exposed globally
+  (window as any).incrementBalance = () => {
+    globalPrayerSigns++;
+    setBalance(0.11 + (globalPrayerSigns * 0.11));
+  };
 
   const handleWalletAuth = async () => {
     try {
@@ -57,26 +68,10 @@ export const WalletAuth = () => {
           Wallet
         </button>
       ) : (
-        <button
-          onClick={copyToClipboard}
-          className="px-4 py-2 text-sm rounded-lg font-medium bg-purple-300/80 hover:bg-purple-400 text-white transition-colors duration-200 flex items-center gap-2"
-        >
-          copy
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-          </svg>
-        </button>
+        <div className="flex items-center gap-2 px-4 py-2 text-sm rounded-lg font-medium bg-purple-300/80 text-white">
+          <Image src="/world_c.png" alt="World Coin" width={20} height={20} />
+          <span>{balance.toFixed(2)} WLD</span>
+        </div>
       )}
     </div>
   );
