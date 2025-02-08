@@ -61,13 +61,15 @@ export const WalletAuth = () => {
   return (
     <div className="flex items-center gap-2 margin-bottom-20">
       {!walletAddress ? (
-        <div className="flex items-center gap-2 px-4 py-2 text-lg rounded-lg font-medium bg-purple-300/80 text-white">
-          <Image src="/world_c.png" alt="World Coin" width={30} height={30} />
-          <span>0.00 WLD</span>
-        </div>
+        <button
+          onClick={handleWalletAuth}
+          className="px-4 py-2 text-sm rounded-lg font-medium bg-purple-300/80 hover:bg-purple-400 text-white transition-colors duration-200"
+        >
+          Wallet
+        </button>
       ) : (
-        <div className="flex items-center gap-2 px-4 py-2 text-lg rounded-lg font-medium bg-purple-300/80 text-white">
-          <Image src="/world_c.png" alt="World Coin" width={30} height={30} />
+        <div className="flex items-center gap-2 px-4 py-2 text-sm rounded-lg font-medium bg-purple-300/80 text-white">
+          <Image src="/world_c.png" alt="World Coin" width={20} height={20} />
           <span>{balance.toFixed(2)} WLD</span>
         </div>
       )}
