@@ -18,7 +18,7 @@ export const SignIn = () => {
     return (
       <div className="flex flex-col items-center gap-4">
         {isOrbVerified && (
-          <div className="flex justify-end w-full gap-4 mt-0">
+          <div className="fixed top-0 left-0 right-0 flex justify-end gap-4 p-4 bg-gray-900/80 backdrop-blur-sm z-50">
             <WalletAuth />
             <button
               onClick={async () => {
@@ -52,7 +52,7 @@ export const SignIn = () => {
               }}
               className="px-4 py-2 bg-green-500/80 text-white rounded-xl hover:bg-green-600 transition-colors duration-200 mr-2"
             >
-              Donate 0.1 WLD
+              Donate WLD
             </button>
             <button
               onClick={() => signOut()}
