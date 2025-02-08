@@ -1,4 +1,3 @@
-
 "use client";
 import { MiniKit } from "@worldcoin/minikit-js";
 import { useState } from "react";
@@ -49,24 +48,32 @@ export const ClaimReward = ({ proof }: { proof: any }) => {
     try {
       setClaiming(true);
 
-      // Prepare the transaction data for the claimReward function
-      const payload = {
-        to: CONTRACT_ADDRESS,
-        data: {
-          method: "claimReward",
-          args: [
-            proof.merkle_root,
-            proof.nullifier_hash,
-            proof.proof
-          ],
-          abi: CONTRACT_ABI
-        }
-      };
+      const message = JSON.stringify({
+        action: 'claim_reward',
+        address: await MiniKit.commandsAsync.getAddress(),
+        timestamp: Date.now()
+      });
 
-      const result = await MiniKit.commandsAsync.sendTransaction(payload);
-      
-      if (result?.finalPayload?.status === "success") {
-        alert("Reward claimed successfully!");
+      const signResult = await MiniKit.commandsAsync.signMessage({
+        message
+      });
+
+      if (signResult.finalPayload.status === "success") {
+        const response = await fetch('/api/claim', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            signature: signResult.finalPayload.signature,
+            message,
+            address: signResult.finalPayload.address
+          })
+        });
+
+        if (response.ok) {
+          alert("Claim verified successfully!");
+        } else {
+          alert("Claim verification failed!");
+        }
       }
     } catch (error) {
       console.error("Claim failed:", error);
