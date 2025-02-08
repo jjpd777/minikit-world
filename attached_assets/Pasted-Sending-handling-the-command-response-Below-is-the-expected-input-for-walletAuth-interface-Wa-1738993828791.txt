@@ -1,0 +1,88 @@
+Sending & handling the command response
+Below is the expected input for walletAuth.
+
+interface WalletAuthInput {
+	nonce: string
+	expirationTime?: Date
+	statement?: string
+	requestId?: string
+	notBefore?: Date
+}
+
+Copy
+Copied!
+Using the async walletAuth command.
+
+app/page.tsx
+import { MiniKit, WalletAuthInput } from '@worldcoin/minikit-js'
+// ...
+const signInWithWallet = async () => {
+	if (!MiniKit.isInstalled()) {
+		return
+	}
+	const res = await fetch(`/api/nonce`)
+	const { nonce } = await res.json()
+
+	const {commandPayload: generateMessageResult, finalPayload} = await MiniKit.commandsAsync.walletAuth({
+		nonce: nonce,
+		requestId: '0', // Optional
+		expirationTime: new Date(new Date().getTime() + 7 * 24 * 60 * 60 * 1000),
+		notBefore: new Date(new Date().getTime() - 24 * 60 * 60 * 1000),
+		statement: 'This is my statement and here is a link https://worldcoin.com/apps',
+	})
+	// ...
+
+Copy
+Copied!
+The returned message (in final payload) will include a signature compliant with ERC-191. You're welcome to use any third party libraries to verify the payloads for SIWE.
+
+type MiniAppWalletAuthSuccessPayload = {
+	status: 'success'
+	message: string
+	signature: string
+	address: string
+	version: number
+}
+
+Copy
+Copied!
+app/page.tsx
+const signInWithWallet = async () => {
+	if (!MiniKit.isInstalled()) {
+		return
+	}
+
+	const res = await fetch(`/api/nonce`)
+	const { nonce } = await res.json()
+
+	const { commandPayload: generateMessageResult, finalPayload } = await MiniKit.commandsAsync.walletAuth({
+		nonce: nonce,
+		requestId: '0', // Optional
+		expirationTime: new Date(new Date().getTime() + 7 * 24 * 60 * 60 * 1000),
+		notBefore: new Date(new Date().getTime() - 24 * 60 * 60 * 1000),
+		statement: 'This is my statement and here is a link https://worldcoin.com/apps',
+	})
+
+	if (finalPayload.status === 'error') {
+		return
+	} else {
+		const response = await fetch('/api/complete-siwe', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({
+				payload: finalPayload,
+				nonce,
+			}),
+		})
+	}
+}
+
+Copy
+Copied!
+You can now additionally access the user's wallet address from the minikit object.
+
+const walletAddress = MiniKit.walletAddress
+// or
+const walletAddress = window.MiniKit?.walletAddress

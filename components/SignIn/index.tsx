@@ -1,8 +1,8 @@
 "use client";
 import { signIn, signOut, useSession } from "next-auth/react";
 import { MiniKit } from "@worldcoin/minikit-js";
-import { ethers } from "ethers";
-import contractABI from "../../HumanityRewards.json";
+import { PayBlock } from "../Pay";
+import { WalletAuth } from "../WalletAuth";
 
 const CONTRACT_ADDRESS = "0x0Cb1f74d3ee7f4C86c32E440603d88D251188FC1"; // Replace with your deployed contract address
 const ALCHEMY_RPC =
@@ -53,30 +53,27 @@ export const SignIn = () => {
 
   const sayHello = async () => {
     try {
-      const provider = new ethers.JsonRpcProvider(ALCHEMY_RPC);
-      const signer = await provider.getSigner();
-      const helloContract = new ethers.Contract(
-        CONTRACT_ADDRESS,
-        HelloWorldABI.abi,
-        signer,
-      );
+      if (!MiniKit.isInstalled()) {
+        alert("Please install World App to interact with the contract");
+        return;
+      }
 
-      const tx = await helloContract.sayHello();
-      console.log("Transaction sent:", tx.hash);
+      const iface = new ethers.Interface(HelloWorldABI.abi);
+      const encodedData = iface.encodeFunctionData("sayHello", []);
 
-      const receipt = await tx.wait();
-      console.log("Transaction confirmed:", receipt);
+      const payload = {
+        to: CONTRACT_ADDRESS,
+        data: encodedData,
+        value: "0",  // No ETH being sent
+        gasLimit: "100000"  // Explicit gas limit
+      };
 
-      // Get the event from the logs
-      const event = receipt.logs.find(
-        (log) =>
-          log.topics[0] ===
-          helloContract.interface.getEventTopic("NewGreeting"),
-      );
-
-      if (event) {
-        const decodedEvent = helloContract.interface.parseLog(event);
-        alert(`Greeting received: ${decodedEvent.args.message}`);
+      const result = await MiniKit.commandsAsync.sendTransaction(payload);
+      console.log("Transaction result:", result);
+      
+      if (result?.finalPayload?.status === "success") {
+        console.log("Transaction success payload:", result.finalPayload);
+        alert("Hello message sent successfully!");
       }
     } catch (error) {
       console.error("Error:", error);
@@ -142,24 +139,8 @@ export const SignIn = () => {
             <h1 className="text-3xl font-bold text-white">
               WELCOME TO BENDIGA
             </h1>
-            <button
-              onClick={testNetwork}
-              className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 mb-2"
-            >
-              Test Network
-            </button>
-            <button
-              onClick={sayHello}
-              className="px-4 py-2 bg-purple-500 text-white rounded hover:bg-purple-600 mb-2"
-            >
-              Say Hello
-            </button>
-            <button
-              onClick={handleClaim}
-              className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
-            >
-              Claim Tokens
-            </button>
+            <WalletAuth />
+            <PayBlock />
           </>
         ) : (
           <h1 className="text-3xl font-bold text-red-500">
