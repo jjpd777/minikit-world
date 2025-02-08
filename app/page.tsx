@@ -1,27 +1,25 @@
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bendiga - Prayer Habit</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body class="bg-gradient">
-    <main class="container">
-        <img src="/bendiga_logo.png" alt="Bendiga Logo" class="logo">
-        <h1 class="title">Build a prayer habit with A.I.</h1>
-        <div id="prayerForm" class="prayer-form">
-            <div class="categories">
-                <h2>Prayer Categories:</h2>
-                <div class="category-grid" id="categoryGrid"></div>
-            </div>
-            <div class="prayer-input">
-                <label for="prayerText">Your Prayer:</label>
-                <textarea id="prayerText" placeholder="Type your prayer here..."></textarea>
-            </div>
-        </div>
+import Image from "next/image";
+import { SignIn } from "@/components/SignIn";
+import { PrayerForm } from "@/components/PrayerForm";
+
+export default function Home() {
+  return (
+    <main className="flex min-h-screen flex-col items-center justify-center p-8 bg-gradient-to-b from-gray-900 to-gray-800">
+      <div className="w-full max-w-md flex flex-col items-center gap-8">
+        <Image
+          src="/bendiga_logo.png"
+          alt="Bendiga Logo"
+          width={500}
+          height={500}
+          priority
+          className="mb-8"
+        />
+        <h1 className="text-2xl text-white text-center font-light">
+          Build a prayer habit with A.I.
+        </h1>
+        <SignIn />
+      </div>
     </main>
-    <script src="main.js"></script>
-</body>
-</html>
+  );
+}
