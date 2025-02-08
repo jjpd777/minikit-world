@@ -2,7 +2,6 @@
 import { signIn, signOut, useSession } from "next-auth/react";
 import { MiniKit } from "@worldcoin/minikit-js";
 import { WalletAuth } from "../WalletAuth";
-import { TokenBalances } from "../TokenBalances";
 
 const CONTRACT_ADDRESS = "0x0Cb1f74d3ee7f4C86c32E440603d88D251188FC1"; // Replace with your deployed contract address
 const ALCHEMY_RPC =
@@ -140,7 +139,6 @@ export const SignIn = () => {
               WELCOME TO BENDIGA
             </h1>
             <WalletAuth />
-            <TokenBalances />
           </>
         ) : (
           <h1 className="text-3xl font-bold text-red-500">
