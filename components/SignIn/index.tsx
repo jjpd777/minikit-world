@@ -1,7 +1,7 @@
 "use client";
 import { signIn, signOut, useSession } from "next-auth/react";
 import { MiniKit } from "@worldcoin/minikit-js";
-import { WalletAuth } from "../WalletAuth";
+import { PrayerForm } from "../PrayerForm";
 
 const CONTRACT_ADDRESS = "0x0Cb1f74d3ee7f4C86c32E440603d88D251188FC1"; // Replace with your deployed contract address
 const ALCHEMY_RPC =
@@ -21,10 +21,7 @@ export const SignIn = () => {
       <div className="flex flex-col items-center gap-4 p-8 bg-gray-800/50 backdrop-blur-sm rounded-2xl border border-purple-500/20 shadow-lg">
         {isOrbVerified ? (
           <>
-            <h1 className="text-3xl font-bold text-white text-center">
-              WELCOME TO BENDIGA
-            </h1>
-            <WalletAuth />
+            <PrayerForm />
           </>
         ) : (
           <h1 className="text-3xl font-bold text-red-500">

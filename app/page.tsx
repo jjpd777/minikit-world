@@ -1,8 +1,6 @@
 
 import { SignIn } from "@/components/SignIn";
-import { SignMessage } from "@/components/SignMessage";
 import Image from "next/image";
-import { useSession } from "next-auth/react";
 
 export default function Home() {
   return (
@@ -14,10 +12,12 @@ export default function Home() {
           width={300}
           height={300}
           priority
-          className="mb-8"
+          className="mb-4"
         />
+        <h1 className="text-2xl text-white text-center font-bold mb-8">
+          Build a prayer habit with A.I.
+        </h1>
         <SignIn />
-        <SignMessage />
       </div>
     </main>
   );
