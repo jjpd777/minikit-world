@@ -1,12 +1,7 @@
 
 "use client";
 import { MiniKit } from "@worldcoin/minikit-js";
-import { useState, createContext, useContext } from "react";
-
-export const WalletContext = createContext<{
-  walletAddress: string;
-  setWalletAddress: (address: string) => void;
-}>({ walletAddress: "", setWalletAddress: () => {} });
+import { useState } from "react";
 
 export const WalletAuth = () => {
   const [walletAddress, setWalletAddress] = useState<string>("");

@@ -2,14 +2,9 @@
 "use client";
 import { MiniKit } from "@worldcoin/minikit-js";
 import { useState } from "react";
-import { useSession } from "next-auth/react";
-import { WalletContext } from "../WalletAuth";
-import { useContext } from "react";
 
 export const SignMessage = () => {
   const [signature, setSignature] = useState("");
-  const { data: session } = useSession();
-  const { walletAddress } = useContext(WalletContext);
 
   const handleSignMessage = async () => {
     try {
@@ -19,8 +14,7 @@ export const SignMessage = () => {
       }
 
       const message = JSON.stringify({
-        action: "sign_blessing",
-        message: "God Bless America",
+        action: "test_sign",
         timestamp: Date.now()
       });
 
@@ -38,18 +32,13 @@ export const SignMessage = () => {
     }
   };
 
-  // Only render if user is signed in with World ID and wallet is connected
-  if (!session?.user?.verificationLevel || !walletAddress) {
-    return null;
-  }
-
   return (
     <div className="flex flex-col items-center gap-4">
       <button
         onClick={handleSignMessage}
         className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
       >
-        Sign "God Bless America"
+        Sign Test Message
       </button>
       {signature && (
         <div className="mt-4 p-4 bg-gray-100 rounded-lg break-all">
