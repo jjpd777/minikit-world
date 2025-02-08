@@ -16,7 +16,14 @@ export const PayBlock = () => {
     }
 
     try {
+      // First initiate the payment to get a reference
+      const initRes = await fetch('/api/initiate-payment', {
+        method: 'POST',
+      });
+      const { id } = await initRes.json();
+
       const payload = {
+        reference: id,
         to: address,
         tokens: [{
           symbol: Tokens.WLD,
@@ -26,14 +33,27 @@ export const PayBlock = () => {
       };
 
       const result = await MiniKit.commandsAsync.pay(payload);
+      
       if (result?.finalPayload?.status === "success") {
-        alert("Payment sent successfully!");
-        setAddress("");
-        setAmount("0.1");
+        // Confirm the payment
+        const confirmRes = await fetch('/api/confirm-payment', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ payload: result.finalPayload }),
+        });
+        
+        const payment = await confirmRes.json();
+        if (payment.success) {
+          alert("Payment sent successfully!");
+          setAddress("");
+          setAmount("0.1");
+        } else {
+          throw new Error("Payment confirmation failed");
+        }
       }
     } catch (error) {
       console.error("Payment failed:", error);
-      alert("Payment failed");
+      alert("Payment failed: " + error.message);
     }
   };
 
