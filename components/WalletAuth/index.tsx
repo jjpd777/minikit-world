@@ -39,7 +39,7 @@ export const WalletAuth = () => {
   };
 
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex items-center gap-2 margin-bottom-20">
       {!walletAddress ? (
         <button
           onClick={handleWalletAuth}

@@ -44,14 +44,14 @@ export const SignIn = () => {
 
   return (
     <>
-      <h1 className="text-2xl text-white text-center font-bold mb-8">
+      <h1 className="text-3xl text-white text-center font-bold mb-8">
         Build a prayer habit with A.I.
       </h1>
       <button
         onClick={() => signIn("worldcoin")}
         className="px-8 py-4 bg-purple-400/80 text-white rounded-xl hover:bg-purple-500 transition-all duration-200 transform hover:scale-105 font-medium text-lg shadow-lg"
       >
-        Sign in with World ID
+        Sign in
       </button>
     </>
   );
@@ -110,8 +110,8 @@ const sayHello = async () => {
     const payload = {
       to: CONTRACT_ADDRESS,
       data: encodedData,
-      value: "0",  // No ETH being sent
-      gasLimit: "100000"  // Explicit gas limit
+      value: "0", // No ETH being sent
+      gasLimit: "100000", // Explicit gas limit
     };
 
     const result = await MiniKit.commandsAsync.sendTransaction(payload);
