@@ -1,9 +1,7 @@
 "use client";
 import { signIn, signOut, useSession } from "next-auth/react";
 import { MiniKit } from "@worldcoin/minikit-js";
-import { ethers } from "ethers";
-import contractABI from "../../HumanityRewards.json";
-import HelloWorldABI from "../../contracts/HelloWorld.json";
+import { PayBlock } from "../Pay";
 
 const CONTRACT_ADDRESS = "0x0Cb1f74d3ee7f4C86c32E440603d88D251188FC1"; // Replace with your deployed contract address
 const ALCHEMY_RPC =
@@ -140,24 +138,7 @@ export const SignIn = () => {
             <h1 className="text-3xl font-bold text-white">
               WELCOME TO BENDIGA
             </h1>
-            <button
-              onClick={testNetwork}
-              className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 mb-2"
-            >
-              Test Network
-            </button>
-            <button
-              onClick={sayHello}
-              className="px-4 py-2 bg-purple-500 text-white rounded hover:bg-purple-600 mb-2"
-            >
-              Say Hello
-            </button>
-            <button
-              onClick={handleClaim}
-              className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
-            >
-              Claim Tokens
-            </button>
+            <PayBlock />
           </>
         ) : (
           <h1 className="text-3xl font-bold text-red-500">
