@@ -18,7 +18,7 @@ export const SignIn = () => {
     return (
       <div className="flex flex-col items-center gap-4">
         {isOrbVerified && (
-          <div className="flex justify-end w-full gap-4 mb-4">
+          <div className="flex justify-end w-full gap-4 mt-0">
             <WalletAuth />
             <button
               onClick={() => signOut()}
@@ -29,6 +29,15 @@ export const SignIn = () => {
           </div>
         )}
         <div className="w-full p-8 bg-gray-800/50 backdrop-blur-sm rounded-2xl border border-purple-500/20 shadow-lg">
+          <div className="flex flex-col items-center mb-8">
+            <Image
+              src="/bendiga_logo.png"
+              alt="Bendiga Logo"
+              width={150}
+              height={150}
+              priority
+            />
+          </div>
           {isOrbVerified ? (
             <PrayerForm />
           ) : (
