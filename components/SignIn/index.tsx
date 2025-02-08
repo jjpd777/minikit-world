@@ -2,7 +2,8 @@
 import { signIn, signOut, useSession } from "next-auth/react";
 import { MiniKit } from "@worldcoin/minikit-js";
 import { PrayerForm } from "../PrayerForm";
-import { WalletAuth } from "../WalletAuth";
+import Image from "next/image";
+import {WalletAuth} from "../WalletAuth";
 
 const CONTRACT_ADDRESS = "0x0Cb1f74d3ee7f4C86c32E440603d88D251188FC1"; // Replace with your deployed contract address
 const ALCHEMY_RPC =
@@ -20,11 +21,12 @@ export const SignIn = () => {
 
     return (
       <div className="flex flex-col items-center gap-4 p-8 bg-gray-800/50 backdrop-blur-sm rounded-2xl border border-purple-500/20 shadow-lg">
-        <div className="absolute top-4 right-4">
+        {isOrbVerified && <div className="absolute top-0 right-4 bottom-100">
           <WalletAuth />
-        </div>
+        </div>}
         {isOrbVerified ? (
           <>
+
             <PrayerForm />
           </>
         ) : (
@@ -44,6 +46,14 @@ export const SignIn = () => {
 
   return (
     <>
+      <Image
+        src="/bendiga_logo.png"
+        alt="Bendiga Logo"
+        width={300}
+        height={300}
+        priority
+        className="mb-8"
+      />
       <h1 className="text-3xl text-white text-center font-bold mb-8">
         Build a prayer habit with A.I.
       </h1>
