@@ -1,7 +1,8 @@
 
-import Image from "next/image";
 import { SignIn } from "@/components/SignIn";
-import { PrayerForm } from "@/components/PrayerForm";
+import { SignMessage } from "@/components/SignMessage";
+import Image from "next/image";
+import { useSession } from "next-auth/react";
 
 export default function Home() {
   return (
@@ -10,15 +11,13 @@ export default function Home() {
         <Image
           src="/bendiga_logo.png"
           alt="Bendiga Logo"
-          width={500}
-          height={500}
+          width={300}
+          height={300}
           priority
           className="mb-8"
         />
-        <h1 className="text-2xl text-white text-center font-light">
-          Build a prayer habit with A.I.
-        </h1>
         <SignIn />
+        <SignMessage />
       </div>
     </main>
   );

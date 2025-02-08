@@ -1,84 +1,33 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-.bg-gradient {
-    background: linear-gradient(to bottom, #1a1a2e, #16213e);
-    min-height: 100vh;
-    margin: 0;
-    font-family: Arial, sans-serif;
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
 }
 
-.container {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 2rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 0, 0;
+  }
 }
 
-.logo {
-    width: 300px;
-    height: auto;
-    margin-bottom: 2rem;
+body {
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(
+      to bottom,
+      transparent,
+      rgb(var(--background-end-rgb))
+    )
+    rgb(var(--background-start-rgb));
 }
 
-.title {
-    color: white;
-    font-size: 1.5rem;
-    font-weight: 300;
-    text-align: center;
-    margin-bottom: 2rem;
-}
-
-.prayer-form {
-    background: rgba(31, 41, 55, 0.5);
-    backdrop-filter: blur(8px);
-    padding: 2rem;
-    border-radius: 1rem;
-    border: 1px solid rgba(139, 92, 246, 0.2);
-    width: 100%;
-    max-width: 500px;
-}
-
-.categories h2 {
-    color: white;
-    margin-bottom: 1rem;
-}
-
-.category-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1rem;
-    margin-bottom: 2rem;
-}
-
-.category {
-    padding: 0.75rem;
-    text-align: center;
-    border-radius: 0.5rem;
-    cursor: pointer;
-    background: rgba(55, 65, 81, 0.7);
-    color: #e5e7eb;
-    transition: background-color 0.2s;
-}
-
-.category.selected {
-    background: rgb(139, 92, 246);
-    color: white;
-}
-
-.prayer-input label {
-    display: block;
-    color: white;
-    margin-bottom: 0.5rem;
-}
-
-.prayer-input textarea {
-    width: 100%;
-    padding: 0.75rem;
-    border-radius: 0.5rem;
-    background: rgba(55, 65, 81, 0.7);
-    border: 1px solid rgba(75, 85, 99, 1);
-    color: white;
-    min-height: 100px;
-    resize: vertical;
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
 }
