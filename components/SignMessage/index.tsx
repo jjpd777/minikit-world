@@ -13,10 +13,7 @@ export const SignMessage = () => {
         return;
       }
 
-      const message = JSON.stringify({
-        action: "test_sign",
-        timestamp: Date.now()
-      });
+      const message = "God Bless America";
 
       const result = await MiniKit.commandsAsync.signMessage({
         message
