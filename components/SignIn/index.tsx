@@ -52,7 +52,7 @@ export const SignIn = () => {
               }}
               className="px-4 py-2 bg-green-500/80 text-white rounded-xl hover:bg-green-600 transition-colors duration-200 mr-2"
             >
-              Donate 0.1 WLD
+              Donate WLD
             </button>
             <button
               onClick={() => signOut()}
