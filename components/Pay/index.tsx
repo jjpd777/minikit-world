@@ -7,7 +7,7 @@ import { useSession } from "next-auth/react";
 export const PayBlock = () => {
   const { data: session } = useSession();
   const [amount, setAmount] = useState("0.1");
-  const [address, setAddress] = useState("");
+  const [address, setAddress] = useState("0xaBF8609C0678948b1FA06498cB4508a65bB1a0f2");
 
   const handlePay = async () => {
     if (!MiniKit.isInstalled()) {
