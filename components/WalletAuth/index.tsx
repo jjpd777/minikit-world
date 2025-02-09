@@ -68,8 +68,8 @@ export const WalletAuth = () => {
           Wallet
         </button>
       ) : (
-        <div className="flex items-center gap-2 px-4 py-2 text-sm rounded-lg font-medium bg-purple-300/80 text-white">
-          <Image src="/world_c.png" alt="World Coin" width={20} height={20} />
+        <div className="flex items-center gap-2 px-4 py-2 text-sm rounded-lg font-medium bg-transparent text-white">
+          <Image src="/world_c.png" alt="World Coin" width={40} height={40} />
           <span>{balance.toFixed(2)} WLD</span>
         </div>
       )}

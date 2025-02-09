@@ -27,19 +27,21 @@ export const SignIn = () => {
                   return;
                 }
                 try {
-                  const initRes = await fetch('/api/initiate-payment', {
-                    method: 'POST',
+                  const initRes = await fetch("/api/initiate-payment", {
+                    method: "POST",
                   });
                   const { id } = await initRes.json();
-                  
+
                   const result = await MiniKit.commandsAsync.pay({
                     reference: id,
                     to: "0xaBF8609C0678948b1FA06498cB4508a65bB1a0f2",
-                    tokens: [{
-                      symbol: "WLD",
-                      token_amount: "100000000000000000" // 0.1 WLD
-                    }],
-                    description: "Donation to Bendiga"
+                    tokens: [
+                      {
+                        symbol: "WLD",
+                        token_amount: "100000000000000000", // 0.1 WLD
+                      },
+                    ],
+                    description: "Donation to Bendiga",
                   });
 
                   if (result?.finalPayload?.status === "success") {
@@ -58,7 +60,17 @@ export const SignIn = () => {
               onClick={() => signOut()}
               className="px-4 py-2 bg-purple-600/80 text-white rounded-xl hover:bg-purple-700 transition-colors duration-200"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
                 <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
                 <polyline points="16 17 21 12 16 7" />
                 <line x1="21" y1="12" x2="9" y2="12" />
@@ -66,7 +78,7 @@ export const SignIn = () => {
             </button>
           </div>
         )}
-        <div className="w-full p-8 bg-gray-800/50 backdrop-blur-sm rounded-2xl border border-purple-500/20 shadow-lg">
+        <div className="w-full mt-20 p-8 bg-gray-800/50 backdrop-blur-sm rounded-2xl border border-purple-500/20 shadow-lg">
           <div className="flex flex-col items-center mb-8">
             <Image
               src="/bendiga_logo.png"
@@ -74,7 +86,7 @@ export const SignIn = () => {
               width={450}
               height={450}
               priority
-              style={{ marginTop:'-64px', marginBottom: "-44px" }}
+              style={{ marginTop: "-64px", marginBottom: "-44px" }}
             />
           </div>
           {isOrbVerified ? (
