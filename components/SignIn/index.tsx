@@ -161,8 +161,9 @@ export const SignIn = () => {
               alert(error.message || "Verification failed");
             }
           }}
-          className="px-8 py-4 bg-green-400/80 text-white rounded-xl hover:bg-green-500 transition-all duration-200 transform hover:scale-105 font-medium text-lg shadow-lg"
+          className="px-8 py-4 bg-green-400/80 text-white rounded-xl hover:bg-green-500 transition-all duration-200 transform hover:scale-105 font-medium text-lg shadow-lg flex items-center justify-center gap-2"
         >
+          <Image src="/world_c.png" alt="World Coin" width={24} height={24} />
           Verify with World ID
         </button>
       </div>
