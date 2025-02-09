@@ -9,11 +9,11 @@ let globalPrayerSigns = 0;
 export const WalletAuth = () => {
   const [walletAddress, setWalletAddress] = useState<string>("");
   const [balance, setBalance] = useState(0.11);
-  
+
   // Function to increment balance, exposed globally
   (window as any).incrementBalance = () => {
     globalPrayerSigns++;
-    setBalance(0.11 + (globalPrayerSigns * 0.11));
+    setBalance(0.11 + globalPrayerSigns * 0.11);
   };
 
   const handleWalletAuth = async () => {
@@ -63,12 +63,12 @@ export const WalletAuth = () => {
       {!walletAddress ? (
         <div className="flex items-center gap-2 px-4 py-2 text-lg rounded-lg font-medium bg-purple-300/80 text-white">
           <Image src="/world_c.png" alt="World Coin" width={30} height={30} />
-          <span>0.00 WLD</span>
+          <span>0.00</span>
         </div>
       ) : (
         <div className="flex items-center gap-2 px-4 py-2 text-lg rounded-lg font-medium bg-purple-300/80 text-white">
           <Image src="/world_c.png" alt="World Coin" width={30} height={30} />
-          <span>{balance.toFixed(2)} WLD</span>
+          <span>{balance.toFixed(2)} </span>
         </div>
       )}
     </div>
