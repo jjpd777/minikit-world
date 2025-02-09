@@ -147,7 +147,8 @@ export const SignIn = () => {
 
                 const data = await verifyResponse.json();
                 if (data.verifyRes?.success) {
-                  alert("Verification successful!");
+                  // Sign in after successful verification
+                  await signIn("worldcoin", { callbackUrl: "/" });
                 } else {
                   throw new Error(data.verifyRes?.error || 'Verification failed');
                 }
