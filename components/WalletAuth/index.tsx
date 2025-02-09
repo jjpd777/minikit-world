@@ -8,12 +8,22 @@ let globalPrayerSigns = 0;
 
 export const WalletAuth = () => {
   const [walletAddress, setWalletAddress] = useState<string>("");
-  const [balance, setBalance] = useState(0.11);
-  
-  // Function to increment balance, exposed globally
-  (window as any).incrementBalance = () => {
-    globalPrayerSigns++;
-    setBalance(0.11 + (globalPrayerSigns * 0.11));
+  const [balance, setBalance] = useState<number | null>(null);
+
+  const fetchBalance = async (address: string) => {
+    try {
+      if (!MiniKit.isInstalled()) return;
+      const result = await MiniKit.commandsAsync.getBalance({
+        address,
+        symbol: "USDC.e"
+      });
+      if (result?.finalPayload?.status === "success") {
+        // USDC.e has 6 decimals
+        setBalance(Number(result.finalPayload.balance) / 1000000);
+      }
+    } catch (error) {
+      console.error("Error fetching balance:", error);
+    }
   };
 
   const handleWalletAuth = async () => {
@@ -36,6 +46,7 @@ export const WalletAuth = () => {
       if (result?.finalPayload?.status === "success") {
         const address = result.finalPayload.address;
         setWalletAddress(address);
+        await fetchBalance(address);
         alert("Wallet authenticated successfully!");
       }
     } catch (error) {
@@ -70,7 +81,7 @@ export const WalletAuth = () => {
       ) : (
         <div className="flex items-center gap-2 px-4 py-2 text-sm rounded-lg font-medium bg-transparent text-white">
           <Image src="/world_c.png" alt="World Coin" width={40} height={40} />
-          <span>{balance.toFixed(2)} WLD</span>
+          <span>{balance?.toFixed(2) || '0.00'} USDC.e</span>
         </div>
       )}
     </div>
