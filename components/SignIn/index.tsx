@@ -13,24 +13,16 @@ export const SignIn = () => {
   }
 
   if (session) {
+    const isOrbVerified = session.user?.verificationLevel === "orb";
+
     return (
       <div className="flex flex-col items-center gap-4">
-        <div className="fixed top-0 left-0 right-0 flex justify-end gap-4 p-4 bg-gray-900/80 backdrop-blur-sm z-50">
-          <WalletAuth />
-          <button
-            onClick={() => signOut()}
-            className="px-4 py-2 bg-purple-600/80 text-white rounded-xl hover:bg-purple-700 transition-colors duration-200"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
-              <polyline points="16 17 21 12 16 7" />
-              <line x1="21" y1="12" x2="9" y2="12" />
-            </svg>
-          </button>
-        </div>
-        <PrayerForm />
-      </div>
-    );
+        {isOrbVerified && (
+          <div className="fixed top-0 left-0 right-0 flex justify-end gap-4 p-4 bg-gray-900/80 backdrop-blur-sm z-50">
+            <WalletAuth />
+            <button
+              onClick={async () => {
+                if (!MiniKit.isInstalled()) {
                   alert("Please install World App to make payments");
                   return;
                 }
@@ -85,7 +77,13 @@ export const SignIn = () => {
               style={{ marginTop:'-64px', marginBottom: "-44px" }}
             />
           </div>
-          <PrayerForm />
+          {isOrbVerified ? (
+            <PrayerForm />
+          ) : (
+            <h1 className="text-3xl font-bold text-red-500">
+              Can't Claim tokens
+            </h1>
+          )}
         </div>
       </div>
     );
@@ -94,15 +92,15 @@ export const SignIn = () => {
   return (
     <>
       <div className="relative">
-        <div className="absolute inset-0 rounded-full animate-pulse bg-purple-500/20 filter blur-xl"></div>
         <Image
           src="/bendiga_logo.png"
           alt="Bendiga Logo"
           width={300}
           height={300}
           priority
-          className="mb-8 animate-glow relative z-10"
+          className="mb-8 animate-glow"
         />
+        <div className="absolute inset-0 rounded-full animate-pulse bg-purple-500/20 filter blur-xl"></div>
       </div>
       <h1 className="text-3xl text-white text-center font-bold mb-8">
         Pray to Earn $WLD
