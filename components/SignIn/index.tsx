@@ -97,9 +97,9 @@ export const SignIn = () => {
         width={300}
         height={300}
         priority
-        className="mb-8"
+        className="mb-8 rounded-3xl"
       />
-      <h1 className="text-3xl text-white text-center font-bold mb-8">
+      <h1 className="text-3xl text-purple-200 text-center font-bold mb-8 -mt-20">
         Spread God's Word, earn $WLD
       </h1>
       <div className="flex flex-col gap-4">
