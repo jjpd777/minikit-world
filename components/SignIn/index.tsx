@@ -121,7 +121,7 @@ export const SignIn = () => {
                 signal: "user_verification",
                 verification_level: "device"
               });
-              
+
               if (result?.finalPayload?.status === "success") {
                 const verifyResponse = await fetch('/api/verify', {
                   method: 'POST',
@@ -129,11 +129,21 @@ export const SignIn = () => {
                     'Content-Type': 'application/json',
                   },
                   body: JSON.stringify({
-                    payload: result.finalPayload,
+                    payload: {
+                      proof: result.finalPayload.proof,
+                      merkle_root: result.finalPayload.merkle_root,
+                      nullifier_hash: result.finalPayload.nullifier_hash,
+                      verification_level: result.finalPayload.verification_level,
+                      version: result.finalPayload.version
+                    },
                     action: "prayer_verify",
                     signal: "user_verification"
                   }),
                 });
+
+                if (!verifyResponse.ok) {
+                  throw new Error('Verification request failed');
+                }
 
                 const data = await verifyResponse.json();
                 if (data.verifyRes?.success) {
