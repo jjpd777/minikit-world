@@ -92,15 +92,15 @@ export const SignIn = () => {
   return (
     <>
       <div className="relative">
+        <div className="absolute inset-0 rounded-full animate-pulse bg-purple-500/20 filter blur-xl"></div>
         <Image
           src="/bendiga_logo.png"
           alt="Bendiga Logo"
           width={300}
           height={300}
           priority
-          className="mb-8 animate-glow"
+          className="mb-8 animate-glow relative z-10"
         />
-        <div className="absolute inset-0 rounded-full animate-pulse bg-purple-500/20 filter blur-xl"></div>
       </div>
       <h1 className="text-3xl text-white text-center font-bold mb-8">
         Pray to Earn $WLD
