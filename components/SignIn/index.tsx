@@ -91,22 +91,26 @@ export const SignIn = () => {
 
   return (
     <>
-      <Image
-        src="/bendiga_logo.png"
-        alt="Bendiga Logo"
-        width={300}
-        height={300}
-        priority
-        className="mb-8"
-      />
+      <div className="relative">
+        <Image
+          src="/bendiga_logo.png"
+          alt="Bendiga Logo"
+          width={300}
+          height={300}
+          priority
+          className="mb-8 animate-glow"
+        />
+        <div className="absolute inset-0 rounded-full animate-pulse bg-purple-500/20 filter blur-xl"></div>
+      </div>
       <h1 className="text-3xl text-white text-center font-bold mb-8">
         Pray to Earn $WLD
       </h1>
       <div className="flex flex-col gap-4">
         <button
           onClick={() => signIn("worldcoin")}
-          className="px-8 py-4 bg-purple-400/80 text-white rounded-xl hover:bg-purple-500 transition-all duration-200 transform hover:scale-105 font-medium text-lg shadow-lg"
+          className="px-8 py-4 bg-purple-400/80 text-white rounded-xl hover:bg-purple-500 transition-all duration-200 transform hover:scale-105 font-medium text-lg shadow-lg flex items-center justify-center gap-2"
         >
+          <Image src="/world_c.png" alt="World Coin" width={24} height={24} />
           Sign in with World ID
         </button>
         <button
