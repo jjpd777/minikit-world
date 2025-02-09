@@ -13,7 +13,7 @@ export const WalletAuth = () => {
   // Function to increment balance, exposed globally
   (window as any).incrementBalance = () => {
     globalPrayerSigns++;
-    setBalance(prev => 0.11 + globalPrayerSigns * 0.11);
+    setBalance(0.11 + globalPrayerSigns * 0.11);
   };
 
   const handleWalletAuth = async () => {
