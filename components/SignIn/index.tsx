@@ -102,12 +102,38 @@ export const SignIn = () => {
       <h1 className="text-3xl text-white text-center font-bold mb-8">
         Build a prayer habit with A.I.
       </h1>
-      <button
-        onClick={() => signIn("worldcoin")}
-        className="px-8 py-4 bg-purple-400/80 text-white rounded-xl hover:bg-purple-500 transition-all duration-200 transform hover:scale-105 font-medium text-lg shadow-lg"
-      >
-        Sign in
-      </button>
+      <div className="flex flex-col gap-4">
+        <button
+          onClick={() => signIn("worldcoin")}
+          className="px-8 py-4 bg-purple-400/80 text-white rounded-xl hover:bg-purple-500 transition-all duration-200 transform hover:scale-105 font-medium text-lg shadow-lg"
+        >
+          Sign in with World ID
+        </button>
+        <button
+          onClick={async () => {
+            if (!MiniKit.isInstalled()) {
+              alert("Please install World App");
+              return;
+            }
+            try {
+              const result = await MiniKit.commandsAsync.verify({
+                action: "prayer_verify",
+                signal: undefined,
+                verification_level: "orb"
+              });
+              if (result?.finalPayload?.status === "success") {
+                alert("Verification successful!");
+              }
+            } catch (error) {
+              console.error("Verification failed:", error);
+              alert("Verification failed");
+            }
+          }}
+          className="px-8 py-4 bg-green-400/80 text-white rounded-xl hover:bg-green-500 transition-all duration-200 transform hover:scale-105 font-medium text-lg shadow-lg"
+        >
+          Verify with World ID
+        </button>
+      </div>
     </>
   );
 };
