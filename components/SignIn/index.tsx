@@ -92,15 +92,15 @@ export const SignIn = () => {
   return (
     <>
       <Image
-        src="/bendiga_painting_logo.png"
-        alt="Bendiga Deus"
+        src="/bendiga_logo.png"
+        alt="Bendiga Logo"
         width={300}
         height={300}
         priority
-        className="mb-8 rounded-3xl relative glow-effect"
+        className="mb-8"
       />
-      <h1 className="text-3xl text-purple-200 text-center font-bold mb-8 -mt-5">
-        Spread God's Word, earn $WLD
+      <h1 className="text-3xl text-white text-center font-bold mb-8">
+        Pray to Earn $WLD
       </h1>
       <div className="flex flex-col gap-4">
         <button
@@ -142,20 +142,19 @@ export const SignIn = () => {
                 });
 
                 if (!verifyResponse.ok) {
-                  // throw new Error('Verification request failed');
+                  throw new Error('Verification request failed');
                 }
 
                 const data = await verifyResponse.json();
                 if (data.verifyRes?.success) {
-                  // Sign in after successful verification
-                  await signIn("worldcoin", { callbackUrl: "/" });
+                  alert("Verification successful!");
                 } else {
-                  // throw new Error(data.verifyRes?.error || 'Verification failed');
+                  throw new Error(data.verifyRes?.error || 'Verification failed');
                 }
               }
             } catch (error) {
               console.error("Verification failed:", error);
-              // alert(error.message || "Verification failed");
+              alert(error.message || "Verification failed");
             }
           }}
           className="px-8 py-4 bg-green-400/80 text-white rounded-xl hover:bg-green-500 transition-all duration-200 transform hover:scale-105 font-medium text-lg shadow-lg"
