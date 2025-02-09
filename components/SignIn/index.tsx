@@ -100,7 +100,7 @@ export const SignIn = () => {
         className="mb-8"
       />
       <h1 className="text-3xl text-white text-center font-bold mb-8">
-        Build a prayer habit with A.I.
+        Pray to Earn $WLD
       </h1>
       <div className="flex flex-col gap-4">
         <button
