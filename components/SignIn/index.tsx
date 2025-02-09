@@ -118,15 +118,33 @@ export const SignIn = () => {
             try {
               const result = await MiniKit.commandsAsync.verify({
                 action: "prayer_verify",
-                signal: undefined,
-                verification_level: "orb"
+                signal: "user_verification",
+                verification_level: "device"
               });
+              
               if (result?.finalPayload?.status === "success") {
-                alert("Verification successful!");
+                const verifyResponse = await fetch('/api/verify', {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json',
+                  },
+                  body: JSON.stringify({
+                    payload: result.finalPayload,
+                    action: "prayer_verify",
+                    signal: "user_verification"
+                  }),
+                });
+
+                const data = await verifyResponse.json();
+                if (data.verifyRes?.success) {
+                  alert("Verification successful!");
+                } else {
+                  throw new Error(data.verifyRes?.error || 'Verification failed');
+                }
               }
             } catch (error) {
               console.error("Verification failed:", error);
-              alert("Verification failed");
+              alert(error.message || "Verification failed");
             }
           }}
           className="px-8 py-4 bg-green-400/80 text-white rounded-xl hover:bg-green-500 transition-all duration-200 transform hover:scale-105 font-medium text-lg shadow-lg"
