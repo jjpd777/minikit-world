@@ -1,4 +1,3 @@
-
 "use client";
 import { IDKitWidget } from "@worldcoin/idkit";
 import { useState } from "react";
@@ -8,32 +7,34 @@ export const VerifyBlock = () => {
 
   const handleVerify = async (proof: any) => {
     try {
-      console.log('Starting verification with proof:', proof);
-      console.log('Action name:', process.env.NEXT_PUBLIC_ACTION_NAME);
+      console.log("Starting verification with proof:", proof);
+      console.log("Action name:", process.env.NEXT_PUBLIC_ACTION_NAME);
 
-      const response = await fetch('/api/verify', {
-        method: 'POST',
+      const response = await fetch("/api/verify", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           proof,
           action: process.env.NEXT_PUBLIC_ACTION_NAME,
-          signal: undefined
+          signal: undefined,
         }),
       });
 
       const data = await response.json();
-      console.log('Verification response:', data);
+      console.log("Verification response:", data);
 
       if (data.verifyRes?.success) {
         setResult("Verification successful!");
         setProof(proof); // Add this state with useState at the top
       } else {
-        setResult(`Verification failed: ${data.verifyRes?.error || 'Unknown error'}`);
+        setResult(
+          `Verification failed: ${data.verifyRes?.error || "Unknown error"}`,
+        );
       }
     } catch (error) {
-      console.error('Verification error:', error);
+      console.error("Verification error:", error);
       setResult(`Verification failed: ${error.message}`);
     }
   };
@@ -54,15 +55,17 @@ export const VerifyBlock = () => {
             onClick={open}
             className="px-6 py-3 rounded-lg font-medium bg-blue-500 hover:bg-blue-600 text-white"
           >
-            Verify with World ID
+            Verify with WoRLDY
           </button>
         )}
       </IDKitWidget>
 
       {result && (
-        <div className={`text-sm mt-2 text-center ${
-          result.includes("successful") ? "text-green-500" : "text-red-500"
-        }`}>
+        <div
+          className={`text-sm mt-2 text-center ${
+            result.includes("successful") ? "text-green-500" : "text-red-500"
+          }`}
+        >
           {result}
         </div>
       )}
