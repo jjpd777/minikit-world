@@ -12,48 +12,6 @@ export const SignIn = () => {
     return <div className="text-white">Loading...</div>;
   }
 
-  const handleVerify = async () => {
-    if (!MiniKit.isInstalled()) {
-      alert("Please install World App");
-      return;
-    }
-
-    try {
-      const result = await MiniKit.commandsAsync.verify({
-        action: "prayer_verify",
-        signal: "user_verification"
-      });
-
-      if (result?.finalPayload?.status === "success") {
-        const verifyResponse = await fetch('/api/verify', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            payload: result.finalPayload,
-            action: "prayer_verify",
-            signal: "user_verification"
-          }),
-        });
-
-        if (!verifyResponse.ok) {
-          throw new Error('Verification request failed');
-        }
-
-        const data = await verifyResponse.json();
-        if (data.verifyRes?.success) {
-          alert("Verification successful!");
-        } else {
-          throw new Error(data.verifyRes?.error || 'Verification failed');
-        }
-      }
-    } catch (error) {
-      console.error("Verification failed:", error);
-      alert(error.message || "Verification failed");
-    }
-  };
-
   if (session) {
     const isOrbVerified = session.user?.verificationLevel === "orb";
 
@@ -62,6 +20,40 @@ export const SignIn = () => {
         {isOrbVerified && (
           <div className="fixed top-0 left-0 right-0 flex justify-end gap-4 p-4 bg-gray-900/80 backdrop-blur-sm z-50">
             <WalletAuth />
+            <button
+              onClick={async () => {
+                if (!MiniKit.isInstalled()) {
+                  alert("Please install World App to make payments");
+                  return;
+                }
+                try {
+                  const initRes = await fetch('/api/initiate-payment', {
+                    method: 'POST',
+                  });
+                  const { id } = await initRes.json();
+                  
+                  const result = await MiniKit.commandsAsync.pay({
+                    reference: id,
+                    to: "0xaBF8609C0678948b1FA06498cB4508a65bB1a0f2",
+                    tokens: [{
+                      symbol: "WLD",
+                      token_amount: "100000000000000000" // 0.1 WLD
+                    }],
+                    description: "Donation to Bendiga"
+                  });
+
+                  if (result?.finalPayload?.status === "success") {
+                    alert("Thank you for your donation!");
+                  }
+                } catch (error) {
+                  console.error("Payment failed:", error);
+                  alert("Payment failed");
+                }
+              }}
+              className="px-4 py-2 bg-purple-400/80 text-white rounded-xl hover:bg-purple-500 transition-colors duration-200 mr-2"
+            >
+              Donate
+            </button>
             <button
               onClick={() => signOut()}
               className="px-4 py-2 bg-purple-600/80 text-white rounded-xl hover:bg-purple-700 transition-colors duration-200"
@@ -88,15 +80,9 @@ export const SignIn = () => {
           {isOrbVerified ? (
             <PrayerForm />
           ) : (
-            <div className="flex flex-col items-center gap-4">
-              <h1 className="text-xl text-red-500 mb-4">Please verify your identity</h1>
-              <button
-                onClick={handleVerify}
-                className="px-6 py-3 bg-green-500/80 text-white rounded-xl hover:bg-green-600 transition-colors duration-200"
-              >
-                Verify with World ID
-              </button>
-            </div>
+            <h1 className="text-3xl font-bold text-red-500">
+              Can't Claim tokens
+            </h1>
           )}
         </div>
       </div>
@@ -122,6 +108,58 @@ export const SignIn = () => {
           className="px-8 py-4 bg-purple-400/80 text-white rounded-xl hover:bg-purple-500 transition-all duration-200 transform hover:scale-105 font-medium text-lg shadow-lg"
         >
           Sign in with World ID
+        </button>
+        <button
+          onClick={async () => {
+            if (!MiniKit.isInstalled()) {
+              alert("Please install World App");
+              return;
+            }
+            try {
+              const result = await MiniKit.commandsAsync.verify({
+                action: "prayer_verify",
+                signal: "user_verification",
+                verification_level: "device"
+              });
+
+              if (result?.finalPayload?.status === "success") {
+                const verifyResponse = await fetch('/api/verify', {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json',
+                  },
+                  body: JSON.stringify({
+                    payload: {
+                      proof: result.finalPayload.proof,
+                      merkle_root: result.finalPayload.merkle_root,
+                      nullifier_hash: result.finalPayload.nullifier_hash,
+                      verification_level: result.finalPayload.verification_level,
+                      version: result.finalPayload.version
+                    },
+                    action: "prayer_verify",
+                    signal: "user_verification"
+                  }),
+                });
+
+                if (!verifyResponse.ok) {
+                  throw new Error('Verification request failed');
+                }
+
+                const data = await verifyResponse.json();
+                if (data.verifyRes?.success) {
+                  alert("Verification successful!");
+                } else {
+                  throw new Error(data.verifyRes?.error || 'Verification failed');
+                }
+              }
+            } catch (error) {
+              console.error("Verification failed:", error);
+              alert(error.message || "Verification failed");
+            }
+          }}
+          className="px-8 py-4 bg-green-400/80 text-white rounded-xl hover:bg-green-500 transition-all duration-200 transform hover:scale-105 font-medium text-lg shadow-lg"
+        >
+          Verify with World ID
         </button>
       </div>
     </>
