@@ -92,8 +92,8 @@ export const SignIn = () => {
   return (
     <>
       <Image
-        src="/bendiga_logo.png"
-        alt="Bendiga Logo"
+        src="/bendiga_Deus.png"
+        alt="Bendiga Deus"
         width={300}
         height={300}
         priority
