@@ -13,13 +13,10 @@ export const SignIn = () => {
   }
 
   if (session) {
-    const isOrbVerified = session.user?.verificationLevel === "orb";
-
     return (
       <div className="flex flex-col items-center gap-4">
-        {isOrbVerified && (
-          <div className="fixed top-0 left-0 right-0 flex justify-end gap-4 p-4 bg-gray-900/80 backdrop-blur-sm z-50">
-            <WalletAuth />
+        <div className="fixed top-0 left-0 right-0 flex justify-end gap-4 p-4 bg-gray-900/80 backdrop-blur-sm z-50">
+          <WalletAuth />
             <button
               onClick={async () => {
                 if (!MiniKit.isInstalled()) {
@@ -77,13 +74,7 @@ export const SignIn = () => {
               style={{ marginTop:'-64px', marginBottom: "-44px" }}
             />
           </div>
-          {isOrbVerified ? (
-            <PrayerForm />
-          ) : (
-            <h1 className="text-3xl font-bold text-red-500">
-              Can't Claim tokens
-            </h1>
-          )}
+          <PrayerForm />
         </div>
       </div>
     );
