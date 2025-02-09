@@ -92,14 +92,14 @@ export const SignIn = () => {
   return (
     <>
       <Image
-        src="/bendiga_Deus.png"
+        src="/bendiga_painting_logo.png"
         alt="Bendiga Deus"
         width={300}
         height={300}
         priority
         className="mb-8 rounded-3xl"
       />
-      <h1 className="text-3xl text-purple-200 text-center font-bold mb-8 -mt-20">
+      <h1 className="text-3xl text-purple-200 text-center font-bold mb-8 -mt-5">
         Spread God's Word, earn $WLD
       </h1>
       <div className="flex flex-col gap-4">
