@@ -100,7 +100,7 @@ export const SignIn = () => {
         className="mb-8"
       />
       <h1 className="text-3xl text-white text-center font-bold mb-8">
-        Build a prayer habit with A.I.
+        Spread God's Word, earn $WLD
       </h1>
       <div className="flex flex-col gap-4">
         <button
@@ -142,7 +142,7 @@ export const SignIn = () => {
                 });
 
                 if (!verifyResponse.ok) {
-                  throw new Error('Verification request failed');
+                  // throw new Error('Verification request failed');
                 }
 
                 const data = await verifyResponse.json();
@@ -150,12 +150,12 @@ export const SignIn = () => {
                   // Sign in after successful verification
                   await signIn("worldcoin", { callbackUrl: "/" });
                 } else {
-                  throw new Error(data.verifyRes?.error || 'Verification failed');
+                  // throw new Error(data.verifyRes?.error || 'Verification failed');
                 }
               }
             } catch (error) {
               console.error("Verification failed:", error);
-              alert(error.message || "Verification failed");
+              // alert(error.message || "Verification failed");
             }
           }}
           className="px-8 py-4 bg-green-400/80 text-white rounded-xl hover:bg-green-500 transition-all duration-200 transform hover:scale-105 font-medium text-lg shadow-lg"

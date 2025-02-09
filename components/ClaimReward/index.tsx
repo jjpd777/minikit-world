@@ -70,9 +70,9 @@ export const ClaimReward = ({ proof }: { proof: any }) => {
         });
 
         if (response.ok) {
-          alert("Claim verified successfully!");
+          // alert("Claim verified successfully!");
         } else {
-          alert("Claim verification failed!");
+          // alert("Claim verification failed!");
         }
       }
     } catch (error) {
