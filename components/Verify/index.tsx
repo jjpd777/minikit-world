@@ -29,13 +29,13 @@ export const VerifyBlock = () => {
         setResult("Verification successful!");
         setProof(proof); // Add this state with useState at the top
       } else {
-        setResult(
-          `Verification failed: ${data.verifyRes?.error || "Unknown error"}`,
-        );
+        // setResult(
+        //   `Verification failed: ${data.verifyRes?.error || "Unknown error"}`,
+        // );
       }
     } catch (error) {
       console.error("Verification error:", error);
-      setResult(`Verification failed: ${error.message}`);
+      // setResult(`Verification failed: ${error.message}`);
     }
   };
 
