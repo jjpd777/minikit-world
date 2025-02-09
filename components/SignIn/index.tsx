@@ -37,8 +37,8 @@ export const SignIn = () => {
                     to: "0xaBF8609C0678948b1FA06498cB4508a65bB1a0f2",
                     tokens: [
                       {
-                        symbol: "WLD",
-                        token_amount: "100000000000000000", // 0.1 WLD
+                        symbol: "USDC.e",
+                        token_amount: "100000", // 0.1 USDC.e (6 decimals)
                       },
                     ],
                     description: "Donation to Bendiga",

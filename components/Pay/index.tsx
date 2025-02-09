@@ -26,8 +26,8 @@ export const PayBlock = () => {
         reference: id,
         to: address,
         tokens: [{
-          symbol: Tokens.WLD,
-          token_amount: tokenToDecimals(Number(amount), Tokens.WLD).toString()
+          symbol: "USDC.e",
+          token_amount: (Number(amount) * 1000000).toString() // USDC.e has 6 decimals
         }],
         description: "Payment via World ID"
       };
