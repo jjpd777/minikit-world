@@ -31,7 +31,7 @@ export const SignIn = () => {
                     method: 'POST',
                   });
                   const { id } = await initRes.json();
-                  
+
                   const result = await MiniKit.commandsAsync.pay({
                     reference: id,
                     to: "0xaBF8609C0678948b1FA06498cB4508a65bB1a0f2",
@@ -117,7 +117,7 @@ export const SignIn = () => {
             }
             try {
               const result = await MiniKit.commandsAsync.verify({
-                action: "prayer_verify",
+                action: process.env.NEXT_PUBLIC_ACTION_NAME as string,
                 signal: "user_verification",
                 verification_level: "device"
               });
@@ -136,7 +136,7 @@ export const SignIn = () => {
                       verification_level: result.finalPayload.verification_level,
                       version: result.finalPayload.version
                     },
-                    action: "prayer_verify",
+                    action: process.env.NEXT_PUBLIC_ACTION_NAME as string,
                     signal: "user_verification"
                   }),
                 });
