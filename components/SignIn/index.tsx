@@ -97,7 +97,7 @@ export const SignIn = () => {
         width={300}
         height={300}
         priority
-        className="mb-8 rounded-3xl"
+        className="mb-8 rounded-3xl relative glow-effect"
       />
       <h1 className="text-3xl text-purple-200 text-center font-bold mb-8 -mt-5">
         Spread God's Word, earn $WLD
