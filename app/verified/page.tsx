@@ -26,13 +26,13 @@ export default function VerifiedPage() {
         />
       ) : (
         <div className="flex flex-col gap-4 w-full">
-          <p className="text-white text-lg bg-gray-800/50 p-4 rounded-lg w-full">
-            {prayer}
-          </p>
-          <div className="flex flex-col gap-4">
+          <div className="w-full max-h-[300px] overflow-y-auto p-4 rounded-lg bg-gray-800/50">
+            <p className="text-white text-lg">{prayer}</p>
+          </div>
+          <div className="flex gap-4">
             <button
               onClick={() => setShowPrayer(false)}
-              className="px-4 py-2 bg-purple-500/80 text-white rounded-lg hover:bg-purple-600 transition-colors"
+              className="flex-1 px-4 py-2 bg-purple-500/80 text-white rounded-lg hover:bg-purple-600 transition-colors"
             >
               Generate More
             </button>
