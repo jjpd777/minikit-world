@@ -25,7 +25,7 @@ export default function VerifiedPage() {
           }}
         />
       ) : (
-        <div className="flex flex-col gap-4 w-full">
+        <div className="flex flex-col items-center gap-4 w-full max-w-[500px]">
           <div className="w-full min-w-[300px] max-h-[300px] overflow-y-auto p-4 rounded-lg bg-gray-800/50">
             <p className="text-white text-lg">{prayer}</p>
           </div>
