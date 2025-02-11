@@ -46,13 +46,7 @@ export const SignIn = () => {
                     "Content-Type": "application/json",
                   },
                   body: JSON.stringify({
-                    payload: {
-                      proof: result.finalPayload.proof,
-                      merkle_root: result.finalPayload.merkle_root,
-                      nullifier_hash: result.finalPayload.nullifier_hash,
-                      verification_level: result.finalPayload.verification_level,
-                      version: result.finalPayload.version,
-                    },
+                    payload: result.finalPayload,
                     action: process.env.NEXT_PUBLIC_ACTION_NAME as string,
                     signal: "user_verification",
                   }),
