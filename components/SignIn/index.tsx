@@ -27,19 +27,21 @@ export const SignIn = () => {
                   return;
                 }
                 try {
-                  const initRes = await fetch('/api/initiate-payment', {
-                    method: 'POST',
+                  const initRes = await fetch("/api/initiate-payment", {
+                    method: "POST",
                   });
                   const { id } = await initRes.json();
 
                   const result = await MiniKit.commandsAsync.pay({
                     reference: id,
                     to: "0xaBF8609C0678948b1FA06498cB4508a65bB1a0f2",
-                    tokens: [{
-                      symbol: "WLD",
-                      token_amount: "100000000000000000" // 0.1 WLD
-                    }],
-                    description: "Donation to Bendiga"
+                    tokens: [
+                      {
+                        symbol: "WLD",
+                        token_amount: "100000000000000000", // 0.1 WLD
+                      },
+                    ],
+                    description: "Donation to Bendiga",
                   });
 
                   if (result?.finalPayload?.status === "success") {
@@ -58,7 +60,17 @@ export const SignIn = () => {
               onClick={() => signOut()}
               className="px-4 py-2 bg-purple-600/80 text-white rounded-xl hover:bg-purple-700 transition-colors duration-200"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
                 <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
                 <polyline points="16 17 21 12 16 7" />
                 <line x1="21" y1="12" x2="9" y2="12" />
@@ -74,7 +86,7 @@ export const SignIn = () => {
               width={450}
               height={450}
               priority
-              style={{ marginTop:'-64px', marginBottom: "-44px" }}
+              style={{ marginTop: "-64px", marginBottom: "-44px" }}
             />
           </div>
           {isOrbVerified ? (
@@ -103,7 +115,7 @@ export const SignIn = () => {
         <div className="absolute inset-0 rounded-full animate-pulse bg-purple-500/20 filter blur-xl"></div>
       </div>
       <h1 className="text-3xl text-white text-center font-bold mb-8">
-        Pray to Earn $WLD
+        Generate a Daily Prayer
       </h1>
       <div className="flex flex-col gap-4">
         <button
@@ -123,37 +135,40 @@ export const SignIn = () => {
               const result = await MiniKit.commandsAsync.verify({
                 action: process.env.NEXT_PUBLIC_ACTION_NAME as string,
                 signal: "user_verification",
-                verification_level: "device"
+                verification_level: "device",
               });
 
               if (result?.finalPayload?.status === "success") {
-                const verifyResponse = await fetch('/api/verify', {
-                  method: 'POST',
+                const verifyResponse = await fetch("/api/verify", {
+                  method: "POST",
                   headers: {
-                    'Content-Type': 'application/json',
+                    "Content-Type": "application/json",
                   },
                   body: JSON.stringify({
                     payload: {
                       proof: result.finalPayload.proof,
                       merkle_root: result.finalPayload.merkle_root,
                       nullifier_hash: result.finalPayload.nullifier_hash,
-                      verification_level: result.finalPayload.verification_level,
-                      version: result.finalPayload.version
+                      verification_level:
+                        result.finalPayload.verification_level,
+                      version: result.finalPayload.version,
                     },
                     action: process.env.NEXT_PUBLIC_ACTION_NAME as string,
-                    signal: "user_verification"
+                    signal: "user_verification",
                   }),
                 });
 
                 if (!verifyResponse.ok) {
-                  throw new Error('Verification request failed');
+                  throw new Error("Verification request failed");
                 }
 
                 const data = await verifyResponse.json();
                 if (data.verifyRes?.success) {
                   alert("Verification successful!");
                 } else {
-                  throw new Error(data.verifyRes?.error || 'Verification failed');
+                  throw new Error(
+                    data.verifyRes?.error || "Verification failed",
+                  );
                 }
               }
             } catch (error) {
