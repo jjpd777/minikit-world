@@ -16,21 +16,20 @@ export default function VerifiedPage() {
   }, [router]);
 
   return (
-    <div className="min-h-screen flex items-center justify-center">
-      <div className="max-w-2xl w-full mx-auto p-6">
-        {!showPrayer ? (
-          <PrayerForm
-            onPrayerGenerated={(newPrayer) => {
-              setPrayer(newPrayer);
-              setShowPrayer(true);
-            }}
-          />
-        ) : (
-          <div className="flex flex-col items-center gap-6 w-full">
-            <div className="w-[600px] min-h-[200px] max-h-[300px] overflow-y-auto p-8 rounded-xl bg-gray-800/50 shadow-lg">
-              <p className="text-white text-xl leading-relaxed">{prayer}</p>
-            </div>
-            <div className="flex gap-4 w-[600px]">
+    <div className="flex min-h-screen flex-col items-center justify-center p-24">
+      {!showPrayer ? (
+        <PrayerForm
+          onPrayerGenerated={(newPrayer) => {
+            setPrayer(newPrayer);
+            setShowPrayer(true);
+          }}
+        />
+      ) : (
+        <div className="flex flex-col gap-4 w-full">
+          <div className="w-[500px] max-h-[300px] overflow-y-auto p-4 rounded-lg bg-gray-800/50">
+            <p className="text-white text-lg">{prayer}</p>
+          </div>
+          <div className="flex gap-4">
             <button
               onClick={() => setShowPrayer(false)}
               className="flex-1 px-4 py-2 bg-purple-500/80 text-white rounded-lg hover:bg-purple-600 transition-colors"
