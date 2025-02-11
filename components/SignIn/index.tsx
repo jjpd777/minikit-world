@@ -21,8 +21,8 @@ export const SignIn = () => {
         />
         <div className="absolute inset-0 rounded-full animate-pulse bg-purple-500/20 filter blur-xl"></div>
       </div>
-      <h1 className="text-3xl text-white text-center font-bold mb-8">
-        Generate a Daily Prayer
+      <h1 className="text-2xl text-white text-center font-bold mb-8">
+        Generate Daily Prayers
       </h1>
       <div className="flex flex-col gap-4">
         <button
