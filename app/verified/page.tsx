@@ -1,6 +1,7 @@
 "use client";
 import { PrayerForm } from "@/components/PrayerForm";
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 
 export default function VerifiedPage() {
@@ -26,6 +27,17 @@ export default function VerifiedPage() {
         />
       ) : (
         <div className="flex flex-col items-center gap-4 w-full max-w-[500px]">
+          <div className="flex justify-center mb-4">
+            <Image
+              src="/bendiga_logo.png"
+              alt="Bendiga Logo"
+              width={150}
+              height={150}
+              priority
+              className="animate-glow"
+              style={{marginBottom: '-22px'}}
+            />
+          </div>
           <div className="w-full min-w-[300px] max-h-[300px] overflow-y-auto p-4 rounded-lg bg-gray-800/50">
             <p className="text-white text-lg">{prayer}</p>
           </div>
