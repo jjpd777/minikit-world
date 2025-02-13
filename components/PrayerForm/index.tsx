@@ -12,37 +12,37 @@ export const PrayerForm = ({ onPrayerGenerated }: { onPrayerGenerated: (prayer: 
       code: 'en', 
       name: 'English', 
       flag: '/usa.svg',
-      choices: ['Mother', 'Father', 'Brothers', 'Sisters', 'Health', 'Money', 'Love']
+      choices: ['Myself', 'Mother', 'Father', 'Siblings', 'Health', 'Wealth']
     },
     { 
       code: 'es', 
       name: 'Spanish', 
       flag: '/colombia.svg',
-      choices: ['Madre', 'Padre', 'Hermanos', 'Hermanas', 'Salud', 'Dinero', 'Amor']
+      choices: ['Yo mismo', 'Madre', 'Padre', 'Hermanos', 'Salud', 'Riqueza']
     },
     { 
       code: 'pt', 
       name: 'Portuguese', 
       flag: '/brazil.svg',
-      choices: ['Mãe', 'Pai', 'Irmãos', 'Irmãs', 'Saúde', 'Dinheiro', 'Amor']
+      choices: ['Eu mesmo', 'Mãe', 'Pai', 'Irmãos', 'Saúde', 'Riqueza']
     },
     { 
       code: 'fr', 
       name: 'French', 
       flag: '/france.svg',
-      choices: ['Mère', 'Père', 'Frères', 'Sœurs', 'Santé', 'Argent', 'Amour']
+      choices: ['Moi-même', 'Mère', 'Père', 'Frères et Sœurs', 'Santé', 'Richesse']
     },
     { 
       code: 'de', 
       name: 'German', 
       flag: '/deutschland.svg',
-      choices: ['Mutter', 'Vater', 'Brüder', 'Schwestern', 'Gesundheit', 'Geld', 'Liebe']
+      choices: ['Ich selbst', 'Mutter', 'Vater', 'Geschwister', 'Gesundheit', 'Reichtum']
     },
     { 
       code: 'he', 
       name: 'Hebrew', 
       flag: '/israel.svg',
-      choices: ['אמא', 'אבא', 'אחים', 'אחיות', 'בריאות', 'כסף', 'אהבה']
+      choices: ['עצמי', 'אמא', 'אבא', 'אחים ואחיות', 'בריאות', 'עושר']
     },
   ];
 
