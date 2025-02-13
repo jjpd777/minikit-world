@@ -100,8 +100,8 @@ export const PrayerForm = ({ onPrayerGenerated }: { onPrayerGenerated: (prayer: 
             </button>
           ))}
         </div>
-          <div className="mt-4 flex justify-center w-full">
-            <div className="grid grid-cols-3 gap-x-20 gap-y-4 px-4 max-w-[800px] w-full">
+          <div className="mt-4 flex justify-center min-w-[300px] ml-[-90px]">
+          <div className="grid grid-cols-3 gap-x-20 gap-y-4 px-4">
 
           {languages.find(lang => lang.code === language)?.choices.map((choice, index) => (
             <button
