@@ -113,7 +113,7 @@ export const PrayerForm = ({
               className={`p-2 rounded-lg border ${
                 language === lang.code
                   ? "border-purple-500 bg-purple-500/20"
-                  : "border-gray-700 bg-gray-800"
+                  : "border-transparent bg-transparent"
               } flex flex-col items-center gap-2 hover:border-purple-500/50 transition-colors`}
             >
               <Image
