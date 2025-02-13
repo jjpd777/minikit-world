@@ -1,4 +1,3 @@
-
 "use client";
 import { useState } from 'react';
 import Image from 'next/image';
@@ -96,7 +95,7 @@ export const PrayerForm = ({ onPrayerGenerated }: { onPrayerGenerated: (prayer: 
                 height={24}
                 className="rounded-sm"
               />
-             
+
             </button>
           ))}
         </div>
