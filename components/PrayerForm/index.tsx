@@ -9,12 +9,42 @@ export const PrayerForm = ({ onPrayerGenerated }: { onPrayerGenerated: (prayer: 
   const [isLoading, setIsLoading] = useState(false);
 
   const languages = [
-    { code: 'en', name: 'English', flag: '/usa.svg' },
-    { code: 'es', name: 'Spanish', flag: '/colombia.svg' },
-    { code: 'pt', name: 'Portuguese', flag: '/brazil.svg' },
-    { code: 'fr', name: 'French', flag: '/france.svg' },
-    { code: 'de', name: 'German', flag: '/deutschland.svg' },
-    { code: 'he', name: 'Hebrew', flag: '/israel.svg' },
+    { 
+      code: 'en', 
+      name: 'English', 
+      flag: '/usa.svg',
+      choices: ['Mother', 'Father', 'Brothers', 'Sisters', 'Health', 'Money', 'Love']
+    },
+    { 
+      code: 'es', 
+      name: 'Spanish', 
+      flag: '/colombia.svg',
+      choices: ['Madre', 'Padre', 'Hermanos', 'Hermanas', 'Salud', 'Dinero', 'Amor']
+    },
+    { 
+      code: 'pt', 
+      name: 'Portuguese', 
+      flag: '/brazil.svg',
+      choices: ['Mãe', 'Pai', 'Irmãos', 'Irmãs', 'Saúde', 'Dinheiro', 'Amor']
+    },
+    { 
+      code: 'fr', 
+      name: 'French', 
+      flag: '/france.svg',
+      choices: ['Mère', 'Père', 'Frères', 'Sœurs', 'Santé', 'Argent', 'Amour']
+    },
+    { 
+      code: 'de', 
+      name: 'German', 
+      flag: '/deutschland.svg',
+      choices: ['Mutter', 'Vater', 'Brüder', 'Schwestern', 'Gesundheit', 'Geld', 'Liebe']
+    },
+    { 
+      code: 'he', 
+      name: 'Hebrew', 
+      flag: '/israel.svg',
+      choices: ['אמא', 'אבא', 'אחים', 'אחיות', 'בריאות', 'כסף', 'אהבה']
+    },
   ];
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -67,6 +97,18 @@ export const PrayerForm = ({ onPrayerGenerated }: { onPrayerGenerated: (prayer: 
                 className="rounded-sm"
               />
               <span className="text-white text-sm">{lang.name}</span>
+            </button>
+          ))}
+        </div>
+        <div className="mt-4 grid grid-cols-4 gap-2">
+          {languages.find(lang => lang.code === language)?.choices.map((choice, index) => (
+            <button
+              key={index}
+              type="button"
+              onClick={() => setIntentions(prev => prev ? `${prev}, ${choice}` : choice)}
+              className="p-2 rounded-lg border border-gray-700 bg-gray-800 text-white hover:border-purple-500/50 transition-colors text-sm"
+            >
+              {choice}
             </button>
           ))}
         </div>
