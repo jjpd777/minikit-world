@@ -1,0 +1,54 @@
+Enumerating objects: 1003, done.
+Counting objects: 100% (1003/1003), done.
+Delta compression using up to 8 threads
+Compressing objects: 100% (799/799), done.
+Writing objects: 100% (976/976), 4.21 MiB | 3.32 MiB/s, done.
+Total 976 (delta 559), reused 0 (delta 0), pack-reused 0 (from 0)
+remote: Resolving deltas: 100% (559/559), completed with 10 local objects.
+remote: error: GH013: Repository rule violations found for refs/heads/main.
+remote: 
+remote: - GITHUB PUSH PROTECTION
+remote:   —————————————————————————————————————————
+remote:     Resolve the following violations before pushing again
+remote: 
+remote:     - Push cannot contain secrets
+remote: 
+remote:     
+remote:      (?) Learn how to resolve a blocked push
+remote:      https://docs.github.com/code-security/secret-scanning/working-with-secret-scanning-and-push-protection/working-with-push-protection-from-the-command-line#resolving-a-blocked-push
+remote:     
+remote:     
+remote:       —— OpenAI API Key ————————————————————————————————————
+remote:        locations:
+remote:          - commit: b3bff2829600f99fb9da071344a1ca8185bff976
+remote:            path: app/api/generate-prayer/route.ts:19
+remote:          - commit: 179597bfd5a6779f82b1206531535c7ee1cc576f
+remote:            path: app/api/generate-prayer/route.ts:19
+remote:          - commit: de691950fc7d4ff6767612549411c2dcfaab810e
+remote:            path: app/api/generate-prayer/route.ts:27
+remote:     
+remote:        (?) To push, remove secret from commit(s) or follow this URL to allow the secret.
+remote:        https://github.com/jjpd777/minikit-world/security/secret-scanning/unblock-secret/2t0Hmv9cTj9ml2O1Om7MqEzMf2J
+remote:     
+remote:     
+remote:       —— OpenAI API Key ————————————————————————————————————
+remote:        locations:
+remote:          - commit: 775f1b45b7c347d87e1efcec78bec23bb83a83a2
+remote:            path: app/api/generate-prayer/route.ts:29
+remote:          - commit: 61b1128a80c3d850d043ade190b1124c0086ea0e
+remote:            path: app/api/generate-prayer/route.ts:29
+remote:     
+remote:        (?) To push, remove secret from commit(s) or follow this URL to allow the secret.
+remote:        https://github.com/jjpd777/minikit-world/security/secret-scanning/unblock-secret/2t0Hmoc8mtKsx8Hcg4J2mVA6zF5
+remote:     
+remote:     
+remote:       —— OpenAI API Key ————————————————————————————————————
+remote:        locations:
+remote:          - commit: d8208f0d5188ae5d70feaacd84cd47d6bd5b2bdc
+remote:            path: components/PrayerForm/index.tsx:54
+remote:     
+remote:        (?) To push, remove secret from commit(s) or follow this URL to allow the secret.
+remote:        https://github.com/jjpd777/minikit-world/security/secret-scanning/unblock-secret/2t0HmpEdJ8VgUtTzeosQAtefFk6
+remote:     
+remote: 
+remote: 
