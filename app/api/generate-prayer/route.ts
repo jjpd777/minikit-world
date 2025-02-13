@@ -1,14 +1,9 @@
 
 import { NextRequest, NextResponse } from 'next/server';
-import OpenAI from 'openai';
 
 if (!process.env.OPENAI_API_KEY) {
   throw new Error('Missing OPENAI_API_KEY environment variable');
 }
-
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
 
 export async function POST(request: NextRequest) {
   try {
@@ -30,23 +25,27 @@ export async function POST(request: NextRequest) {
       he: 'Hebrew',
     };
 
-    const completion = await openai.chat.completions.create({
-      model: "gpt-3.5-turbo",
-      messages: [
-        {
-          role: "system",
-          content: "You are a compassionate spiritual guide specializing in crafting meaningful prayers."
-        },
-        {
-          role: "user",
-          content: `Generate a heartfelt prayer in ${languageMap[language]} addressing the following intentions: ${intentions}. The prayer should be respectful, compassionate, and around 100-150 words.`
-        }
-      ],
-      temperature: 0.7,
+    const prompt = `Generate a heartfelt prayer in ${languageMap[language]} addressing the following intentions: ${intentions}. The prayer should be respectful and compassionate.`;
+
+    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`
+      },
+      body: JSON.stringify({
+        model: "gpt-3.5-turbo",
+        messages: [
+          { role: "system", content: "You are a helpful assistant that writes Christian prayers. Make it 200 words MAX." },
+          { role: "user", content: prompt }
+        ],
+        temperature: 0.9
+      })
     });
 
-    const prayer = completion.choices[0].message.content;
-    
+    const data = await response.json();
+    const prayer = data.choices?.[0]?.message?.content;
+
     if (!prayer) {
       throw new Error('No prayer was generated');
     }
