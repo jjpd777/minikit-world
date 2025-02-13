@@ -73,9 +73,9 @@ export const PrayerForm = ({ onPrayerGenerated }: { onPrayerGenerated: (prayer: 
   };
 
   return (
-    <form onSubmit={handleSubmit} className="w-full max-w-md space-y-4">
-      <div className="flex flex-col gap-2">
-        <div className="grid grid-cols-3 gap-2">
+    <form onSubmit={handleSubmit} className="w-full space-y-8">
+      <div className="flex flex-col items-center gap-8 w-full">
+        <div className="grid grid-cols-3 gap-2 w-full max-w-md">
           {languages.map((lang) => (
             <button
               key={lang.code}
@@ -98,8 +98,8 @@ export const PrayerForm = ({ onPrayerGenerated }: { onPrayerGenerated: (prayer: 
             </button>
           ))}
         </div>
-          <div className="mt-4 flex justify-center min-w-[300px] ml-[-90px]">
-          <div className="grid grid-cols-3 gap-x-20 gap-y-4 px-4">
+        <div className="w-full max-w-2xl">
+          <div className="grid grid-cols-3 gap-6">
 
           {languages.find(lang => lang.code === language)?.choices.map((choice, index) => (
             <button
@@ -115,7 +115,7 @@ export const PrayerForm = ({ onPrayerGenerated }: { onPrayerGenerated: (prayer: 
         </div>
       </div>  
 
-      <div className="flex flex-col gap-2 min-w-[500px]">
+      <div className="flex flex-col gap-2 w-full max-w-2xl mx-auto">
         <label htmlFor="intentions" className="text-white">Prayer Intentions</label>
         <textarea
           id="intentions"
