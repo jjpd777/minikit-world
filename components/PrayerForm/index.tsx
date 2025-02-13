@@ -100,18 +100,20 @@ export const PrayerForm = ({ onPrayerGenerated }: { onPrayerGenerated: (prayer: 
             </button>
           ))}
         </div>
-        <div className="mt-4 grid grid-cols-3 gap-x-20 gap-y-4 px-4 justify-center w-full max-w-md mx-auto">
+          <div className="mt-4 flex justify-center min-w-[300px] ml-[-90px]">
+          <div className="grid grid-cols-3 gap-x-20 gap-y-4 px-4">
 
           {languages.find(lang => lang.code === language)?.choices.map((choice, index) => (
             <button
               key={index}
               type="button"
               onClick={() => setIntentions(prev => prev ? `${prev}, ${choice}` : choice)}
-              className="p-2 min-w-[100px] w-full rounded-lg border border-gray-700 bg-gray-800 text-white hover:border-purple-500/50 transition-colors text-sm"
+              className="p-2 min-w-[90px] w-full rounded-lg border border-gray-700 bg-gray-800 text-white hover:border-purple-500/50 transition-colors text-sm"
             >
               {choice}
             </button>
           ))}
+          </div>
         </div>
       </div>  
 
