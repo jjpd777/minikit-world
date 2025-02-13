@@ -28,7 +28,10 @@ export default function RootLayout({
       <body className={inter.className}>
         <NextAuthProvider>
           <ErudaProvider>
-            <MiniKitProvider>{children}</MiniKitProvider>
+            <MiniKitProvider>
+              {children}
+              <AudioPlayer />
+            </MiniKitProvider>
           </ErudaProvider>
         </NextAuthProvider>
       </body>
