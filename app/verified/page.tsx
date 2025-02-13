@@ -53,7 +53,7 @@ export default function VerifiedPage() {
                       headers: {
                         'Accept': 'audio/mpeg',
                         'Content-Type': 'application/json',
-                        'xi-api-key': process.env.NEXT_PUBLIC_ELEVEN_LABS_KEY || '',
+                        'xi-api-key': process.env.ELEVEN_API_KEY || '',
                       },
                       body: JSON.stringify({
                         text: prayer,
