@@ -96,7 +96,7 @@ export const PrayerForm = ({ onPrayerGenerated }: { onPrayerGenerated: (prayer: 
                 height={24}
                 className="rounded-sm"
               />
-              <span className="text-white text-sm">{lang.name}</span>
+             
             </button>
           ))}
         </div>
@@ -106,7 +106,7 @@ export const PrayerForm = ({ onPrayerGenerated }: { onPrayerGenerated: (prayer: 
               key={index}
               type="button"
               onClick={() => setIntentions(prev => prev ? `${prev}, ${choice}` : choice)}
-              className="p-2 rounded-lg border border-gray-700 bg-gray-800 text-white hover:border-purple-500/50 transition-colors text-sm"
+              className="p-2 min-w-[100px] rounded-lg border border-gray-700 bg-gray-800 text-white hover:border-purple-500/50 transition-colors text-sm"
             >
               {choice}
             </button>
