@@ -1,11 +1,21 @@
 
 "use client";
 import { useState } from 'react';
+import Image from 'next/image';
 
 export const PrayerForm = ({ onPrayerGenerated }: { onPrayerGenerated: (prayer: string) => void }) => {
   const [language, setLanguage] = useState('en');
   const [intentions, setIntentions] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+
+  const languages = [
+    { code: 'en', name: 'English', flag: '/usa.svg' },
+    { code: 'es', name: 'Spanish', flag: '/colombia.svg' },
+    { code: 'pt', name: 'Portuguese', flag: '/brazil.svg' },
+    { code: 'fr', name: 'French', flag: '/france.svg' },
+    { code: 'de', name: 'German', flag: '/deutschland.svg' },
+    { code: 'he', name: 'Hebrew', flag: '/israel.svg' },
+  ];
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -37,19 +47,29 @@ export const PrayerForm = ({ onPrayerGenerated }: { onPrayerGenerated: (prayer: 
     <form onSubmit={handleSubmit} className="w-full max-w-md space-y-4">
       <div className="flex flex-col gap-2">
         <label htmlFor="language" className="text-white">Select Language</label>
-        <select
-          id="language"
-          value={language}
-          onChange={(e) => setLanguage(e.target.value)}
-          className="p-2 rounded-lg bg-gray-800 text-white border border-gray-700"
-        >
-          <option value="en">English</option>
-          <option value="es">Spanish</option>
-          <option value="pt">Portuguese</option>
-          <option value="fr">French</option>
-          <option value="de">German</option>
-          <option value="he">Hebrew</option>
-        </select>
+        <div className="grid grid-cols-3 gap-2">
+          {languages.map((lang) => (
+            <button
+              key={lang.code}
+              type="button"
+              onClick={() => setLanguage(lang.code)}
+              className={`p-2 rounded-lg border ${
+                language === lang.code
+                  ? 'border-purple-500 bg-purple-500/20'
+                  : 'border-gray-700 bg-gray-800'
+              } flex flex-col items-center gap-2 hover:border-purple-500/50 transition-colors`}
+            >
+              <Image
+                src={lang.flag}
+                alt={lang.name}
+                width={24}
+                height={24}
+                className="rounded-sm"
+              />
+              <span className="text-white text-sm">{lang.name}</span>
+            </button>
+          ))}
+        </div>
       </div>
 
       <div className="flex flex-col gap-2">
