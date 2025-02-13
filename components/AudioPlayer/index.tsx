@@ -28,7 +28,7 @@ export const AudioPlayer = () => {
         onClick={togglePlay}
         className="bg-purple-500/80 text-white p-2 rounded-full hover:bg-purple-600 transition-colors"
       >
-        {isPlaying ? "🔇 Pause" : "🔊 Play"}
+        {isPlaying ? "🔇" : "🔊 Play"}
       </button>
       <audio
         ref={audioRef}
