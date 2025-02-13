@@ -75,7 +75,6 @@ export const PrayerForm = ({ onPrayerGenerated }: { onPrayerGenerated: (prayer: 
   return (
     <form onSubmit={handleSubmit} className="w-full max-w-md space-y-4">
       <div className="flex flex-col gap-2">
-        <label htmlFor="language" className="text-white">Select Language</label>
         <div className="grid grid-cols-3 gap-2">
           {languages.map((lang) => (
             <button
@@ -116,7 +115,7 @@ export const PrayerForm = ({ onPrayerGenerated }: { onPrayerGenerated: (prayer: 
         </div>
       </div>  
 
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-2 min-w-[500px]">
         <label htmlFor="intentions" className="text-white">Prayer Intentions</label>
         <textarea
           id="intentions"
