@@ -2,6 +2,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import OpenAI from 'openai';
 
+if (!process.env.OPENAI_API_KEY) {
+  throw new Error('Missing OPENAI_API_KEY environment variable');
+}
+
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
@@ -9,6 +13,13 @@ const openai = new OpenAI({
 export async function POST(request: NextRequest) {
   try {
     const { language, intentions } = await request.json();
+    
+    if (!intentions) {
+      return NextResponse.json(
+        { error: 'Prayer intentions are required' },
+        { status: 400 }
+      );
+    }
 
     const languageMap: { [key: string]: string } = {
       en: 'English',
@@ -19,8 +30,6 @@ export async function POST(request: NextRequest) {
       he: 'Hebrew',
     };
 
-    const prompt = `Generate a heartfelt prayer in ${languageMap[language]} addressing the following intentions: ${intentions}. The prayer should be respectful, compassionate, and around 100-150 words.`;
-
     const completion = await openai.chat.completions.create({
       model: "gpt-3.5-turbo",
       messages: [
@@ -30,13 +39,17 @@ export async function POST(request: NextRequest) {
         },
         {
           role: "user",
-          content: prompt
+          content: `Generate a heartfelt prayer in ${languageMap[language]} addressing the following intentions: ${intentions}. The prayer should be respectful, compassionate, and around 100-150 words.`
         }
       ],
       temperature: 0.7,
     });
 
     const prayer = completion.choices[0].message.content;
+    
+    if (!prayer) {
+      throw new Error('No prayer was generated');
+    }
 
     return NextResponse.json({ prayer });
   } catch (error) {
