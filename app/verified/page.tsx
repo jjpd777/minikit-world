@@ -41,14 +41,59 @@ export default function VerifiedPage() {
           <div className="w-full min-w-[300px] max-h-[300px] overflow-y-auto p-4 rounded-lg bg-gray-800/50">
             <p className="text-white text-lg">{prayer}</p>
           </div>
-          <div className="flex gap-4">
+          <div className="flex gap-4 flex-col w-full">
             <button
-              onClick={() => setShowPrayer(false)}
-              className="flex-1 px-4 py-2 bg-purple-500/80 text-white rounded-lg hover:bg-purple-600 transition-colors flex items-center justify-center"
+              onClick={async () => {
+                try {
+                  const response = await fetch(
+                    'https://api.elevenlabs.io/v1/text-to-speech/l1zE9xgNpUTaQCZzpNJa',
+                    {
+                      method: 'POST',
+                      headers: {
+                        'Accept': 'audio/mpeg',
+                        'Content-Type': 'application/json',
+                        'xi-api-key': process.env.NEXT_PUBLIC_ELEVEN_LABS_KEY || '',
+                      },
+                      body: JSON.stringify({
+                        text: prayer,
+                        model_id: "eleven_multilingual_v2",
+                        voice_settings: {
+                          stability: 0.3,
+                          similarity_boost: 0.85,
+                          style: 0.2,
+                        }
+                      }),
+                    }
+                  );
+
+                  if (!response.ok) {
+                    throw new Error(`Failed to generate audio: ${response.status}`);
+                  }
+
+                  const audioBlob = await response.blob();
+                  const audioUrl = URL.createObjectURL(audioBlob);
+                  const audio = new Audio(audioUrl);
+                  audio.play();
+                } catch (error) {
+                  console.error('Error generating audio:', error);
+                  alert('Failed to generate audio. Please try again.');
+                }
+              }}
+              className="w-full px-4 py-2 bg-blue-500/80 text-white rounded-lg hover:bg-blue-600 transition-colors flex items-center justify-center gap-2"
             >
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M22 12c0 6-4.39 10-9.806 10C7.792 22 4.24 19.665 3 16" />
-                <path d="M2 12C2 6 6.39 2 11.806 2 16.209 2 19.76 4.335 21 8" />
+                <path d="M12 6v12M6 12h12"/>
+              </svg>
+              Prayer A.I.
+            </button>
+            <div className="flex gap-4">
+              <button
+                onClick={() => setShowPrayer(false)}
+                className="flex-1 px-4 py-2 bg-purple-500/80 text-white rounded-lg hover:bg-purple-600 transition-colors flex items-center justify-center"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M22 12c0 6-4.39 10-9.806 10C7.792 22 4.24 19.665 3 16" />
+                  <path d="M2 12C2 6 6.39 2 11.806 2 16.209 2 19.76 4.335 21 8" />
                 <path d="M7 17l-4-1-1 4" />
                 <path d="M17 7l4 1 1-4" />
               </svg>
