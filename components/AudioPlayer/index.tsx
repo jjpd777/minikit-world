@@ -1,50 +1,41 @@
 
 "use client";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export const AudioPlayer = () => {
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
 
-  useEffect(() => {
-    const playAudio = async () => {
-      console.log("Attempting to play audio...");
-      
-      if (audioRef.current) {
-        audioRef.current.volume = 0.3;
-        console.log("Audio element exists, volume set to 0.3");
-        
+  const togglePlay = async () => {
+    if (audioRef.current) {
+      if (isPlaying) {
+        audioRef.current.pause();
+      } else {
         try {
-          const playPromise = audioRef.current.play();
-          await playPromise;
-          console.log("Audio playback started successfully");
+          audioRef.current.volume = 0.3;
+          await audioRef.current.play();
         } catch (error) {
           console.error("Audio playback failed:", error);
-          
-          // Check if the audio file exists
-          fetch('/music_files_soundtrack_02.mp3')
-            .then(response => {
-              if (!response.ok) {
-                console.error("Audio file not found or inaccessible");
-              }
-            })
-            .catch(err => console.error("Error checking audio file:", err));
         }
-      } else {
-        console.error("Audio element reference not found");
       }
-    };
-
-    playAudio();
-  }, []);
+      setIsPlaying(!isPlaying);
+    }
+  };
 
   return (
-    <audio
-      ref={audioRef}
-      src="/music_files_soundtrack_02.mp3"
-      loop
-      preload="auto"
-      style={{ display: "none" }}
-      onError={(e) => console.error("Audio element error:", e)}
-    />
+    <div className="fixed bottom-4 right-4 z-50">
+      <button
+        onClick={togglePlay}
+        className="bg-purple-500/80 text-white p-2 rounded-full hover:bg-purple-600 transition-colors"
+      >
+        {isPlaying ? "🔇 Pause" : "🔊 Play"}
+      </button>
+      <audio
+        ref={audioRef}
+        src="/music_files_soundtrack_02.mp3"
+        loop
+        preload="auto"
+      />
+    </div>
   );
 };
