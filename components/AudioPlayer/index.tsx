@@ -7,13 +7,30 @@ export const AudioPlayer = () => {
 
   useEffect(() => {
     const playAudio = async () => {
+      console.log("Attempting to play audio...");
+      
       if (audioRef.current) {
         audioRef.current.volume = 0.3;
+        console.log("Audio element exists, volume set to 0.3");
+        
         try {
-          await audioRef.current.play();
+          const playPromise = audioRef.current.play();
+          await playPromise;
+          console.log("Audio playback started successfully");
         } catch (error) {
           console.error("Audio playback failed:", error);
+          
+          // Check if the audio file exists
+          fetch('/music_files_soundtrack_02.mp3')
+            .then(response => {
+              if (!response.ok) {
+                console.error("Audio file not found or inaccessible");
+              }
+            })
+            .catch(err => console.error("Error checking audio file:", err));
         }
+      } else {
+        console.error("Audio element reference not found");
       }
     };
 
@@ -27,6 +44,7 @@ export const AudioPlayer = () => {
       loop
       preload="auto"
       style={{ display: "none" }}
+      onError={(e) => console.error("Audio element error:", e)}
     />
   );
 };
