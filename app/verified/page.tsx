@@ -8,10 +8,10 @@ export default function VerifiedPage() {
 
 const generateSpeech = async (text: string, walletAddress: string) => {
   try {
-    console.log("%c[generateSpeech] Starting request to external API...", "color: purple");
+    console.log("%c[generateSpeech] Starting request to backend API...", "color: purple");
     console.log("%c[generateSpeech] Request payload:", "color: blue", { text, walletAddress });
 
-    const response = await fetch('https://0cb3df08-f19f-4e55-add7-4513e781f46c-00-2lvwkm65uqcmj.spock.replit.dev/api/text-to-speech', {
+    const response = await fetch('/api/text-to-speech', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -148,7 +148,7 @@ const generateSpeech = async (text: string, walletAddress: string) => {
                     const audioBlob = await response.blob();
                     const audioUrl = URL.createObjectURL(audioBlob);
                     const audioPlayer = document.getElementById(
-                      "prayerAudio",
+                      "elevenlabsAudio",
                     ) as HTMLAudioElement;
                     if (audioPlayer) {
                       audioPlayer.src = audioUrl;
@@ -179,23 +179,40 @@ const generateSpeech = async (text: string, walletAddress: string) => {
                       console.log("%c[GENAI] Using wallet:", "color: blue", "0x7777");
 
                       console.log("%c[GENAI] Calling generateSpeech...", "color: purple");
-                      const response = await fetch('/api/text-to-speech', {
-                        method: 'POST',
-                        headers: {
-                          'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({
-                          text: prayer,
-                          walletAddress: "0x7777"
-                        }),
-                      });
-                      console.log("%c[GENAI] Raw response:", "color: green", response);
-                      
-                      // Type guard to check response structure
-                      if ('url' in response) {
+                      const response = await generateSpeech(prayer, "0x7777");
+
+                      if (response.url) {
                         console.log("%c[GENAI] Success! Audio URL:", "color: green; font-weight: bold", response.url);
-                        console.log("%c[GENAI] Response type:", "color: blue", "SuccessResponse");
-                      } else if ('error' in response) {
+                      
+                      console.log("%c[GENAI] Fetching audio from URL...", "color: purple");
+                      const audioResponse = await fetch(response.url);
+                      console.log("%c[GENAI] Audio fetch response status:", "color: blue", audioResponse.status);
+                      
+                      if (!audioResponse.ok) {
+                        throw new Error(`Failed to fetch audio: ${audioResponse.status}`);
+                      }
+
+                      const audioBlob = await audioResponse.blob();
+                      console.log("%c[GENAI] Audio blob size:", "color: blue", `${audioBlob.size} bytes`);
+                      console.log("%c[GENAI] Audio blob type:", "color: blue", audioBlob.type);
+
+                      const audioUrl = URL.createObjectURL(audioBlob);
+                      console.log("%c[GENAI] Created object URL:", "color: green", audioUrl);
+
+                      const audioPlayer = document.getElementById("genaiAudio") as HTMLAudioElement;
+                      if (audioPlayer) {
+                        audioPlayer.src = audioUrl;
+                        audioPlayer.style.display = "block";
+                        
+                        audioPlayer.onloadeddata = () => {
+                          console.log("%c[GENAI] Audio loaded successfully!", "color: green; font-weight: bold");
+                        };
+                        
+                        audioPlayer.onerror = (e) => {
+                          console.error("%c[GENAI] Audio loading error:", "color: red", e);
+                        };
+                      }
+                      } else if (response.error) {
                         console.error("%c[GENAI] Error detected!", "color: red; font-weight: bold");
                         console.error("%c[GENAI] Error message:", "color: red", response.error);
                         if (response.details) {
@@ -220,7 +237,13 @@ const generateSpeech = async (text: string, walletAddress: string) => {
               </div>
             )}
             <audio
-              id="prayerAudio"
+              id="elevenlabsAudio"
+              controls
+              className="w-full mt-2"
+              style={{ display: "none" }}
+            />
+            <audio
+              id="genaiAudio"
               controls
               className="w-full mt-2"
               style={{ display: "none" }}

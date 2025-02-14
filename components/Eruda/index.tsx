@@ -1,19 +1,20 @@
 
 "use client";
 
-import eruda from "eruda";
-import { ReactNode, useEffect } from "react";
+import dynamic from "next/dynamic";
+import { ReactNode } from "react";
 
 export const ErudaProvider = (props: { children: ReactNode }) => {
-  useEffect(() => {
-    if (typeof window !== "undefined") {
+  if (typeof window !== "undefined") {
+    // Dynamically import eruda only on client side
+    import("eruda").then((eruda) => {
       try {
-        eruda.init();
+        eruda.default.init();
       } catch (error) {
         console.log("Eruda failed to initialize", error);
       }
-    }
-  }, []);
+    });
+  }
 
   return <>{props.children}</>;
 };

@@ -46,6 +46,9 @@ export async function POST(request: NextRequest) {
 
     const audioBuffer = await response.arrayBuffer();
     const base64Audio = Buffer.from(audioBuffer).toString("base64");
+    console.log("Audio Base64:", base64Audio);
+    const resp = await response.json();
+    console.log(resp.body);
 
     return NextResponse.json({
       success: true,
