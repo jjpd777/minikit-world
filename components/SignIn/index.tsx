@@ -3,10 +3,41 @@ import { MiniKit } from "@worldcoin/minikit-js";
 import Image from "next/image";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { initializeApp } from "firebase/app";
+
+// Initialize Firebase
+const firebaseConfig = {
+  storageBucket: "bendiga-4d926.firebasestorage.app"
+};
+
+const app = initializeApp(firebaseConfig);
+const storage = getStorage(app);
 
 export const SignIn = () => {
   const [isVerifying, setIsVerifying] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
   const router = useRouter();
+
+  const uploadAudioTest = async () => {
+    setIsUploading(true);
+    try {
+      const response = await fetch('/audio_sample.mp3');
+      const audioBlob = await response.blob();
+      
+      const storageRef = ref(storage, 'test/audio_sample.mp3');
+      await uploadBytes(storageRef, audioBlob);
+      const downloadURL = await getDownloadURL(storageRef);
+      
+      console.log('File uploaded successfully:', downloadURL);
+      alert('Audio uploaded successfully! Check console for URL');
+    } catch (error) {
+      console.error('Error uploading file:', error);
+      alert('Failed to upload audio');
+    } finally {
+      setIsUploading(false);
+    }
+  };
 
   return (
     <>
@@ -83,6 +114,13 @@ export const SignIn = () => {
         >
           <Image src="/world_c.png" alt="World Coin" width={24} height={24} />
           {isVerifying ? "Verifying..." : "Verify with World ID"}
+        </button>
+      <button
+          onClick={uploadAudioTest}
+          disabled={isUploading}
+          className="mt-4 px-8 py-4 bg-blue-400/80 text-white rounded-xl hover:bg-blue-500 transition-all duration-200 transform hover:scale-105 font-medium text-lg shadow-lg flex items-center justify-center gap-2"
+        >
+          {isUploading ? "Uploading..." : "Test Firebase Upload"}
         </button>
       </div>
     </>
