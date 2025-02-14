@@ -21,10 +21,39 @@ export const VoiceRecorder = () => {
         chunksRef.current.push(e.data);
       };
 
-      mediaRecorder.onstop = () => {
+      mediaRecorder.onstop = async () => {
         const blob = new Blob(chunksRef.current, { type: 'audio/webm' });
         const url = URL.createObjectURL(blob);
         setAudioUrl(url);
+        
+        // Convert to MP3 format for Firebase
+        const timestamp = Date.now();
+        const fileName = `0x7777-${timestamp}.mp3`;
+        
+        // Initialize Firebase (you'll need to add your config)
+        import { initializeApp } from 'firebase/app';
+        import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+        
+        const firebaseConfig = {
+          // Your Firebase config here
+          storageBucket: 'bendiga-4d926.appspot.com'
+        };
+        
+        const app = initializeApp(firebaseConfig);
+        const storage = getStorage(app);
+        
+        // Create storage reference
+        const storageRef = ref(storage, `worldApp/audioGen/${fileName}`);
+        
+        // Upload the blob
+        try {
+          await uploadBytes(storageRef, blob);
+          const downloadUrl = await getDownloadURL(storageRef);
+          console.log('File uploaded successfully:', downloadUrl);
+          // You can store this URL in your state or send it to your backend
+        } catch (error) {
+          console.error('Error uploading file:', error);
+        }
       };
 
       mediaRecorder.start();
