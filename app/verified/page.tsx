@@ -43,8 +43,9 @@ export default function VerifiedPage() {
             <p className="text-white text-lg">{prayer}</p>
           </div>
           <div className="flex gap-4 flex-col w-full">
-            <button
-              onClick={async () => {
+            {!document.getElementById('prayerAudio')?.src && (
+              <button
+                onClick={async () => {
                 try {
                   const button = document.getElementById('generateAudioBtn');
                   if (button) {
@@ -92,7 +93,8 @@ export default function VerifiedPage() {
                 <path d="M12 6v12M6 12h12"/>
               </svg>
               Prayer A.I.
-            </button>
+              </button>
+            )}
             <audio 
               id="prayerAudio" 
               controls 
