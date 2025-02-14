@@ -30,17 +30,7 @@ export const VoiceRecorder = () => {
         const timestamp = Date.now();
         const fileName = `0x7777-${timestamp}.mp3`;
         
-        // Initialize Firebase (you'll need to add your config)
-        import { initializeApp } from 'firebase/app';
-        import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-        
-        const firebaseConfig = {
-          // Your Firebase config here
-          storageBucket: 'bendiga-4d926.appspot.com'
-        };
-        
-        const app = initializeApp(firebaseConfig);
-        const storage = getStorage(app);
+        import { storage, bucket } from '@/lib/firebase-admin';
         
         // Create storage reference
         const storageRef = ref(storage, `worldApp/audioGen/${fileName}`);
