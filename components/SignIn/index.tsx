@@ -3,8 +3,8 @@ import { MiniKit } from "@worldcoin/minikit-js";
 import Image from "next/image";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { initializeApp } from "firebase/app";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { storage } from "@/lib/firebase";
 
 // Initialize Firebase
 const firebaseConfig = {
