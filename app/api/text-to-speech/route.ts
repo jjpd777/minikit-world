@@ -12,61 +12,48 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Call the ElevenLabs API
-    console.log("Making API request to ElevenLabs with text:", text);
     const response = await fetch(
-      "https://0cb3df08-f19f-4e55-add7-4513e781f46c-00-2lvwkm65uqcmj.spock.replit.dev/api/text-to-speech",
+      "https://api.elevenlabs.io/v1/text-to-speech/l1zE9xgNpUTaQCZzpNJa",
       {
         method: "POST",
         headers: {
           Accept: "audio/mpeg",
           "Content-Type": "application/json",
+          "xi-api-key": process.env.ELEVEN_LABS_KEY || "",
         },
         body: JSON.stringify({
           text,
-          walletAddress: "0x7777",
+          model_id: "eleven_multilingual_v2",
+          voice_settings: {
+            stability: 0.3,
+            similarity_boost: 0.85,
+            style: 0.2,
+          },
         }),
       },
     );
 
-    console.log("API Response Status:", response);
-    console.log(
-      "API Response Headers:",
-      Object.fromEntries(response.headers.entries()),
-    );
-
     if (!response.ok) {
       const errorText = await response.text();
-      console.error("API Error Response:", {
-        status: response.status,
-        statusText: response.statusText,
-        body: errorText,
-      });
+      console.error("ElevenLabs API error:", errorText);
       throw new Error(`ElevenLabs API error: ${response.status}`);
     }
 
     const audioBuffer = await response.arrayBuffer();
-    const filename = `audio-${Date.now()}.mp3`;
+    const timestamp = Date.now();
+    const filename = `worldApp/audioGen/${walletAddress}${timestamp}.mp3`;
     const file = bucket.file(filename);
-    
-    try {
-      await file.save(Buffer.from(audioBuffer));
-      const [url] = await file.getSignedUrl({
-        action: 'read',
-        expires: Date.now() + 15 * 60 * 1000 // URL expires in 15 minutes
-      });
-      
-      return NextResponse.json({
-        success: true,
-        url
-      });
-    } catch (error) {
-      console.error('Firebase upload error:', error);
-      return NextResponse.json(
-        { error: "Failed to upload audio", details: error.message },
-        { status: 500 }
-      );
-    }
+
+    await file.save(Buffer.from(audioBuffer));
+    const [url] = await file.getSignedUrl({
+      action: "read",
+      expires: Date.now() + 15 * 60 * 1000, // URL expires in 15 minutes
+    });
+
+    return NextResponse.json({
+      success: true,
+      url,
+    });
   } catch (error) {
     console.error("Text-to-speech error:", error);
     return NextResponse.json(
