@@ -20,7 +20,7 @@ export default function VerifiedPage() {
 
   return (
     <div className="flex min-h-screen flex-col items-center p-24">
-      <div className="absolute top-4 right-4">
+      <div className="absolute top-4 left-4">
         <button 
           onClick={() => router.push('/wallet')}
           className="p-2 rounded-full bg-purple-500/30 hover:bg-purple-500/50 transition-all"
