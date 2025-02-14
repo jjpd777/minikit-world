@@ -9,6 +9,7 @@ export default function VerifiedPage() {
   const router = useRouter();
   const [prayer, setPrayer] = useState("");
   const [showPrayer, setShowPrayer] = useState(false);
+  const [hasAudio, setHasAudio] = useState(false);
 
   useEffect(() => {
     const isVerified = localStorage.getItem("worldcoin_verified") === "true";
@@ -43,54 +44,68 @@ export default function VerifiedPage() {
             <p className="text-white text-lg">{prayer}</p>
           </div>
           <div className="flex gap-4 flex-col w-full">
-            <button
-              onClick={async () => {
+            {!hasAudio && (
+              <button
+                onClick={async () => {
                 try {
-                  const response = await fetch(
-                    'https://api.elevenlabs.io/v1/text-to-speech/l1zE9xgNpUTaQCZzpNJa',
-                    {
-                      method: 'POST',
-                      headers: {
-                        'Accept': 'audio/mpeg',
-                        'Content-Type': 'application/json',
-                        'xi-api-key': process.env.ELEVEN_API_KEY || '',
-                      },
-                      body: JSON.stringify({
-                        text: prayer,
-                        model_id: "eleven_multilingual_v2",
-                        voice_settings: {
-                          stability: 0.3,
-                          similarity_boost: 0.85,
-                          style: 0.2,
-                        }
-                      }),
-                    }
-                  );
+                  const button = document.getElementById('generateAudioBtn');
+                  if (button) {
+                    button.textContent = 'Generating...';
+                    button.disabled = true;
+                  }
+
+                  const response = await fetch('/api/generate-audio', {
+                    method: 'POST',
+                    headers: {
+                      'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                      text: prayer,
+                    }),
+                  });
 
                   if (!response.ok) {
-                    throw new Error(`Failed to generate audio: ${response.status}`);
+                    const error = await response.json();
+                    throw new Error(error.error || 'Failed to generate audio');
                   }
 
                   const audioBlob = await response.blob();
                   const audioUrl = URL.createObjectURL(audioBlob);
-                  const audio = new Audio(audioUrl);
-                  audio.play();
+                  const audioPlayer = document.getElementById('prayerAudio') as HTMLAudioElement;
+                  if (audioPlayer) {
+                    audioPlayer.src = audioUrl;
+                    audioPlayer.style.display = 'block';
+                    setHasAudio(true);
+                  }
                 } catch (error) {
                   console.error('Error generating audio:', error);
                   alert('Failed to generate audio. Please try again.');
+                } finally {
+                  const button = document.getElementById('generateAudioBtn');
+                  if (button) {
+                    button.textContent = 'Prayer A.I.';
+                    button.disabled = false;
+                  }
                 }
               }}
-              className="w-full px-4 py-2 bg-blue-500/80 text-white rounded-lg hover:bg-blue-600 transition-colors flex items-center justify-center gap-2"
+              id="generateAudioBtn"
+                className="w-full px-4 py-2 bg-white text-purple-600 border border-purple-600 rounded-lg hover:bg-purple-50 transition-colors flex items-center justify-center gap-2"
+
             >
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M12 6v12M6 12h12"/>
-              </svg>
-              Prayer A.I.
-            </button>
+             
+                ✨A.I. voice💫
+              </button>
+            )}
+            <audio 
+              id="prayerAudio" 
+              controls 
+              className="w-full mt-2" 
+              style={{ display: 'none' }}
+            />
             <div className="flex gap-4">
               <button
                 onClick={() => setShowPrayer(false)}
-                className="flex-1 px-4 py-2 bg-purple-500/80 text-white rounded-lg hover:bg-purple-600 transition-colors flex items-center justify-center"
+                className="flex-1 ml-[-10px] px-4 py-2 bg-purple-500/80 text-white rounded-lg hover:bg-purple-600 transition-colors flex items-center justify-center"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M22 12c0 6-4.39 10-9.806 10C7.792 22 4.24 19.665 3 16" />
