@@ -44,15 +44,25 @@ export async function POST(request: NextRequest) {
     const filename = `worldApp/audioGen/${walletAddress}${timestamp}.mp3`;
     const file = bucket.file(filename);
 
-    await file.save(Buffer.from(audioBuffer));
+    await file.save(Buffer.from(audioBuffer), {
+      metadata: {
+        contentType: 'audio/mpeg',
+        custom: {
+          walletAddress,
+          timestamp: Date.now().toString()
+        }
+      }
+    });
+    
     const [url] = await file.getSignedUrl({
       action: "read",
-      expires: Date.now() + 15 * 60 * 1000, // URL expires in 15 minutes
+      expires: Date.now() + 24 * 60 * 60 * 1000, // URL expires in 24 hours
     });
 
     return NextResponse.json({
       success: true,
       url,
+      storagePath: filename
     });
   } catch (error) {
     console.error("Text-to-speech error:", error);
