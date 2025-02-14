@@ -59,9 +59,15 @@ const generateSpeech = async (text: string, walletAddress: string) => {
   }, []);
 
   const toggleBookmark = () => {
-    const newBookmarks = bookmarkedPrayers.includes(prayer)
-      ? bookmarkedPrayers.filter((p) => p !== prayer)
-      : [...bookmarkedPrayers, prayer];
+    const prayerObject = {
+      text: prayer,
+      audioUrl: currentAudioUrl,
+      timestamp: Date.now()
+    };
+    
+    const newBookmarks = bookmarkedPrayers.some(p => p.text === prayer)
+      ? bookmarkedPrayers.filter(p => p.text !== prayer)
+      : [...bookmarkedPrayers, prayerObject];
 
     setBookmarkedPrayers(newBookmarks);
     localStorage.setItem("bookmarked_prayers", JSON.stringify(newBookmarks));
