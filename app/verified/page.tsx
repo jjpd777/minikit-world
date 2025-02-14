@@ -86,6 +86,25 @@ export default function VerifiedPage() {
                         text: prayer,
                       }),
                     });
+                    
+                    if (!response.ok) {
+                      throw new Error("Failed to generate audio");
+                    }
+
+                    const audioBlob = await response.blob();
+                    const formData = new FormData();
+                    formData.append('audio', audioBlob, 'generated-audio.mp3');
+
+                    const uploadResponse = await fetch("/api/upload-audio", {
+                      method: "POST",
+                      body: formData,
+                    });
+
+                    if (!uploadResponse.ok) {
+                      throw new Error("Failed to upload audio");
+                    }
+
+                    const { url } = await uploadResponse.json();
 
                     if (!response.ok) {
                       throw new Error("Failed to generate audio");
