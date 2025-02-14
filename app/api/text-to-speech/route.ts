@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { bucket } from "@/lib/firebase-admin";
 
 export async function POST(request: NextRequest) {
   try {
@@ -45,15 +46,27 @@ export async function POST(request: NextRequest) {
     }
 
     const audioBuffer = await response.arrayBuffer();
-    const base64Audio = Buffer.from(audioBuffer).toString("base64");
-    console.log("Audio Base64:", base64Audio);
-    const resp = await response.json();
-    console.log(resp.body);
-
-    return NextResponse.json({
-      success: true,
-      url: `data:audio/mpeg;base64,${base64Audio}`,
-    });
+    const filename = `audio-${Date.now()}.mp3`;
+    const file = bucket.file(filename);
+    
+    try {
+      await file.save(Buffer.from(audioBuffer));
+      const [url] = await file.getSignedUrl({
+        action: 'read',
+        expires: Date.now() + 15 * 60 * 1000 // URL expires in 15 minutes
+      });
+      
+      return NextResponse.json({
+        success: true,
+        url
+      });
+    } catch (error) {
+      console.error('Firebase upload error:', error);
+      return NextResponse.json(
+        { error: "Failed to upload audio", details: error.message },
+        { status: 500 }
+      );
+    }
   } catch (error) {
     console.error("Text-to-speech error:", error);
     return NextResponse.json(

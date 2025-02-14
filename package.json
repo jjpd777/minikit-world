@@ -15,6 +15,7 @@
     "eruda": "^3.2.3",
     "ethers": "^6.13.5",
     "file-loader": "^6.2.0",
+    "firebase-admin": "^13.1.0",
     "next": "14.2.6",
     "next-auth": "^4.24.7",
     "react": "^18",
