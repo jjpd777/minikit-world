@@ -6,14 +6,6 @@ import { useRouter } from "next/navigation";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { storage } from "@/lib/firebase";
 
-// Initialize Firebase
-const firebaseConfig = {
-  storageBucket: "bendiga-4d926.firebasestorage.app"
-};
-
-const app = initializeApp(firebaseConfig);
-const storage = getStorage(app);
-
 export const SignIn = () => {
   const [isVerifying, setIsVerifying] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
