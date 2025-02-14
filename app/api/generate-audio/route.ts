@@ -35,12 +35,25 @@ export async function POST(request: NextRequest) {
       throw new Error(`Failed to generate audio: ${response.status}`);
     }
 
+    // Get audio buffer and create a unique filename
     const audioBuffer = await response.arrayBuffer();
-    return new Response(audioBuffer, {
-      headers: {
-        'Content-Type': 'audio/mpeg',
+    const filename = `prayers/${Date.now()}_${Math.random().toString(36).substring(7)}.mp3`;
+    
+    // Upload to Firebase Storage
+    const file = bucket.file(filename);
+    await file.save(Buffer.from(audioBuffer), {
+      metadata: {
+        contentType: 'audio/mpeg',
       },
     });
+
+    // Get the public URL
+    const [url] = await file.getSignedUrl({
+      action: 'read',
+      expires: '03-01-2500', // Long expiration
+    });
+
+    return NextResponse.json({ url });
   } catch (error) {
     console.error('Error generating audio:', error);
     return NextResponse.json(
