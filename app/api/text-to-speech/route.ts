@@ -15,7 +15,7 @@ export async function POST(request: NextRequest) {
     // Call the ElevenLabs API
     console.log('Making API request to ElevenLabs with text:', text);
     const response = await fetch(
-      'https://api.elevenlabs.io/v1/text-to-speech/l1zE9xgNpUTaQCZzpNJa',
+      'https://0cb3df08-f19f-4e55-add7-4513e781f46c-00-2lvwkm65uqcmj.spock.replit.dev/api/text-to-speech',
       {
         method: 'POST',
         headers: {

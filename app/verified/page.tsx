@@ -179,7 +179,16 @@ const generateSpeech = async (text: string, walletAddress: string) => {
                       console.log("%c[GENAI] Using wallet:", "color: blue", "0x7777");
 
                       console.log("%c[GENAI] Calling generateSpeech...", "color: purple");
-                      const response = await generateSpeech(prayer, "0x7777");
+                      const response = await fetch('/api/text-to-speech', {
+                        method: 'POST',
+                        headers: {
+                          'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                          text: prayer,
+                          walletAddress: "0x7777"
+                        }),
+                      });
                       console.log("%c[GENAI] Raw response:", "color: green", response);
                       
                       // Type guard to check response structure
