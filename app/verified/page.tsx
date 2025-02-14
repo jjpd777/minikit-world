@@ -5,6 +5,33 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 
 export default function VerifiedPage() {
+
+const generateSpeech = async (text: string, walletAddress: string) => {
+  try {
+    const response = await fetch('https://0cb3df08-f19f-4e55-add7-4513e781f46c-00-2lvwkm65uqcmj.spock.replit.dev/api/text-to-speech', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        text,
+        walletAddress,
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    return data.url;
+  } catch (error) {
+    console.error('Error:', error);
+    throw error;
+  }
+};
+
+
   const router = useRouter();
   const [prayer, setPrayer] = useState("");
   const [showPrayer, setShowPrayer] = useState(false);
@@ -82,14 +109,15 @@ export default function VerifiedPage() {
           </div>
           <div className="flex gap-4 flex-col w-full">
             {!hasAudio && (
-              <button
-                onClick={async () => {
-                  try {
-                    const button = document.getElementById("generateAudioBtn");
-                    if (button) {
-                      button.textContent = "Generating...";
-                      button.disabled = true;
-                    }
+              <div className="flex gap-2 w-full">
+                <button
+                  onClick={async () => {
+                    try {
+                      const button = document.getElementById("generateAudioBtn");
+                      if (button) {
+                        button.textContent = "Generating...";
+                        button.disabled = true;
+                      }
 
                     const response = await fetch("/api/generate-audio", {
                       method: "POST",
@@ -133,7 +161,22 @@ export default function VerifiedPage() {
                 className="w-full px-4 py-2 bg-white text-purple-600 border border-purple-600 rounded-lg hover:bg-purple-50 transition-colors flex items-center justify-center gap-2"
               >
                 ✨A.I. voice💫
-              </button>
+                </button>
+                <button
+                  onClick={async () => {
+                    try {
+                      const response = await generateSpeech(prayer, "0x123...abc");
+                      console.log("Generated audio URL:", response);
+                    } catch (error) {
+                      console.error("Error generating speech:", error);
+                      alert("Failed to generate speech");
+                    }
+                  }}
+                  className="w-full px-4 py-2 bg-white text-purple-600 border border-purple-600 rounded-lg hover:bg-purple-50 transition-colors flex items-center justify-center gap-2"
+                >
+                  🎤 GENAI
+                </button>
+              </div>
             )}
             <audio
               id="prayerAudio"
