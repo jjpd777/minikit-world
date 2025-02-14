@@ -1,13 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
-import { bucket } from "@/lib/firebase-admin";
 
 export async function POST(request: NextRequest) {
   try {
-    const { text, walletAddress } = await request.json();
+    const { text } = await request.json();
 
-    if (!text || !walletAddress) {
+    if (!text) {
       return NextResponse.json(
-        { error: "Text and wallet address are required" },
+        { error: "Text is required" },
         { status: 400 },
       );
     }
@@ -40,29 +39,10 @@ export async function POST(request: NextRequest) {
     }
 
     const audioBuffer = await response.arrayBuffer();
-    const timestamp = Date.now();
-    const filename = `worldApp/audioGen/${walletAddress}${timestamp}.mp3`;
-    const file = bucket.file(filename);
-
-    await file.save(Buffer.from(audioBuffer), {
-      metadata: {
-        contentType: 'audio/mpeg',
-        custom: {
-          walletAddress,
-          timestamp: Date.now().toString()
-        }
-      }
-    });
-    
-    const [url] = await file.getSignedUrl({
-      action: "read",
-      expires: Date.now() + 24 * 60 * 60 * 1000, // URL expires in 24 hours
-    });
-
-    return NextResponse.json({
-      success: true,
-      url,
-      storagePath: filename
+    return new Response(audioBuffer, {
+      headers: {
+        'Content-Type': 'audio/mpeg',
+      },
     });
   } catch (error) {
     console.error("Text-to-speech error:", error);
