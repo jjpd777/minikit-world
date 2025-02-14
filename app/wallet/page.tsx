@@ -3,9 +3,18 @@
 import { WalletAuth } from "@/components/WalletAuth";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export default function WalletPage() {
   const router = useRouter();
+  const [bookmarkedPrayers, setBookmarkedPrayers] = useState<string[]>([]);
+
+  useEffect(() => {
+    const saved = localStorage.getItem('bookmarked_prayers');
+    if (saved) {
+      setBookmarkedPrayers(JSON.parse(saved));
+    }
+  }, []);
   return (
     <div className="min-h-screen flex flex-col items-center justify-center p-8 bg-gradient-to-b from-gray-900 to-gray-800">
       <button 
@@ -29,6 +38,18 @@ export default function WalletPage() {
           Connect Your Wallet
         </h1>
         <WalletAuth />
+        {bookmarkedPrayers.length > 0 && (
+          <div className="mt-8 w-full">
+            <h3 className="text-white text-xl mb-4">Your Bookmarked Prayers</h3>
+            <div className="space-y-4">
+              {bookmarkedPrayers.map((prayer, index) => (
+                <div key={index} className="p-4 rounded-lg bg-gray-800/50">
+                  <p className="text-white text-sm">{prayer}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
