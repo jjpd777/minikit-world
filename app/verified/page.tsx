@@ -65,8 +65,12 @@ const generateSpeech = async (text: string, walletAddress: string) => {
       timestamp: Date.now()
     };
     
-    const newBookmarks = bookmarkedPrayers.some(p => p.text === prayer)
-      ? bookmarkedPrayers.filter(p => p.text !== prayer)
+    const newBookmarks = bookmarkedPrayers.some(p => 
+      typeof p === 'string' ? p === prayer : p.text === prayer
+    )
+      ? bookmarkedPrayers.filter(p => 
+          typeof p === 'string' ? p !== prayer : p.text !== prayer
+        )
       : [...bookmarkedPrayers, prayerObject];
 
     setBookmarkedPrayers(newBookmarks);
