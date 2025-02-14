@@ -81,7 +81,7 @@ export const VoiceRecorder = () => {
 
   return (
     <div className="flex flex-col items-center gap-4 mt-4">
-      <div className="flex gap-4">
+      <div className="flex flex-col gap-4">
         <div className="flex gap-2">
           <button
             onClick={isRecording ? stopRecording : startRecording}
@@ -93,17 +93,17 @@ export const VoiceRecorder = () => {
           >
             {isRecording ? "Stop Recording" : "Start Recording"}
           </button>
-          
-          {audioUrl && !isRecording && (
-            <button
-              onClick={uploadToFirebase}
-              disabled={isUploading}
-              className="px-4 py-2 rounded bg-blue-500 hover:bg-blue-600 text-white disabled:opacity-50"
-            >
-              {isUploading ? "Uploading..." : "Upload to Firebase"}
-            </button>
-          )}
         </div>
+
+        {audioUrl && !isRecording && (
+          <button
+            onClick={uploadToFirebase}
+            disabled={isUploading}
+            className="px-4 py-2 rounded bg-purple-500 hover:bg-purple-600 text-white disabled:opacity-50 flex items-center justify-center gap-2"
+          >
+            {isUploading ? "🔄 Uploading..." : "☁️ Upload to Firebase"}
+          </button>
+        )}
 
         <input
           type="file"
