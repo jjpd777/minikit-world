@@ -45,7 +45,7 @@ const generateSpeech = async (text: string, walletAddress: string) => {
   const [prayer, setPrayer] = useState("");
   const [showPrayer, setShowPrayer] = useState(false);
   const [hasAudio, setHasAudio] = useState(false);
-  const [bookmarkedPrayers, setBookmarkedPrayers] = useState<string[]>([]);
+  const [bookmarkedPrayers, setBookmarkedPrayers] = useState<Array<string>>([]);
 
   useEffect(() => {
     const saved = localStorage.getItem("bookmarked_prayers");
