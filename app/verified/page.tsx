@@ -46,6 +46,12 @@ export default function VerifiedPage() {
             <button
               onClick={async () => {
                 try {
+                  const button = document.getElementById('generateAudioBtn');
+                  if (button) {
+                    button.textContent = 'Generating...';
+                    button.disabled = true;
+                  }
+
                   const response = await fetch('/api/generate-audio', {
                     method: 'POST',
                     headers: {
@@ -63,13 +69,23 @@ export default function VerifiedPage() {
 
                   const audioBlob = await response.blob();
                   const audioUrl = URL.createObjectURL(audioBlob);
-                  const audio = new Audio(audioUrl);
-                  audio.play();
+                  const audioPlayer = document.getElementById('prayerAudio') as HTMLAudioElement;
+                  if (audioPlayer) {
+                    audioPlayer.src = audioUrl;
+                    audioPlayer.style.display = 'block';
+                  }
                 } catch (error) {
                   console.error('Error generating audio:', error);
                   alert('Failed to generate audio. Please try again.');
+                } finally {
+                  const button = document.getElementById('generateAudioBtn');
+                  if (button) {
+                    button.textContent = 'Prayer A.I.';
+                    button.disabled = false;
+                  }
                 }
               }}
+              id="generateAudioBtn"
               className="w-full px-4 py-2 bg-blue-500/80 text-white rounded-lg hover:bg-blue-600 transition-colors flex items-center justify-center gap-2"
             >
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -77,6 +93,12 @@ export default function VerifiedPage() {
               </svg>
               Prayer A.I.
             </button>
+            <audio 
+              id="prayerAudio" 
+              controls 
+              className="w-full mt-2" 
+              style={{ display: 'none' }}
+            />
             <div className="flex gap-4">
               <button
                 onClick={() => setShowPrayer(false)}
