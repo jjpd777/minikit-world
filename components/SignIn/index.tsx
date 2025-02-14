@@ -14,18 +14,40 @@ export const SignIn = () => {
   const uploadAudioTest = async () => {
     setIsUploading(true);
     try {
+      console.log('Starting audio file fetch...');
       const response = await fetch('/audio_sample.mp3');
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      console.log('Audio file fetched successfully');
+      
       const audioBlob = await response.blob();
+      console.log('Audio blob created:', {
+        size: audioBlob.size,
+        type: audioBlob.type
+      });
       
+      console.log('Creating storage reference...');
       const storageRef = ref(storage, 'test/audio_sample.mp3');
-      await uploadBytes(storageRef, audioBlob);
-      const downloadURL = await getDownloadURL(storageRef);
+      console.log('Storage reference created:', storageRef);
       
-      console.log('File uploaded successfully:', downloadURL);
+      console.log('Starting upload...');
+      const uploadResult = await uploadBytes(storageRef, audioBlob);
+      console.log('Upload completed:', uploadResult);
+      
+      console.log('Getting download URL...');
+      const downloadURL = await getDownloadURL(storageRef);
+      console.log('Download URL obtained:', downloadURL);
+      
       alert('Audio uploaded successfully! Check console for URL');
     } catch (error) {
-      console.error('Error uploading file:', error);
-      alert('Failed to upload audio');
+      console.error('Detailed error information:', {
+        message: error.message,
+        code: error.code,
+        name: error.name,
+        stack: error.stack
+      });
+      alert(`Failed to upload audio: ${error.message}`);
     } finally {
       setIsUploading(false);
     }
