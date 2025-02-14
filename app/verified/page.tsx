@@ -11,7 +11,7 @@ const generateSpeech = async (text: string, walletAddress: string) => {
     console.log("%c[generateSpeech] Starting request to API...", "color: purple");
     console.log("%c[generateSpeech] Request payload:", "color: blue", { text, walletAddress });
 
-    const response = await fetch('https://0cb3df08-f19f-4e55-add7-4513e781f46c-00-2lvwkm65uqcmj.spock.replit.dev/api/text-to-speech', {
+    const response = await fetch('/api/text-to-speech', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
