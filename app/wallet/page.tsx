@@ -66,12 +66,14 @@ export default function WalletPage() {
           <div className="mt-8 w-full">
             <h3 className="text-white text-xl mb-4">Your Bookmarked Prayers</h3>
             <div className="space-y-4">
-              {bookmarkedPrayers.map((prayer, index) => (
+              {bookmarkedPrayers.map((prayer: any, index) => (
                 <div key={index} className="p-4 rounded-lg bg-gray-800/50">
-                  <p className="text-white text-sm mb-2">{prayer.text}</p>
-                  {prayer.audioUrl && (
+                  <p className="text-white text-sm mb-2">
+                    {typeof prayer === 'string' ? prayer : prayer.text}
+                  </p>
+                  {typeof prayer === 'object' && prayer.audioUrl && (
                     <button
-                      onClick={() => playAudio(prayer.audioUrl!, index)}
+                      onClick={() => playAudio(prayer.audioUrl, index)}
                       className="mt-2 px-3 py-1 bg-purple-500/30 hover:bg-purple-500/50 rounded-lg text-white text-sm flex items-center gap-2"
                     >
                       {playingAudioId === index ? '⏸️ Pause' : '▶️ Play'}
