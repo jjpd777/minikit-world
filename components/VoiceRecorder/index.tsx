@@ -45,8 +45,27 @@ export const VoiceRecorder = () => {
         chunksRef.current.push(e.data);
       };
 
-      mediaRecorder.onstop = () => {
+      mediaRecorder.onstop = async () => {
         const blob = new Blob(chunksRef.current, { type: "audio/webm" });
+        
+        // Upload to Firebase first
+        setIsUploading(true);
+        try {
+          const timestamp = Date.now();
+          const fileName = `0x7777-${timestamp}.mp3`;
+          
+          const storageRef = ref(storage, `worldApp/audioGen/${fileName}`);
+          await uploadBytes(storageRef, blob);
+          const downloadUrl = await getDownloadURL(storageRef);
+          console.log("File uploaded successfully:", downloadUrl);
+        } catch (error) {
+          console.error("Error uploading file:", error);
+          alert("Failed to upload audio");
+        } finally {
+          setIsUploading(false);
+        }
+        
+        // Then display the audio
         const url = URL.createObjectURL(blob);
         setAudioUrl(url);
       };
@@ -122,15 +141,7 @@ export const VoiceRecorder = () => {
           >
             Download Audio
           </a>
-              {audioUrl && !isRecording && (
-                <button
-                  onClick={uploadToFirebase}
-                  disabled={isUploading}
-                  className="flex-1 px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
-                >
-                  {isUploading ? "🔄 Uploading..." : "☁️ Upload"}
-                </button>
-              )}
+              
         </>
       )}
     </div>
