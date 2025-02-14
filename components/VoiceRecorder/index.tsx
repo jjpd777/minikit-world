@@ -3,11 +3,36 @@ import { useState, useRef } from "react";
 
 export const VoiceRecorder = () => {
   const [isRecording, setIsRecording] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
   const [uploadedFile, setUploadedFile] = useState<string | null>(null);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const chunksRef = useRef<Blob[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const uploadToFirebase = async () => {
+    if (!chunksRef.current.length) return;
+
+    setIsUploading(true);
+    try {
+      const blob = new Blob(chunksRef.current, { type: "audio/webm" });
+      const timestamp = Date.now();
+      const fileName = `0x9777-${timestamp}.mp3`;
+
+      import { storage, bucket } from "@/lib/firebase-admin";
+      const storageRef = ref(storage, `worldApp/audioGen/${fileName}`);
+
+      await uploadBytes(storageRef, blob);
+      const downloadUrl = await getDownloadURL(storageRef);
+      console.log("File uploaded successfully:", downloadUrl);
+      alert("Audio uploaded successfully!");
+    } catch (error) {
+      console.error("Error uploading file:", error);
+      alert("Failed to upload audio");
+    } finally {
+      setIsUploading(false);
+    }
+  };
 
   const startRecording = async () => {
     try {
@@ -22,27 +47,27 @@ export const VoiceRecorder = () => {
 
       mediaRecorder.onstop = async () => {
         const blob = new Blob(chunksRef.current, { type: "audio/webm" });
-        const url = URL.createObjectURL(blob);
-        setAudioUrl(url);
 
-        // Convert to MP3 format for Firebase
-        const timestamp = Date.now();
-        const fileName = `0x99999-${timestamp}.mp3`;
-
-        import { storage, bucket } from "@/lib/firebase-admin";
-
-        // Create storage reference
-        const storageRef = ref(storage, `worldApp/audioGen/${fileName}`);
-
-        // Upload the blob
+        // Upload to Firebase first
+        setIsUploading(true);
         try {
+          const timestamp = Date.now();
+          const fileName = `0x9777-${timestamp}.mp3`;
+
+          const storageRef = ref(storage, `worldApp/audioGen/${fileName}`);
           await uploadBytes(storageRef, blob);
           const downloadUrl = await getDownloadURL(storageRef);
           console.log("File uploaded successfully:", downloadUrl);
-          // You can store this URL in your state or send it to your backend
         } catch (error) {
           console.error("Error uploading file:", error);
+          alert("Failed to upload audio");
+        } finally {
+          setIsUploading(false);
         }
+
+        // Then display the audio
+        const url = URL.createObjectURL(blob);
+        setAudioUrl(url);
       };
 
       mediaRecorder.start();
@@ -75,17 +100,19 @@ export const VoiceRecorder = () => {
 
   return (
     <div className="flex flex-col items-center gap-4 mt-4">
-      <div className="flex gap-4">
-        <button
-          onClick={isRecording ? stopRecording : startRecording}
-          className={`px-4 py-2 rounded ${
-            isRecording
-              ? "bg-red-500 hover:bg-red-600"
-              : "bg-green-500 hover:bg-green-600"
-          } text-white`}
-        >
-          {isRecording ? "Stop Recording" : "Start Recording"}
-        </button>
+      <div className="flex flex-col gap-4">
+        <div className="flex gap-2">
+          <button
+            onClick={isRecording ? stopRecording : startRecording}
+            className={`px-4 py-2 rounded ${
+              isRecording
+                ? "bg-red-500 hover:bg-red-600"
+                : "bg-green-500 hover:bg-green-600"
+            } text-white`}
+          >
+            {isRecording ? "Stop Recording" : "Start Recording"}
+          </button>
+        </div>
 
         <input
           type="file"
