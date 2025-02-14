@@ -7,6 +7,7 @@ export default function VerifiedPage() {
   const [prayer, setPrayer] = useState("");
   const [showPrayer, setShowPrayer] = useState(false);
   const [isGeneratingAudio, setIsGeneratingAudio] = useState(false);
+  const [hasGeneratedAudio, setHasGeneratedAudio] = useState(false);
 
   return (
     <div className="flex min-h-screen flex-col items-center p-24">
@@ -98,6 +99,7 @@ export default function VerifiedPage() {
                     if (audioPlayer) {
                       audioPlayer.src = audioUrl;
                       audioPlayer.style.display = "block";
+                      setHasGeneratedAudio(true);
                     }
                   } catch (error) {
                     console.error("Error generating audio:", error);
@@ -106,7 +108,7 @@ export default function VerifiedPage() {
                     setIsGeneratingAudio(false);
                   }
                 }}
-                disabled={isGeneratingAudio}
+                disabled={isGeneratingAudio || hasGeneratedAudio}
                 className="flex-1 px-4 py-2 bg-white text-purple-600 border border-purple-600 rounded-lg hover:bg-purple-50 transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
               >
                 <svg
