@@ -10,6 +10,23 @@ export default function VerifiedPage() {
   const [prayer, setPrayer] = useState("");
   const [showPrayer, setShowPrayer] = useState(false);
   const [hasAudio, setHasAudio] = useState(false);
+  const [bookmarkedPrayers, setBookmarkedPrayers] = useState<string[]>([]);
+
+  useEffect(() => {
+    const saved = localStorage.getItem('bookmarked_prayers');
+    if (saved) {
+      setBookmarkedPrayers(JSON.parse(saved));
+    }
+  }, []);
+
+  const toggleBookmark = () => {
+    const newBookmarks = bookmarkedPrayers.includes(prayer) 
+      ? bookmarkedPrayers.filter(p => p !== prayer)
+      : [...bookmarkedPrayers, prayer];
+    
+    setBookmarkedPrayers(newBookmarks);
+    localStorage.setItem('bookmarked_prayers', JSON.stringify(newBookmarks));
+  };
 
   useEffect(() => {
     const isVerified = localStorage.getItem("worldcoin_verified") === "true";
@@ -114,8 +131,14 @@ export default function VerifiedPage() {
             />
             <div className="flex gap-4">
               <button
+                onClick={toggleBookmark}
+                className="flex-1 px-4 py-2 bg-purple-500/80 text-white rounded-lg hover:bg-purple-600 transition-colors flex items-center justify-center gap-2"
+              >
+                {bookmarkedPrayers.includes(prayer) ? '★ Bookmarked' : '☆ Bookmark'}
+              </button>
+              <button
                 onClick={() => setShowPrayer(false)}
-                className="flex-1 ml-[-10px] px-4 py-2 bg-purple-500/80 text-white rounded-lg hover:bg-purple-600 transition-colors flex items-center justify-center"
+                className="flex-1 px-4 py-2 bg-purple-500/80 text-white rounded-lg hover:bg-purple-600 transition-colors flex items-center justify-center"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M22 12c0 6-4.39 10-9.806 10C7.792 22 4.24 19.665 3 16" />
@@ -143,6 +166,18 @@ export default function VerifiedPage() {
               </a>
             </div>
           </div>
+          {bookmarkedPrayers.length > 0 && (
+            <div className="mt-8 w-full">
+              <h3 className="text-white text-xl mb-4">Bookmarked Prayers</h3>
+              <div className="space-y-4">
+                {bookmarkedPrayers.map((p, i) => (
+                  <div key={i} className="p-4 rounded-lg bg-gray-800/50">
+                    <p className="text-white">{p}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       )}
     </div>
