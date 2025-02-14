@@ -9,6 +9,7 @@ export default function VerifiedPage() {
   const router = useRouter();
   const [prayer, setPrayer] = useState("");
   const [showPrayer, setShowPrayer] = useState(false);
+  const [hasAudio, setHasAudio] = useState(false);
 
   useEffect(() => {
     const isVerified = localStorage.getItem("worldcoin_verified") === "true";
@@ -43,7 +44,7 @@ export default function VerifiedPage() {
             <p className="text-white text-lg">{prayer}</p>
           </div>
           <div className="flex gap-4 flex-col w-full">
-            {!document.getElementById('prayerAudio')?.src && (
+            {!hasAudio && (
               <button
                 onClick={async () => {
                 try {
@@ -74,6 +75,7 @@ export default function VerifiedPage() {
                   if (audioPlayer) {
                     audioPlayer.src = audioUrl;
                     audioPlayer.style.display = 'block';
+                    setHasAudio(true);
                   }
                 } catch (error) {
                   console.error('Error generating audio:', error);
