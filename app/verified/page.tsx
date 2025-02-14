@@ -148,7 +148,7 @@ const generateSpeech = async (text: string, walletAddress: string) => {
                     const audioBlob = await response.blob();
                     const audioUrl = URL.createObjectURL(audioBlob);
                     const audioPlayer = document.getElementById(
-                      "prayerAudio",
+                      "elevenlabsAudio",
                     ) as HTMLAudioElement;
                     if (audioPlayer) {
                       audioPlayer.src = audioUrl;
@@ -179,30 +179,16 @@ const generateSpeech = async (text: string, walletAddress: string) => {
                       console.log("%c[GENAI] Using wallet:", "color: blue", "0x7777");
 
                       console.log("%c[GENAI] Calling generateSpeech...", "color: purple");
-                      const response = await fetch('/api/text-to-speech', {
-                        method: 'POST',
-                        headers: {
-                          'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({
-                          text: prayer,
-                          walletAddress: "0x7777"
-                        }),
-                      });
-                      console.log("%c[GENAI] Raw response:", "color: green", response);
-                      
-                      const data = await response.json();
-                      console.log("%c[GENAI] Parsed response:", "color: blue", data);
+                      const response = await generateSpeech(prayer, "0x7777");
 
-                      if (data.url) {
-                        console.log("%c[GENAI] Success! Audio URL:", "color: green; font-weight: bold", data.url);
-                        const audioPlayer = document.getElementById("prayerAudio") as HTMLAudioElement;
+                      if (response.url) {
+                        console.log("%c[GENAI] Success! Audio URL:", "color: green; font-weight: bold", response.url);
+                        const audioPlayer = document.getElementById("genaiAudio") as HTMLAudioElement;
                         if (audioPlayer) {
-                          audioPlayer.src = data.url;
+                          audioPlayer.src = response.url;
                           audioPlayer.style.display = "block";
-                          setHasAudio(true);
                         }
-                      } else if (data.error) {
+                      } else if (response.error) {
                         console.error("%c[GENAI] Error detected!", "color: red; font-weight: bold");
                         console.error("%c[GENAI] Error message:", "color: red", response.error);
                         if (response.details) {
@@ -227,7 +213,13 @@ const generateSpeech = async (text: string, walletAddress: string) => {
               </div>
             )}
             <audio
-              id="prayerAudio"
+              id="elevenlabsAudio"
+              controls
+              className="w-full mt-2"
+              style={{ display: "none" }}
+            />
+            <audio
+              id="genaiAudio"
               controls
               className="w-full mt-2"
               style={{ display: "none" }}
