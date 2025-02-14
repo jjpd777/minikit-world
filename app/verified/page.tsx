@@ -46,29 +46,19 @@ export default function VerifiedPage() {
             <button
               onClick={async () => {
                 try {
-                  const response = await fetch(
-                    'https://api.elevenlabs.io/v1/text-to-speech/l1zE9xgNpUTaQCZzpNJa',
-                    {
-                      method: 'POST',
-                      headers: {
-                        'Accept': 'audio/mpeg',
-                        'Content-Type': 'application/json',
-                        'xi-api-key': process.env.ELEVEN_API_KEY || '',
-                      },
-                      body: JSON.stringify({
-                        text: prayer,
-                        model_id: "eleven_multilingual_v2",
-                        voice_settings: {
-                          stability: 0.3,
-                          similarity_boost: 0.85,
-                          style: 0.2,
-                        }
-                      }),
-                    }
-                  );
+                  const response = await fetch('/api/generate-audio', {
+                    method: 'POST',
+                    headers: {
+                      'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                      text: prayer,
+                    }),
+                  });
 
                   if (!response.ok) {
-                    throw new Error(`Failed to generate audio: ${response.status}`);
+                    const error = await response.json();
+                    throw new Error(error.error || 'Failed to generate audio');
                   }
 
                   const audioBlob = await response.blob();
