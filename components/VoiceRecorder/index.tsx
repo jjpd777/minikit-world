@@ -95,15 +95,7 @@ export const VoiceRecorder = () => {
           </button>
         </div>
 
-        {audioUrl && !isRecording && (
-          <button
-            onClick={uploadToFirebase}
-            disabled={isUploading}
-            className="px-4 py-2 rounded bg-purple-500 hover:bg-purple-600 text-white disabled:opacity-50 flex items-center justify-center gap-2"
-          >
-            {isUploading ? "🔄 Uploading..." : "☁️ Upload to Firebase"}
-          </button>
-        )}
+        
 
         <input
           type="file"
@@ -130,6 +122,15 @@ export const VoiceRecorder = () => {
           >
             Download Audio
           </a>
+              {audioUrl && !isRecording && (
+                <button
+                  onClick={uploadToFirebase}
+                  disabled={isUploading}
+                  className="flex-1 px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
+                >
+                  {isUploading ? "🔄 Uploading..." : "☁️ Upload"}
+                </button>
+              )}
         </>
       )}
     </div>
