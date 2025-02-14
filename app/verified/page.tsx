@@ -191,11 +191,18 @@ const generateSpeech = async (text: string, walletAddress: string) => {
                       });
                       console.log("%c[GENAI] Raw response:", "color: green", response);
                       
-                      // Type guard to check response structure
-                      if ('url' in response) {
-                        console.log("%c[GENAI] Success! Audio URL:", "color: green; font-weight: bold", response.url);
-                        console.log("%c[GENAI] Response type:", "color: blue", "SuccessResponse");
-                      } else if ('error' in response) {
+                      const data = await response.json();
+                      console.log("%c[GENAI] Parsed response:", "color: blue", data);
+
+                      if (data.url) {
+                        console.log("%c[GENAI] Success! Audio URL:", "color: green; font-weight: bold", data.url);
+                        const audioPlayer = document.getElementById("prayerAudio") as HTMLAudioElement;
+                        if (audioPlayer) {
+                          audioPlayer.src = data.url;
+                          audioPlayer.style.display = "block";
+                          setHasAudio(true);
+                        }
+                      } else if (data.error) {
                         console.error("%c[GENAI] Error detected!", "color: red; font-weight: bold");
                         console.error("%c[GENAI] Error message:", "color: red", response.error);
                         if (response.details) {
