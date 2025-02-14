@@ -173,63 +173,55 @@ const generateSpeech = async (text: string, walletAddress: string) => {
                 </button>
                 <button
                   onClick={async () => {
+                    const button = document.getElementById("genaiButton") as HTMLButtonElement;
+                    if (button) {
+                      button.disabled = true;
+                      button.textContent = "Generating...";
+                    }
+
                     try {
                       console.log("%c[GENAI] Starting request...", "color: purple; font-weight: bold");
-                      console.log("%c[GENAI] Prayer content:", "color: blue", prayer);
-                      console.log("%c[GENAI] Using wallet:", "color: blue", "0x7777");
-
-                      console.log("%c[GENAI] Calling generateSpeech...", "color: purple");
                       const response = await generateSpeech(prayer, "0x7777");
 
-                      if (response.url) {
-                        console.log("%c[GENAI] Success! Audio URL:", "color: green; font-weight: bold", response.url);
+                      if (!response || !response.url) {
+                        throw new Error("Invalid response from server");
+                      }
+
+                      console.log("%c[GENAI] Success! Audio URL:", "color: green", response.url);
                       
-                      console.log("%c[GENAI] Fetching audio from URL...", "color: purple");
                       const audioResponse = await fetch(response.url);
-                      console.log("%c[GENAI] Audio fetch response status:", "color: blue", audioResponse.status);
-                      
                       if (!audioResponse.ok) {
                         throw new Error(`Failed to fetch audio: ${audioResponse.status}`);
                       }
 
                       const audioBlob = await audioResponse.blob();
-                      console.log("%c[GENAI] Audio blob size:", "color: blue", `${audioBlob.size} bytes`);
-                      console.log("%c[GENAI] Audio blob type:", "color: blue", audioBlob.type);
+                      if (audioBlob.size === 0) {
+                        throw new Error("Received empty audio file");
+                      }
 
                       const audioUrl = URL.createObjectURL(audioBlob);
-                      console.log("%c[GENAI] Created object URL:", "color: green", audioUrl);
-
                       const audioPlayer = document.getElementById("genaiAudio") as HTMLAudioElement;
+                      
                       if (audioPlayer) {
                         audioPlayer.src = audioUrl;
                         audioPlayer.style.display = "block";
+                        setHasAudio(true);
                         
                         audioPlayer.onloadeddata = () => {
-                          console.log("%c[GENAI] Audio loaded successfully!", "color: green; font-weight: bold");
+                          console.log("%c[GENAI] Audio loaded successfully!", "color: green");
                         };
-                        
-                        audioPlayer.onerror = (e) => {
-                          console.error("%c[GENAI] Audio loading error:", "color: red", e);
-                        };
-                      }
-                      } else if (response.error) {
-                        console.error("%c[GENAI] Error detected!", "color: red; font-weight: bold");
-                        console.error("%c[GENAI] Error message:", "color: red", response.error);
-                        if (response.details) {
-                          console.error("%c[GENAI] Error details:", "color: red", response.details);
-                        }
-                        console.error("%c[GENAI] Response type:", "color: blue", "ErrorResponse");
-                        throw new Error(response.error);
-                      } else {
-                        console.error("%c[GENAI] Unknown response format:", "color: red", response);
-                        throw new Error("Invalid response format");
                       }
                     } catch (error) {
-                      console.error("%c[GENAI] Exception caught:", "color: red; font-weight: bold", error);
-                      console.error("%c[GENAI] Stack trace:", "color: red", error.stack);
-                      alert("Failed to generate speech. Check browser console for details.");
+                      console.error("[GENAI] Error:", error);
+                      alert(error.message || "Failed to generate speech");
+                    } finally {
+                      if (button) {
+                        button.disabled = false;
+                        button.textContent = "🎤 GENAI";
+                      }
                     }
                   }}
+                  id="genaiButton"
                   className="w-full px-4 py-2 bg-white text-purple-600 border border-purple-600 rounded-lg hover:bg-purple-50 transition-colors flex items-center justify-center gap-2"
                 >
                   🎤 GENAI
