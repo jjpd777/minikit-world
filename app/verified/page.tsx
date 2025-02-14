@@ -5,47 +5,11 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 
 export default function VerifiedPage() {
-
-const generateSpeech = async (text: string, walletAddress: string) => {
-  try {
-    console.log("%c[generateSpeech] Starting request to backend API...", "color: purple");
-    console.log("%c[generateSpeech] Request payload:", "color: blue", { text, walletAddress });
-
-    const response = await fetch('/api/text-to-speech', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        text,
-        walletAddress,
-      }),
-    });
-
-    console.log("%c[generateSpeech] Response status:", "color: blue", response.status);
-    console.log("%c[generateSpeech] Response headers:", "color: blue", Object.fromEntries(response.headers.entries()));
-
-    if (!response.ok) {
-      console.error("%c[generateSpeech] HTTP error!", "color: red", response.status);
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
-    const data = await response.json();
-    console.log("%c[generateSpeech] Response data:", "color: green", data);
-    return data;
-  } catch (error) {
-    console.error("%c[generateSpeech] Error caught:", "color: red", error);
-    console.error("%c[generateSpeech] Stack trace:", "color: red", error.stack);
-    throw error;
-  }
-};
-
-
   const router = useRouter();
   const [prayer, setPrayer] = useState("");
   const [showPrayer, setShowPrayer] = useState(false);
   const [hasAudio, setHasAudio] = useState(false);
-  const [bookmarkedPrayers, setBookmarkedPrayers] = useState<Array<string>>([]);
+  const [bookmarkedPrayers, setBookmarkedPrayers] = useState<string[]>([]);
 
   useEffect(() => {
     const saved = localStorage.getItem("bookmarked_prayers");
@@ -118,15 +82,14 @@ const generateSpeech = async (text: string, walletAddress: string) => {
           </div>
           <div className="flex gap-4 flex-col w-full">
             {!hasAudio && (
-              <div className="flex gap-2 w-full">
-                <button
-                  onClick={async () => {
-                    try {
-                      const button = document.getElementById("generateAudioBtn");
-                      if (button) {
-                        button.textContent = "Generating...";
-                        button.disabled = true;
-                      }
+              <button
+                onClick={async () => {
+                  try {
+                    const button = document.getElementById("generateAudioBtn");
+                    if (button) {
+                      button.textContent = "Generating...";
+                      button.disabled = true;
+                    }
 
                     const response = await fetch("/api/generate-audio", {
                       method: "POST",
@@ -148,7 +111,7 @@ const generateSpeech = async (text: string, walletAddress: string) => {
                     const audioBlob = await response.blob();
                     const audioUrl = URL.createObjectURL(audioBlob);
                     const audioPlayer = document.getElementById(
-                      "elevenlabsAudio",
+                      "prayerAudio",
                     ) as HTMLAudioElement;
                     if (audioPlayer) {
                       audioPlayer.src = audioUrl;
@@ -171,16 +134,9 @@ const generateSpeech = async (text: string, walletAddress: string) => {
               >
                 ✨A.I. voice💫
               </button>
-              </div>
             )}
             <audio
-              id="elevenlabsAudio"
-              controls
-              className="w-full mt-2"
-              style={{ display: "none" }}
-            />
-            <audio
-              id="genaiAudio"
+              id="prayerAudio"
               controls
               className="w-full mt-2"
               style={{ display: "none" }}
