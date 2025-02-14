@@ -12,12 +12,12 @@ export const VoiceRecorder = () => {
 
   const uploadToFirebase = async () => {
     if (!chunksRef.current.length) return;
-    
+
     setIsUploading(true);
     try {
       const blob = new Blob(chunksRef.current, { type: "audio/webm" });
       const timestamp = Date.now();
-      const fileName = `0x7777-${timestamp}.mp3`;
+      const fileName = `0x9777-${timestamp}.mp3`;
 
       import { storage, bucket } from "@/lib/firebase-admin";
       const storageRef = ref(storage, `worldApp/audioGen/${fileName}`);
@@ -47,13 +47,13 @@ export const VoiceRecorder = () => {
 
       mediaRecorder.onstop = async () => {
         const blob = new Blob(chunksRef.current, { type: "audio/webm" });
-        
+
         // Upload to Firebase first
         setIsUploading(true);
         try {
           const timestamp = Date.now();
-          const fileName = `0x7777-${timestamp}.mp3`;
-          
+          const fileName = `0x9777-${timestamp}.mp3`;
+
           const storageRef = ref(storage, `worldApp/audioGen/${fileName}`);
           await uploadBytes(storageRef, blob);
           const downloadUrl = await getDownloadURL(storageRef);
@@ -64,7 +64,7 @@ export const VoiceRecorder = () => {
         } finally {
           setIsUploading(false);
         }
-        
+
         // Then display the audio
         const url = URL.createObjectURL(blob);
         setAudioUrl(url);
@@ -114,8 +114,6 @@ export const VoiceRecorder = () => {
           </button>
         </div>
 
-        
-
         <input
           type="file"
           accept="audio/*"
@@ -141,7 +139,6 @@ export const VoiceRecorder = () => {
           >
             Download Audio
           </a>
-              
         </>
       )}
     </div>
