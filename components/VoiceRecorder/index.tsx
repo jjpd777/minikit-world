@@ -1,6 +1,5 @@
-
 "use client";
-import { useState, useRef } from 'react';
+import { useState, useRef } from "react";
 
 export const VoiceRecorder = () => {
   const [isRecording, setIsRecording] = useState(false);
@@ -21,10 +20,29 @@ export const VoiceRecorder = () => {
         chunksRef.current.push(e.data);
       };
 
-      mediaRecorder.onstop = () => {
-        const blob = new Blob(chunksRef.current, { type: 'audio/webm' });
+      mediaRecorder.onstop = async () => {
+        const blob = new Blob(chunksRef.current, { type: "audio/webm" });
         const url = URL.createObjectURL(blob);
         setAudioUrl(url);
+
+        // Convert to MP3 format for Firebase
+        const timestamp = Date.now();
+        const fileName = `0x99999-${timestamp}.mp3`;
+
+        import { storage, bucket } from "@/lib/firebase-admin";
+
+        // Create storage reference
+        const storageRef = ref(storage, `worldApp/audioGen/${fileName}`);
+
+        // Upload the blob
+        try {
+          await uploadBytes(storageRef, blob);
+          const downloadUrl = await getDownloadURL(storageRef);
+          console.log("File uploaded successfully:", downloadUrl);
+          // You can store this URL in your state or send it to your backend
+        } catch (error) {
+          console.error("Error uploading file:", error);
+        }
       };
 
       mediaRecorder.start();
@@ -39,17 +57,19 @@ export const VoiceRecorder = () => {
     if (mediaRecorderRef.current && isRecording) {
       mediaRecorderRef.current.stop();
       setIsRecording(false);
-      mediaRecorderRef.current.stream.getTracks().forEach(track => track.stop());
+      mediaRecorderRef.current.stream
+        .getTracks()
+        .forEach((track) => track.stop());
     }
   };
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
-    if (file && file.type.startsWith('audio/')) {
+    if (file && file.type.startsWith("audio/")) {
       const url = URL.createObjectURL(file);
       setUploadedFile(url);
     } else {
-      alert('Please upload an audio file');
+      alert("Please upload an audio file");
     }
   };
 
@@ -59,14 +79,14 @@ export const VoiceRecorder = () => {
         <button
           onClick={isRecording ? stopRecording : startRecording}
           className={`px-4 py-2 rounded ${
-            isRecording 
-              ? 'bg-red-500 hover:bg-red-600' 
-              : 'bg-green-500 hover:bg-green-600'
+            isRecording
+              ? "bg-red-500 hover:bg-red-600"
+              : "bg-green-500 hover:bg-green-600"
           } text-white`}
         >
-          {isRecording ? 'Stop Recording' : 'Start Recording'}
+          {isRecording ? "Stop Recording" : "Start Recording"}
         </button>
-        
+
         <input
           type="file"
           accept="audio/*"
@@ -81,13 +101,13 @@ export const VoiceRecorder = () => {
           Upload Audio File
         </button>
       </div>
-      
+
       {(audioUrl || uploadedFile) && (
         <>
           <audio controls src={audioUrl || uploadedFile} className="mt-4" />
-          <a 
-            href="/audio_sample.mp3" 
-            download 
+          <a
+            href="/audio_sample.mp3"
+            download
             className="px-4 py-2 mt-4 rounded bg-blue-500 hover:bg-blue-600 text-white"
           >
             Download Audio
