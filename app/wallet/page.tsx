@@ -5,16 +5,9 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
-interface BookmarkedPrayer {
-  text: string;
-  audioUrl?: string;
-  timestamp: number;
-}
-
 export default function WalletPage() {
   const router = useRouter();
-  const [bookmarkedPrayers, setBookmarkedPrayers] = useState<BookmarkedPrayer[]>([]);
-  const [playingAudioId, setPlayingAudioId] = useState<number | null>(null);
+  const [bookmarkedPrayers, setBookmarkedPrayers] = useState<string[]>([]);
 
   useEffect(() => {
     const saved = localStorage.getItem('bookmarked_prayers');
@@ -22,23 +15,6 @@ export default function WalletPage() {
       setBookmarkedPrayers(JSON.parse(saved));
     }
   }, []);
-
-  const playAudio = async (audioUrl: string, index: number) => {
-    if (playingAudioId === index) {
-      setPlayingAudioId(null);
-      return;
-    }
-    
-    try {
-      const audio = new Audio(audioUrl);
-      audio.onended = () => setPlayingAudioId(null);
-      await audio.play();
-      setPlayingAudioId(index);
-    } catch (error) {
-      console.error('Error playing audio:', error);
-    }
-  };
-
   return (
     <div className="min-h-screen flex flex-col items-center justify-center p-8 bg-gradient-to-b from-gray-900 to-gray-800">
       <button 
@@ -68,15 +44,7 @@ export default function WalletPage() {
             <div className="space-y-4">
               {bookmarkedPrayers.map((prayer, index) => (
                 <div key={index} className="p-4 rounded-lg bg-gray-800/50">
-                  <p className="text-white text-sm mb-2">{prayer.text}</p>
-                  {prayer.audioUrl && (
-                    <button
-                      onClick={() => playAudio(prayer.audioUrl!, index)}
-                      className="mt-2 px-3 py-1 bg-purple-500/30 hover:bg-purple-500/50 rounded-lg text-white text-sm flex items-center gap-2"
-                    >
-                      {playingAudioId === index ? '⏸️ Pause' : '▶️ Play'}
-                    </button>
-                  )}
+                  <p className="text-white text-sm">{prayer}</p>
                 </div>
               ))}
             </div>

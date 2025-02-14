@@ -59,12 +59,10 @@ export async function POST(request: NextRequest) {
       expires: Date.now() + 24 * 60 * 60 * 1000, // URL expires in 24 hours
     });
 
-    const gsUrl = `gs://bendiga-4d926.appspot.com/${filename}`;
     return NextResponse.json({
       success: true,
       url,
-      storagePath: filename,
-      gsUrl
+      storagePath: filename
     });
   } catch (error) {
     console.error("Text-to-speech error:", error);
