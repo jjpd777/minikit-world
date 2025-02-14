@@ -165,7 +165,7 @@ const generateSpeech = async (text: string, walletAddress: string) => {
                 <button
                   onClick={async () => {
                     try {
-                      const response = await generateSpeech(prayer, "0x123...abc");
+                      const response = await generateSpeech(prayer, "0x7777");
                       console.log("Generated audio URL:", response);
                     } catch (error) {
                       console.error("Error generating speech:", error);
