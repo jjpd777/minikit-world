@@ -6,7 +6,7 @@ import Image from "next/image";
 
 export const WalletAuth = () => {
   const [walletAddress, setWalletAddress] = useState<string>("");
-  const [balance, setBalance] = useState(0.11);
+  const [balance, setBalance] = useState(0.33);
   const [loading, setLoading] = useState(false);
 
   const handleWalletAuth = async () => {
