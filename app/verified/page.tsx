@@ -168,7 +168,17 @@ const generateSpeech = async (text: string, walletAddress: string) => {
                       console.log("Sending prayer to GENAI:", prayer);
                       const response = await generateSpeech(prayer, "0x7777");
                       console.log("%cGENAI Response:", "color: green; font-weight: bold; font-size: 14px");
-                      console.log("%cAudio URL:", "color: blue; font-weight: bold", response);
+                      
+                      // Type guard to check response structure
+                      if ('url' in response) {
+                        console.log("%cAudio URL:", "color: blue; font-weight: bold", response.url);
+                      } else if ('error' in response) {
+                        console.error("%cError:", "color: red; font-weight: bold", response.error);
+                        if (response.details) {
+                          console.error("%cDetails:", "color: red", response.details);
+                        }
+                        throw new Error(response.error);
+                      }
                     } catch (error) {
                       console.error("%cGENAI Error:", "color: red; font-weight: bold; font-size: 14px", error);
                       alert("Failed to generate speech");
