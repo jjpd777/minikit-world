@@ -1,23 +1,17 @@
+
 "use client";
 import { MiniKit } from "@worldcoin/minikit-js";
 import { useState } from "react";
 import Image from "next/image";
 
-// Create a global variable to track prayer signs
-let globalPrayerSigns = 0;
-
 export const WalletAuth = () => {
   const [walletAddress, setWalletAddress] = useState<string>("");
   const [balance, setBalance] = useState(0.11);
-
-  // Function to increment balance, exposed globally
-  (window as any).incrementBalance = () => {
-    globalPrayerSigns++;
-    setBalance(0.11 + globalPrayerSigns * 0.11);
-  };
+  const [loading, setLoading] = useState(false);
 
   const handleWalletAuth = async () => {
     try {
+      setLoading(true);
       if (!MiniKit.isInstalled()) {
         alert("Please install World App to authenticate your wallet");
         return;
@@ -41,6 +35,8 @@ export const WalletAuth = () => {
     } catch (error) {
       console.error("Wallet auth error:", error);
       alert("Failed to authenticate wallet");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -59,16 +55,39 @@ export const WalletAuth = () => {
   };
 
   return (
-    <div className="flex items-center gap-2 margin-bottom-20">
+    <div className="flex flex-col items-center gap-4">
+      <div className="flex items-center gap-2 px-4 py-2 text-lg rounded-lg font-medium bg-purple-300/80 text-white">
+        <Image src="/world_c.png" alt="World Coin" width={30} height={30} />
+        <span>{balance.toFixed(2)}</span>
+      </div>
+
       {!walletAddress ? (
-        <div className="flex items-center gap-2 px-4 py-2 text-lg rounded-lg font-medium bg-purple-300/80 text-white">
-          <Image src="/world_c.png" alt="World Coin" width={30} height={30} />
-          <span>0.00</span>
-        </div>
+        <button
+          onClick={handleWalletAuth}
+          disabled={loading}
+          className="px-6 py-3 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition-all disabled:opacity-50"
+        >
+          {loading ? "Connecting..." : "Connect Wallet"}
+        </button>
       ) : (
-        <div className="flex items-center gap-2 px-4 py-2 text-lg rounded-lg font-medium bg-purple-300/80 text-white">
-          <Image src="/world_c.png" alt="World Coin" width={30} height={30} />
-          <span>{balance.toFixed(2)} </span>
+        <div className="flex flex-col items-center gap-2">
+          <div className="px-4 py-2 bg-gray-800 rounded-lg text-white font-mono text-sm">
+            {`${walletAddress.slice(0, 6)}...${walletAddress.slice(-4)}`}
+          </div>
+          <div className="flex gap-2">
+            <button
+              onClick={copyToClipboard}
+              className="px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-600 text-sm"
+            >
+              Copy Address
+            </button>
+            <button
+              onClick={handleDisconnect}
+              className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 text-sm"
+            >
+              Disconnect
+            </button>
+          </div>
         </div>
       )}
     </div>
