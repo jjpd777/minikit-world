@@ -1,4 +1,3 @@
-
 "use client";
 import { PrayerForm } from "@/components/PrayerForm";
 import { useEffect, useState } from "react";
@@ -10,6 +9,23 @@ export default function VerifiedPage() {
   const [prayer, setPrayer] = useState("");
   const [showPrayer, setShowPrayer] = useState(false);
   const [hasAudio, setHasAudio] = useState(false);
+  const [bookmarkedPrayers, setBookmarkedPrayers] = useState<string[]>([]);
+
+  useEffect(() => {
+    const saved = localStorage.getItem("bookmarked_prayers");
+    if (saved) {
+      setBookmarkedPrayers(JSON.parse(saved));
+    }
+  }, []);
+
+  const toggleBookmark = () => {
+    const newBookmarks = bookmarkedPrayers.includes(prayer)
+      ? bookmarkedPrayers.filter((p) => p !== prayer)
+      : [...bookmarkedPrayers, prayer];
+
+    setBookmarkedPrayers(newBookmarks);
+    localStorage.setItem("bookmarked_prayers", JSON.stringify(newBookmarks));
+  };
 
   useEffect(() => {
     const isVerified = localStorage.getItem("worldcoin_verified") === "true";
@@ -21,12 +37,23 @@ export default function VerifiedPage() {
   return (
     <div className="flex min-h-screen flex-col items-center p-24">
       <div className="absolute top-4 left-4">
-        <button 
-          onClick={() => router.push('/wallet')}
+        <button
+          onClick={() => router.push("/wallet")}
           className="p-2 rounded-full bg-purple-500/30 hover:bg-purple-500/50 transition-all"
         >
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-6 w-6 text-white"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+            />
           </svg>
         </button>
       </div>
@@ -47,7 +74,7 @@ export default function VerifiedPage() {
               height={150}
               priority
               className="animate-glow"
-              style={{marginBottom: '-22px'}}
+              style={{ marginBottom: "-22px" }}
             />
           </div>
           <div className="w-full min-w-[300px] max-h-[300px] overflow-y-auto p-4 rounded-lg bg-gray-800/50">
@@ -57,67 +84,85 @@ export default function VerifiedPage() {
             {!hasAudio && (
               <button
                 onClick={async () => {
-                try {
-                  const button = document.getElementById('generateAudioBtn');
-                  if (button) {
-                    button.textContent = 'Generating...';
-                    button.disabled = true;
-                  }
+                  try {
+                    const button = document.getElementById("generateAudioBtn");
+                    if (button) {
+                      button.textContent = "Generating...";
+                      button.disabled = true;
+                    }
 
-                  const response = await fetch('/api/generate-audio', {
-                    method: 'POST',
-                    headers: {
-                      'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                      text: prayer,
-                    }),
-                  });
+                    const response = await fetch("/api/generate-audio", {
+                      method: "POST",
+                      headers: {
+                        "Content-Type": "application/json",
+                      },
+                      body: JSON.stringify({
+                        text: prayer,
+                      }),
+                    });
 
-                  if (!response.ok) {
-                    const error = await response.json();
-                    throw new Error(error.error || 'Failed to generate audio');
-                  }
+                    if (!response.ok) {
+                      const error = await response.json();
+                      throw new Error(
+                        error.error || "Failed to generate audio",
+                      );
+                    }
 
-                  const audioBlob = await response.blob();
-                  const audioUrl = URL.createObjectURL(audioBlob);
-                  const audioPlayer = document.getElementById('prayerAudio') as HTMLAudioElement;
-                  if (audioPlayer) {
-                    audioPlayer.src = audioUrl;
-                    audioPlayer.style.display = 'block';
-                    setHasAudio(true);
+                    const audioBlob = await response.blob();
+                    const audioUrl = URL.createObjectURL(audioBlob);
+                    const audioPlayer = document.getElementById(
+                      "prayerAudio",
+                    ) as HTMLAudioElement;
+                    if (audioPlayer) {
+                      audioPlayer.src = audioUrl;
+                      audioPlayer.style.display = "block";
+                      setHasAudio(true);
+                    }
+                  } catch (error) {
+                    console.error("Error generating audio:", error);
+                    alert("Failed to generate audio. Please try again.");
+                  } finally {
+                    const button = document.getElementById("generateAudioBtn");
+                    if (button) {
+                      button.textContent = "Prayer A.I.";
+                      button.disabled = false;
+                    }
                   }
-                } catch (error) {
-                  console.error('Error generating audio:', error);
-                  alert('Failed to generate audio. Please try again.');
-                } finally {
-                  const button = document.getElementById('generateAudioBtn');
-                  if (button) {
-                    button.textContent = 'Prayer A.I.';
-                    button.disabled = false;
-                  }
-                }
-              }}
-              id="generateAudioBtn"
+                }}
+                id="generateAudioBtn"
                 className="w-full px-4 py-2 bg-white text-purple-600 border border-purple-600 rounded-lg hover:bg-purple-50 transition-colors flex items-center justify-center gap-2"
-
-            >
-             
+              >
                 ✨A.I. voice💫
               </button>
             )}
-            <audio 
-              id="prayerAudio" 
-              controls 
-              className="w-full mt-2" 
-              style={{ display: 'none' }}
+            <audio
+              id="prayerAudio"
+              controls
+              className="w-full mt-2"
+              style={{ display: "none" }}
             />
             <div className="flex gap-4">
               <button
-                onClick={() => setShowPrayer(false)}
-                className="flex-1 ml-[-10px] px-4 py-2 bg-purple-500/80 text-white rounded-lg hover:bg-purple-600 transition-colors flex items-center justify-center"
+                onClick={toggleBookmark}
+                className="flex-1 px-4 py-2 bg-purple-500/80 text-white rounded-lg hover:bg-purple-600 transition-colors flex items-center justify-center gap-2"
               >
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                {bookmarkedPrayers.includes(prayer) ? "★" : "☆"}
+              </button>
+              <button
+                onClick={() => setShowPrayer(false)}
+                className="flex-1 px-4 py-2 bg-purple-500/80 text-white rounded-lg hover:bg-purple-600 transition-colors flex items-center justify-center"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
                   <path d="M22 12c0 6-4.39 10-9.806 10C7.792 22 4.24 19.665 3 16" />
                   <path d="M2 12C2 6 6.39 2 11.806 2 16.209 2 19.76 4.335 21 8" />
                   <path d="M7 17l-4-1-1 4" />
@@ -143,6 +188,18 @@ export default function VerifiedPage() {
               </a>
             </div>
           </div>
+          {bookmarkedPrayers.length > 0 && (
+            <div className="mt-8 w-full">
+              <h3 className="text-white text-xl mb-4">Bookmarked Prayers</h3>
+              <div className="space-y-4">
+                {bookmarkedPrayers.map((p, i) => (
+                  <div key={i} className="p-4 rounded-lg bg-gray-800/50">
+                    <p className="text-white">{p}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       )}
     </div>
