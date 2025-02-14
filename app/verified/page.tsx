@@ -32,6 +32,9 @@ const generateSpeech = async (text: string, walletAddress: string) => {
 
     const data = await response.json();
     console.log("%c[generateSpeech] Response data:", "color: green", data);
+    if (data.gsUrl) {
+      setCurrentAudioUrl(data.gsUrl);
+    }
     return data;
   } catch (error) {
     console.error("%c[generateSpeech] Error caught:", "color: red", error);
@@ -46,6 +49,7 @@ const generateSpeech = async (text: string, walletAddress: string) => {
   const [showPrayer, setShowPrayer] = useState(false);
   const [hasAudio, setHasAudio] = useState(false);
   const [bookmarkedPrayers, setBookmarkedPrayers] = useState<string[]>([]);
+  const [currentAudioUrl, setCurrentAudioUrl] = useState(''); // Added state for audio URL
 
   useEffect(() => {
     const saved = localStorage.getItem("bookmarked_prayers");
