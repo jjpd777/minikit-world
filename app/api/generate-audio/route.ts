@@ -37,7 +37,8 @@ export async function POST(request: NextRequest) {
 
     // Get audio buffer and create a unique filename
     const audioBuffer = await response.arrayBuffer();
-    const filename = `prayers/${Date.now()}_${Math.random().toString(36).substring(7)}.mp3`;
+    const userAddress = request.headers.get('x-user-address') || 'anonymous';
+    const filename = `worldApp/audioGen/${userAddress}-${Date.now()}.mp3`;
     
     // Upload to Firebase Storage
     const file = bucket.file(filename);
