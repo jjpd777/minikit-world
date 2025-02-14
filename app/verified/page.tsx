@@ -183,11 +183,35 @@ const generateSpeech = async (text: string, walletAddress: string) => {
 
                       if (response.url) {
                         console.log("%c[GENAI] Success! Audio URL:", "color: green; font-weight: bold", response.url);
-                        const audioPlayer = document.getElementById("genaiAudio") as HTMLAudioElement;
-                        if (audioPlayer) {
-                          audioPlayer.src = response.url;
-                          audioPlayer.style.display = "block";
-                        }
+                      
+                      console.log("%c[GENAI] Fetching audio from URL...", "color: purple");
+                      const audioResponse = await fetch(response.url);
+                      console.log("%c[GENAI] Audio fetch response status:", "color: blue", audioResponse.status);
+                      
+                      if (!audioResponse.ok) {
+                        throw new Error(`Failed to fetch audio: ${audioResponse.status}`);
+                      }
+
+                      const audioBlob = await audioResponse.blob();
+                      console.log("%c[GENAI] Audio blob size:", "color: blue", `${audioBlob.size} bytes`);
+                      console.log("%c[GENAI] Audio blob type:", "color: blue", audioBlob.type);
+
+                      const audioUrl = URL.createObjectURL(audioBlob);
+                      console.log("%c[GENAI] Created object URL:", "color: green", audioUrl);
+
+                      const audioPlayer = document.getElementById("genaiAudio") as HTMLAudioElement;
+                      if (audioPlayer) {
+                        audioPlayer.src = audioUrl;
+                        audioPlayer.style.display = "block";
+                        
+                        audioPlayer.onloadeddata = () => {
+                          console.log("%c[GENAI] Audio loaded successfully!", "color: green; font-weight: bold");
+                        };
+                        
+                        audioPlayer.onerror = (e) => {
+                          console.error("%c[GENAI] Audio loading error:", "color: red", e);
+                        };
+                      }
                       } else if (response.error) {
                         console.error("%c[GENAI] Error detected!", "color: red; font-weight: bold");
                         console.error("%c[GENAI] Error message:", "color: red", response.error);
