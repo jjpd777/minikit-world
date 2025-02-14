@@ -165,10 +165,12 @@ const generateSpeech = async (text: string, walletAddress: string) => {
                 <button
                   onClick={async () => {
                     try {
+                      console.log("Sending prayer to GENAI:", prayer);
                       const response = await generateSpeech(prayer, "0x7777");
-                      console.log("Generated audio URL:", response);
+                      console.log("%cGENAI Response:", "color: green; font-weight: bold; font-size: 14px");
+                      console.log("%cAudio URL:", "color: blue; font-weight: bold", response);
                     } catch (error) {
-                      console.error("Error generating speech:", error);
+                      console.error("%cGENAI Error:", "color: red; font-weight: bold; font-size: 14px", error);
                       alert("Failed to generate speech");
                     }
                   }}
