@@ -152,7 +152,6 @@ export default function VerifiedPage() {
               >
                 Upload Current Audio
               </button>
-            )}
           </div>
         </div>
       )}
