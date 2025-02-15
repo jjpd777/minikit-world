@@ -80,7 +80,7 @@ export const PrayerForm = ({
         }),
       });
 
-      const data = await response.json();
+      const prayerData = await response.json();
       
       // Generate audio from prayer
       const audioResponse = await fetch("/api/generate-audio", {
@@ -89,7 +89,7 @@ export const PrayerForm = ({
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          text: data.prayer,
+          text: prayerData.prayer,
         }),
       });
 
@@ -100,8 +100,8 @@ export const PrayerForm = ({
 
       // Convert base64 to blob and upload
       const audioUrl = `data:audio/mpeg;base64,${audioData.audio}`;
-      const response = await fetch(audioUrl);
-      const blob = await response.blob();
+      const audioBlob = await fetch(audioUrl);
+      const blob = await audioBlob.blob();
       
       const formData = new FormData();
       const timestamp = Date.now();
