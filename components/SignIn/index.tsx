@@ -28,9 +28,12 @@ export const SignIn = () => {
     return () => window.removeEventListener('storage', loadBookmarkedFiles);
   }, []);
 
-  const playAudioFile = async (filename: string) => {
+  const playAudioFile = async (gsPath: string) => {
     try {
-      const response = await fetch(`/api/upload-audio?file=${encodeURIComponent(filename)}`, {
+      // Remove gs://bucket-name/ prefix to get just the file path
+      const filePath = gsPath.replace(/^gs:\/\/[^/]+\//, '');
+      
+      const response = await fetch(`/api/upload-audio?file=${encodeURIComponent(filePath)}`, {
         method: 'GET'
       });
       
