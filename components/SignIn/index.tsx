@@ -181,9 +181,33 @@ export const SignIn = () => {
 
         <div className="mt-4 p-4 bg-purple-100 rounded-xl">
           <h3 className="text-lg font-semibold mb-2">Stored Audio Files:</h3>
-          {JSON.parse(localStorage.getItem('audioUrls') || '[]').map((url: string, index: number) => (
-            <div key={index} className="text-sm text-gray-700 mb-1">
-              {url}
+          {JSON.parse(localStorage.getItem('audioUrls') || '[]').map((gsPath: string, index: number) => (
+            <div key={index} className="text-sm text-gray-700 mb-3 p-2 border-b border-purple-200">
+              <div className="mb-2">{gsPath}</div>
+              <button
+                onClick={async () => {
+                  try {
+                    const response = await fetch('/api/get-audio', {
+                      method: 'POST',
+                      headers: { 'Content-Type': 'application/json' },
+                      body: JSON.stringify({ gsPath })
+                    });
+
+                    const data = await response.json();
+                    if (!data.success) throw new Error(data.error);
+
+                    const audioUrl = `data:${data.contentType};base64,${data.audio}`;
+                    const audio = new Audio(audioUrl);
+                    audio.play();
+                  } catch (error) {
+                    console.error('Error playing audio:', error);
+                    alert('Failed to play audio');
+                  }
+                }}
+                className="px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition-colors"
+              >
+                Play Audio
+              </button>
             </div>
           ))}
         </div>
