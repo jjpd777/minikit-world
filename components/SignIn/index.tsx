@@ -141,29 +141,6 @@ export const SignIn = () => {
 
               const audioUrl = `data:audio/mpeg;base64,${data.audio}`;
               setAudioUrl(audioUrl);
-
-              // Upload to Firebase
-              const timestamp = Date.now();
-              const audioBlob = new Blob(
-                [Buffer.from(data.audio, 'base64')],
-                { type: 'audio/mpeg' }
-              );
-              
-              const formData = new FormData();
-              formData.append('audio', audioBlob, `prayer-${timestamp}.mp3`);
-
-              const uploadResponse = await fetch('/api/upload-audio', {
-                method: 'POST',
-                body: formData,
-              });
-
-              if (!uploadResponse.ok) {
-                throw new Error('Failed to upload to Firebase');
-              }
-
-              const uploadData = await uploadResponse.json();
-              console.log('Uploaded to Firebase:', uploadData.gsPath);
-              alert(`Audio uploaded successfully to Firebase!\nPath: ${uploadData.gsPath}`);
             } catch (error) {
               console.error("Error generating audio:", error);
               alert("Failed to generate audio");
