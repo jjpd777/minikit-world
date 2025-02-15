@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { storage } from "@/lib/firebase";
+import { storage } from "@/lib/firebase-admin";
 
 export const SignIn = () => {
   const [isVerifying, setIsVerifying] = useState(false);
