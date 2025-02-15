@@ -17,10 +17,10 @@ export const VoiceRecorder = () => {
     try {
       const blob = new Blob(chunksRef.current, { type: "audio/webm" });
       const timestamp = Date.now();
-      const fileName = `0x9777-${timestamp}.mp3`;
+      const fileName = `worldApp/audioGen/0x888_${timestamp}.mp3`;
 
       import { storage, bucket } from "@/lib/firebase-admin";
-      const storageRef = ref(storage, `worldApp/audioGen/${fileName}`);
+      const storageRef = ref(storage, fileName);
 
       await uploadBytes(storageRef, blob);
       const downloadUrl = await getDownloadURL(storageRef);
