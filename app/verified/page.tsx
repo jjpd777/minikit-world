@@ -188,14 +188,15 @@ export default function VerifiedPage() {
                       body: formData,
                     });
                     
-                    const responseData = await uploadResponse.json();
-                    console.log('Upload response:', responseData);
-                    
                     if (!uploadResponse.ok) {
-                      throw new Error(`Upload failed: ${responseData.error || uploadResponse.status}`);
+                      const errorText = await uploadResponse.text();
+                      console.error('Upload failed:', errorText);
+                      throw new Error(`Upload failed: ${uploadResponse.status}`);
                     }
-                    
+
                     const data = await uploadResponse.json();
+                    console.log('Upload response:', data);
+                    
                     if (data.success) {
                       alert(`Uploaded successfully! Path: ${data.gsPath}`);
                     } else {
