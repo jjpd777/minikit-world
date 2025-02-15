@@ -177,43 +177,7 @@ export const SignIn = () => {
           <Image src="/world_c.png" alt="World Coin" width={24} height={24} />
           {isVerifying ? "Verifying..." : "Verify with World ID"}
         </button>
-        <button
-          onClick={uploadAudioTest}
-          disabled={isUploading}
-          className="mt-4 px-8 py-4 bg-blue-400/80 text-white rounded-xl hover:bg-blue-500 transition-all duration-200 transform hover:scale-105 font-medium text-lg shadow-lg flex items-center justify-center gap-2"
-        >
-          {isUploading ? "Uploading..." : "Test Upload"}
-        </button>
-
-        <button
-          onClick={async () => {
-            try {
-              const response = await fetch("/api/generate-audio", {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                  text: "God Willing, we are poised to WIN",
-                }),
-              });
-
-              const data = await response.json();
-              if (!response.ok || !data.success) {
-                throw new Error(data.error || "Failed to generate audio");
-              }
-
-              const audioUrl = `data:audio/mpeg;base64,${data.audio}`;
-              setAudioUrl(audioUrl);
-            } catch (error) {
-              console.error("Error generating audio:", error);
-              alert("Failed to generate audio");
-            }
-          }}
-          className="mt-4 px-8 py-4 bg-green-400/80 text-white rounded-xl hover:bg-green-500 transition-all duration-200 transform hover:scale-105 font-medium text-lg shadow-lg flex items-center justify-center gap-2"
-        >
-          Test Audio Gen
-        </button>
+        
 
         <button
           onClick={fetchAudioFiles}
