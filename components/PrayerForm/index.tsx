@@ -19,10 +19,10 @@ export const PrayerForm = ({
       choices: ["Myself", "Mother", "Father", "Siblings", "Health", "Wealth"],
     },
     {
-      code: "es",
-      name: "Spanish",
-      flag: "/colombia.svg",
-      choices: ["Yo mismo", "Madre", "Padre", "Hermanos", "Salud", "Riqueza"],
+      code: "he",
+      name: "Hebrew",
+      flag: "/israel.svg",
+      choices: ["עצמי", "אמא", "אבא", "אחים ואחיות", "בריאות", "עושר"],
     },
     {
       code: "pt",
@@ -57,10 +57,10 @@ export const PrayerForm = ({
       ],
     },
     {
-      code: "he",
-      name: "Hebrew",
-      flag: "/israel.svg",
-      choices: ["עצמי", "אמא", "אבא", "אחים ואחיות", "בריאות", "עושר"],
+      code: "es",
+      name: "Spanish",
+      flag: "/colombia.svg",
+      choices: ["Yo mismo", "Madre", "Padre", "Hermanos", "Salud", "Riqueza"],
     },
   ];
 
