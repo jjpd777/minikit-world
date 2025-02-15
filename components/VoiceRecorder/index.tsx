@@ -24,10 +24,12 @@ export const VoiceRecorder = () => {
       
       const storageRef = ref(storage, fileName);
       const snapshot = await uploadBytes(storageRef, blob);
+      const gsPath = `gs://${snapshot.ref.bucket}/${snapshot.ref.fullPath}`;
       const downloadUrl = await getDownloadURL(snapshot.ref);
-      console.log('File uploaded to:', `gs://${snapshot.ref.bucket}/${snapshot.ref.fullPath}`);
-      console.log("File uploaded successfully:", downloadUrl);
-      alert("Audio uploaded successfully!");
+      console.log('Firebase Storage Path:', gsPath);
+      console.log("Download URL:", downloadUrl);
+      alert(`Audio uploaded successfully!\nStorage path: ${gsPath}`);
+      return { gsPath, downloadUrl };
     } catch (error) {
       console.error("Error uploading file:", error);
       alert("Failed to upload audio");
