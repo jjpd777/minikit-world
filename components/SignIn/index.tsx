@@ -9,20 +9,31 @@ export const SignIn = () => {
   const [isVerifying, setIsVerifying] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
-  const [audioFiles, setAudioFiles] = useState<string[]>([]);
-  const [isFetching, setIsFetching] = useState(false);
+  const [bookmarkedFiles, setBookmarkedFiles] = useState<string[]>([]);
   const [currentPage, setCurrentPage] = useState(0);
   const [selectedAudioFile, setSelectedAudioFile] = useState<string | null>(null);
   const filesPerPage = 10;
   const router = useRouter();
 
   useEffect(() => {
-    fetchAudioFiles();
+    // Load bookmarked files from localStorage
+    const loadBookmarkedFiles = () => {
+      const bookmarked = JSON.parse(localStorage.getItem('bookmarkedAudios') || '[]');
+      setBookmarkedFiles(bookmarked);
+    };
+
+    loadBookmarkedFiles();
+    // Add event listener for storage changes
+    window.addEventListener('storage', loadBookmarkedFiles);
+    return () => window.removeEventListener('storage', loadBookmarkedFiles);
   }, []);
 
-  const playAudioFile = async (filename: string) => {
+  const playAudioFile = async (gsPath: string) => {
     try {
-      const response = await fetch(`/api/upload-audio?file=${encodeURIComponent(filename)}`, {
+      // Remove gs://bucket-name/ prefix to get just the file path
+      const filePath = gsPath.replace(/^gs:\/\/[^/]+\//, '');
+      
+      const response = await fetch(`/api/upload-audio?file=${encodeURIComponent(filePath)}`, {
         method: 'GET'
       });
       
@@ -106,16 +117,14 @@ export const SignIn = () => {
         <Image
           src="/bendiga_logo.png"
           alt="Bendiga Logo"
-          width={300}
-          height={300}
+          width={200}
+          height={200}
           priority
           className="mb-8 animate-glow"
         />
         <div className="absolute inset-0 rounded-full animate-pulse bg-purple-500/20 filter blur-xl"></div>
       </div>
-      <h1 className="text-2xl text-white text-center font-bold mb-8">
-        Generate Daily Prayers
-      </h1>
+    
       <div className="flex flex-col gap-4">
         <button
           onClick={async () => {
@@ -180,21 +189,25 @@ export const SignIn = () => {
         
 
     
-        {audioFiles.length > 0 && (
+        {bookmarkedFiles.length > 0 && (
           <div className="mt-4 w-full">
-            <h3 className="text-white mb-2">Stored Audio Files:</h3>
+            {/* <h3 className="text-white mb-2">Bookmarked:</h3> */}
             <div className="max-h-80 overflow-y-auto bg-purple-900/20 p-4 rounded-lg">
-              {audioFiles
+              {[...bookmarkedFiles]
+                .reverse()
                 .slice(currentPage * filesPerPage, (currentPage + 1) * filesPerPage)
-                .map((file, index) => (
-                  <div 
-                    key={index} 
-                    onClick={() => playAudioFile(file)}
-                    className="text-white text-sm mb-2 p-2 bg-purple-800/20 rounded cursor-pointer hover:bg-purple-700/20"
-                  >
-                    🎵 {file}
-                  </div>
-                ))}
+                .map((file, index) => {
+                  const globalIndex = bookmarkedFiles.length - (currentPage * filesPerPage + index);
+                  return (
+                    <div 
+                      key={index} 
+                      onClick={() => playAudioFile(file)}
+                      className="text-white text-sm mb-2 p-2 bg-purple-800/20 rounded cursor-pointer hover:bg-purple-700/20"
+                    >
+                      🎵 Prayer #{globalIndex}
+                    </div>
+                  );
+                })}
             </div>
             {selectedAudioFile && (
               <audio 
@@ -213,11 +226,11 @@ export const SignIn = () => {
                 Previous
               </button>
               <span className="text-white">
-                Page {currentPage + 1} of {Math.ceil(audioFiles.length / filesPerPage)}
+                Page {currentPage + 1} of {Math.ceil(bookmarkedFiles.length / filesPerPage)}
               </span>
               <button
-                onClick={() => setCurrentPage(prev => Math.min(Math.ceil(audioFiles.length / filesPerPage) - 1, prev + 1))}
-                disabled={currentPage >= Math.ceil(audioFiles.length / filesPerPage) - 1}
+                onClick={() => setCurrentPage(prev => Math.min(Math.ceil(bookmarkedFiles.length / filesPerPage) - 1, prev + 1))}
+                disabled={currentPage >= Math.ceil(bookmarkedFiles.length / filesPerPage) - 1}
                 className="px-4 py-2 bg-purple-400/80 text-white rounded-lg disabled:opacity-50"
               >
                 Next
