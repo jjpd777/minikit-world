@@ -44,10 +44,22 @@ export async function POST(request: NextRequest) {
 
     const audioBuffer = await response.arrayBuffer();
     const base64Audio = Buffer.from(audioBuffer).toString('base64');
+    
+    // Upload to Firebase Storage
+    const timestamp = Date.now();
+    const fileName = `worldApp/DEMO/${timestamp}.mp3`;
+    const file = bucket.file(fileName);
+    
+    await file.save(Buffer.from(audioBuffer), {
+      contentType: 'audio/mpeg',
+    });
+
+    const gsPath = `gs://${bucket.name}/${fileName}`;
 
     return NextResponse.json({
       success: true,
-      audio: base64Audio
+      audio: base64Audio,
+      gsPath
     });
   } catch (error) {
     console.error('Error generating audio:', error);
