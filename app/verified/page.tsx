@@ -137,13 +137,23 @@ export default function VerifiedPage() {
             </div>
             {storagePath && (
               <button
-                onClick={() => console.log('Firebase Storage Path:', storagePath)}
+                onClick={() => {
+                  const bookmarked = JSON.parse(localStorage.getItem('bookmarkedAudios') || '[]');
+                  if (!bookmarked.includes(storagePath)) {
+                    const newBookmarked = [...bookmarked, storagePath];
+                    localStorage.setItem('bookmarkedAudios', JSON.stringify(newBookmarked));
+                    console.log('Audio bookmarked:', storagePath);
+                    alert('Audio bookmarked successfully!');
+                  } else {
+                    alert('This audio is already bookmarked!');
+                  }
+                }}
                 className="w-full px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors flex items-center justify-center gap-2"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                   <path d="M5 4a2 2 0 012-2h6a2 2 0 012 2v14l-5-2.5L5 18V4z" />
                 </svg>
-                Show Storage Path
+                Bookmark Audio
               </button>
             )}
             {audioUrl && (
