@@ -11,15 +11,18 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "APP_ID not configured" }, { status: 500 });
     }
 
+    console.log("Verification payload:", { proof, action, signal, app_id });
+
     const verifyRes = await verifyCloudProof(proof, app_id, action, signal);
+    console.log("Verification response:", verifyRes);
 
     if (verifyRes.success) {
       return NextResponse.json({ verifyRes, status: 200 });
     } else {
+      console.error("Verification failed:", verifyRes.error);
       return NextResponse.json({ 
         error: verifyRes.error || "Verification failed",
-        status: 400,
-        verifyRes 
+        status: 400 
       });
     }
   } catch (error) {
