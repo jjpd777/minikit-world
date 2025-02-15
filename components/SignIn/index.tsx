@@ -124,6 +124,7 @@ export const SignIn = () => {
               const verifyPayload = {
                 action: process.env.NEXT_PUBLIC_ACTION_NAME as string,
                 signal: "user_verification",
+                verification_level: VerificationLevel.Device
               };
               
               const result = await MiniKit.commandsAsync.verify(verifyPayload);
