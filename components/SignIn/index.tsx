@@ -9,7 +9,30 @@ export const SignIn = () => {
   const [isVerifying, setIsVerifying] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
+  const [audioFiles, setAudioFiles] = useState<string[]>([]);
+  const [isFetching, setIsFetching] = useState(false);
   const router = useRouter();
+
+  const fetchAudioFiles = async () => {
+    setIsFetching(true);
+    try {
+      const response = await fetch('/api/upload-audio?list=true', {
+        method: 'GET'
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to fetch audio files');
+      }
+
+      const data = await response.json();
+      setAudioFiles(data.files || []);
+    } catch (error) {
+      console.error('Error fetching audio files:', error);
+      alert('Failed to fetch audio files');
+    } finally {
+      setIsFetching(false);
+    }
+  };
 
   const uploadAudioTest = async () => {
     if (!audioUrl) {
@@ -170,6 +193,27 @@ export const SignIn = () => {
         >
           Test Audio Gen
         </button>
+
+        <button
+          onClick={fetchAudioFiles}
+          disabled={isFetching}
+          className="mt-4 px-8 py-4 bg-purple-400/80 text-white rounded-xl hover:bg-purple-500 transition-all duration-200 transform hover:scale-105 font-medium text-lg shadow-lg flex items-center justify-center gap-2"
+        >
+          {isFetching ? "Fetching..." : "Show Audio Files"}
+        </button>
+
+        {audioFiles.length > 0 && (
+          <div className="mt-4 w-full">
+            <h3 className="text-white mb-2">Stored Audio Files:</h3>
+            <div className="max-h-40 overflow-y-auto">
+              {audioFiles.map((file, index) => (
+                <div key={index} className="text-white text-sm mb-1 opacity-80">
+                  {file}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
         {audioUrl && (
           <audio 

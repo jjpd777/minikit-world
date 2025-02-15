@@ -2,6 +2,20 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { bucket } from '@/lib/firebase-admin';
 
+export async function GET(request: NextRequest) {
+  try {
+    const [files] = await bucket.getFiles({
+      prefix: 'worldApp/NewAudio/'
+    });
+
+    const fileNames = files.map(file => file.name);
+    return NextResponse.json({ success: true, files: fileNames });
+  } catch (error) {
+    console.error('Error listing files:', error);
+    return NextResponse.json({ error: 'Failed to list files' }, { status: 500 });
+  }
+}
+
 export async function POST(request: NextRequest) {
   try {
     const formData = await request.formData();
