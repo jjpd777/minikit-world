@@ -83,8 +83,8 @@ export const PrayerForm = ({
       const data = await response.json();
       onPrayerGenerated(data.prayer);
     } catch (error) {
-      console.error("Error generating prayer:", error);
-      alert("Failed to generate prayer. Please try again.");
+      console.error("Error:", error);
+      alert("Failed to generate prayer or audio. Please try again.");
     } finally {
       setIsLoading(false);
     }

@@ -4,8 +4,8 @@ import { bucket } from "@/lib/firebase-admin";
 
 export async function GET() {
   try {
-    const destinationPath = 'worldApp/NewAudio/audio_sample_88.mp3';
     const sourcePath = 'public/audio_sample.mp3';
+    const destinationPath = 'worldApp/Winners/audio_sample.mp3';
     
     await bucket.upload(sourcePath, {
       destination: destinationPath,

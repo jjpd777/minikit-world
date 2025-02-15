@@ -1,5 +1,5 @@
 "use client";
-import { MiniKit } from "@worldcoin/minikit-js";
+import { MiniKit, VerificationLevel } from "@worldcoin/minikit-js";
 import Image from "next/image";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -9,31 +9,83 @@ export const SignIn = () => {
   const [isVerifying, setIsVerifying] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
+  const [audioFiles, setAudioFiles] = useState<string[]>([]);
+  const [isFetching, setIsFetching] = useState(false);
+  const [currentPage, setCurrentPage] = useState(0);
+  const [selectedAudioFile, setSelectedAudioFile] = useState<string | null>(null);
+  const filesPerPage = 10;
   const router = useRouter();
+
+  const playAudioFile = async (filename: string) => {
+    try {
+      const response = await fetch(`/api/upload-audio?file=${encodeURIComponent(filename)}`, {
+        method: 'GET'
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to fetch audio file');
+      }
+
+      const blob = await response.blob();
+      const url = URL.createObjectURL(blob);
+      setSelectedAudioFile(url);
+    } catch (error) {
+      console.error('Error playing audio file:', error);
+      alert('Failed to play audio file');
+    }
+  };
+
+  const fetchAudioFiles = async () => {
+    setIsFetching(true);
+    try {
+      const response = await fetch('/api/upload-audio?list=true', {
+        method: 'GET'
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to fetch audio files');
+      }
+
+      const data = await response.json();
+      setAudioFiles(data.files || []);
+    } catch (error) {
+      console.error('Error fetching audio files:', error);
+      alert('Failed to fetch audio files');
+    } finally {
+      setIsFetching(false);
+    }
+  };
 
   const uploadAudioTest = async () => {
     setIsUploading(true);
     try {
       const formData = new FormData();
-      const audioFile = new File([''], 'audio_sample.mp3', { type: 'audio/mpeg' });
-      formData.append('file', audioFile);
-      
-      const response = await fetch('/api/upload-test', {
+      // Use the sample audio file for testing
+      const response = await fetch('/audio_sample.mp3');
+      const blob = await response.blob();
+      formData.append('file', blob, `${Date.now()}.mp3`);
+
+      const uploadResponse = await fetch('/api/upload-test', {
         method: 'POST',
         body: formData
       });
-      
-      const data = await response.json();
-      
+
+      const data = await uploadResponse.json();
+
       if (!data.success) {
         throw new Error(data.error || 'Upload failed');
       }
+
+      // Store the new path in localStorage
+      const existingPaths = JSON.parse(localStorage.getItem('audioUrls') || '[]');
+      const newPaths = [...existingPaths, data.gsPath];
+      localStorage.setItem('audioUrls', JSON.stringify(newPaths));
 
       console.log('----------------------------------------');
       console.log('Firebase Storage gs:// path:');
       console.log(data.gsPath);
       console.log('----------------------------------------');
-      
+
       alert(`Upload successful!\nStorage path: ${data.gsPath}`);
       return data.gsPath;
     } catch (error) {
@@ -72,8 +124,8 @@ export const SignIn = () => {
               const result = await MiniKit.commandsAsync.verify({
                 action: process.env.NEXT_PUBLIC_ACTION_NAME as string,
                 signal: "user_verification",
-                verification_level: "device",
-              });
+                verification_level: VerificationLevel.Device,
+                });
 
               if (result?.finalPayload?.status === "success") {
                 const verifyResponse = await fetch("/api/verify", {
@@ -120,12 +172,12 @@ export const SignIn = () => {
           <Image src="/world_c.png" alt="World Coin" width={24} height={24} />
           {isVerifying ? "Verifying..." : "Verify with World ID"}
         </button>
-      <button
+        <button
           onClick={uploadAudioTest}
           disabled={isUploading}
           className="mt-4 px-8 py-4 bg-blue-400/80 text-white rounded-xl hover:bg-blue-500 transition-all duration-200 transform hover:scale-105 font-medium text-lg shadow-lg flex items-center justify-center gap-2"
         >
-          {isUploading ? "Uploading..." : "Test Static Firebase"}
+          {isUploading ? "Uploading..." : "Test Upload"}
         </button>
 
         <button
@@ -157,7 +209,61 @@ export const SignIn = () => {
         >
           Test Audio Gen
         </button>
-        
+
+        <button
+          onClick={fetchAudioFiles}
+          disabled={isFetching}
+          className="mt-4 px-8 py-4 bg-purple-400/80 text-white rounded-xl hover:bg-purple-500 transition-all duration-200 transform hover:scale-105 font-medium text-lg shadow-lg flex items-center justify-center gap-2"
+        >
+          {isFetching ? "Fetching..." : "Show Audio Files"}
+        </button>
+
+        {audioFiles.length > 0 && (
+          <div className="mt-4 w-full">
+            <h3 className="text-white mb-2">Stored Audio Files:</h3>
+            <div className="max-h-80 overflow-y-auto bg-purple-900/20 p-4 rounded-lg">
+              {audioFiles
+                .slice(currentPage * filesPerPage, (currentPage + 1) * filesPerPage)
+                .map((file, index) => (
+                  <div 
+                    key={index} 
+                    onClick={() => playAudioFile(file)}
+                    className="text-white text-sm mb-2 p-2 bg-purple-800/20 rounded cursor-pointer hover:bg-purple-700/20"
+                  >
+                    🎵 {file}
+                  </div>
+                ))}
+            </div>
+            {selectedAudioFile && (
+              <audio 
+                controls 
+                src={selectedAudioFile}
+                className="mt-4 w-full" 
+                autoPlay
+              />
+            )}
+            <div className="flex justify-between mt-4">
+              <button
+                onClick={() => setCurrentPage(prev => Math.max(0, prev - 1))}
+                disabled={currentPage === 0}
+                className="px-4 py-2 bg-purple-400/80 text-white rounded-lg disabled:opacity-50"
+              >
+                Previous
+              </button>
+              <span className="text-white">
+                Page {currentPage + 1} of {Math.ceil(audioFiles.length / filesPerPage)}
+              </span>
+              <button
+                onClick={() => setCurrentPage(prev => Math.min(Math.ceil(audioFiles.length / filesPerPage) - 1, prev + 1))}
+                disabled={currentPage >= Math.ceil(audioFiles.length / filesPerPage) - 1}
+                className="px-4 py-2 bg-purple-400/80 text-white rounded-lg disabled:opacity-50"
+              >
+                Next
+              </button>
+            </div>
+          </div>
+        )}
+
         {audioUrl && (
           <audio 
             controls 
