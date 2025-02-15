@@ -1,13 +1,10 @@
 
-import {
-  verifyCloudProof,
-  IVerifyResponse,
-} from "@worldcoin/minikit-js";
+import { verifyCloudProof } from "@worldcoin/minikit-js";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
   try {
-    const { payload, action, signal } = await req.json();
+    const { proof, action, signal } = await req.json();
     const app_id = process.env.NEXT_PUBLIC_APP_ID as `app_${string}`;
     
     if (!app_id) {
@@ -15,9 +12,9 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "APP_ID not configured" }, { status: 500 });
     }
 
-    console.log("Verification payload:", { payload, action, signal, app_id });
+    console.log("Verification payload:", { proof, action, signal, app_id });
 
-    const verifyRes = await verifyCloudProof(payload, app_id, action, signal);
+    const verifyRes = await verifyCloudProof(proof, app_id, action, signal);
     console.log("Verification response:", verifyRes);
 
     if (verifyRes.success) {
