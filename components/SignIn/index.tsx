@@ -1,7 +1,7 @@
 "use client";
 import { MiniKit, VerificationLevel } from "@worldcoin/minikit-js";
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
 
@@ -15,6 +15,10 @@ export const SignIn = () => {
   const [selectedAudioFile, setSelectedAudioFile] = useState<string | null>(null);
   const filesPerPage = 10;
   const router = useRouter();
+
+  useEffect(() => {
+    fetchAudioFiles();
+  }, []);
 
   const playAudioFile = async (filename: string) => {
     try {
@@ -121,29 +125,24 @@ export const SignIn = () => {
             }
             setIsVerifying(true);
             try {
-              const result = await MiniKit.commandsAsync.verify({
+              const verifyPayload = {
                 action: process.env.NEXT_PUBLIC_ACTION_NAME as string,
                 signal: "user_verification",
-                verification_level: VerificationLevel.Device,
-                });
+                verification_level: VerificationLevel.Device
+              };
+              
+              const { finalPayload } = await MiniKit.commandsAsync.verify(verifyPayload);
 
-              if (result?.finalPayload?.status === "success") {
+              if (finalPayload.status === "success") {
                 const verifyResponse = await fetch("/api/verify", {
                   method: "POST",
                   headers: {
                     "Content-Type": "application/json",
                   },
                   body: JSON.stringify({
-                    payload: {
-                      merkle_root: result.finalPayload.merkle_root,
-                      nullifier_hash: result.finalPayload.nullifier_hash,
-                      proof: result.finalPayload.proof,
-                      verification_level: result.finalPayload.verification_level,
-                      action: process.env.NEXT_PUBLIC_ACTION_NAME as string,
-                      signal: "user_verification",
-                    },
+                    payload: finalPayload,
                     action: process.env.NEXT_PUBLIC_ACTION_NAME as string,
-                    signal: "user_verification",
+                    signal: "user_verification"
                   }),
                 });
 
@@ -152,10 +151,16 @@ export const SignIn = () => {
                 }
 
                 const data = await verifyResponse.json();
+                console.log("Verification response data:", data);
+                console.log("verifyRes object:", data.verifyRes);
+                console.log("Success value:", data.verifyRes?.success);
+                
                 if (data.verifyRes?.success) {
+                  console.log("Verification succeeded!");
                   localStorage.setItem('worldcoin_verified', 'true');
                   router.push("/verified");
                 } else {
+                  console.log("Verification failed with data:", data);
                   throw new Error(data.verifyRes?.error || "Verification failed");
                 }
               }
@@ -172,52 +177,9 @@ export const SignIn = () => {
           <Image src="/world_c.png" alt="World Coin" width={24} height={24} />
           {isVerifying ? "Verifying..." : "Verify with World ID"}
         </button>
-        <button
-          onClick={uploadAudioTest}
-          disabled={isUploading}
-          className="mt-4 px-8 py-4 bg-blue-400/80 text-white rounded-xl hover:bg-blue-500 transition-all duration-200 transform hover:scale-105 font-medium text-lg shadow-lg flex items-center justify-center gap-2"
-        >
-          {isUploading ? "Uploading..." : "Test Upload"}
-        </button>
+        
 
-        <button
-          onClick={async () => {
-            try {
-              const response = await fetch("/api/generate-audio", {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                  text: "God Willing, we are poised to WIN",
-                }),
-              });
-
-              const data = await response.json();
-              if (!response.ok || !data.success) {
-                throw new Error(data.error || "Failed to generate audio");
-              }
-
-              const audioUrl = `data:audio/mpeg;base64,${data.audio}`;
-              setAudioUrl(audioUrl);
-            } catch (error) {
-              console.error("Error generating audio:", error);
-              alert("Failed to generate audio");
-            }
-          }}
-          className="mt-4 px-8 py-4 bg-green-400/80 text-white rounded-xl hover:bg-green-500 transition-all duration-200 transform hover:scale-105 font-medium text-lg shadow-lg flex items-center justify-center gap-2"
-        >
-          Test Audio Gen
-        </button>
-
-        <button
-          onClick={fetchAudioFiles}
-          disabled={isFetching}
-          className="mt-4 px-8 py-4 bg-purple-400/80 text-white rounded-xl hover:bg-purple-500 transition-all duration-200 transform hover:scale-105 font-medium text-lg shadow-lg flex items-center justify-center gap-2"
-        >
-          {isFetching ? "Fetching..." : "Show Audio Files"}
-        </button>
-
+    
         {audioFiles.length > 0 && (
           <div className="mt-4 w-full">
             <h3 className="text-white mb-2">Stored Audio Files:</h3>

@@ -18,9 +18,12 @@ export const VerifyBlock = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          proof,
+          merkle_root: proof.merkle_root,
+          nullifier_hash: proof.nullifier_hash,
+          proof: proof.proof,
+          verification_level: proof.verification_level,
           action: process.env.NEXT_PUBLIC_ACTION_NAME,
-          signal: "user_verification",
+          signal: "user_verification"
         }),
       });
 

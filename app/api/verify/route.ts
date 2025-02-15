@@ -1,30 +1,28 @@
 
-import { verifyCloudProof } from "@worldcoin/minikit-js";
 import { NextRequest, NextResponse } from "next/server";
+import { verifyCloudProof, IVerifyResponse, ISuccessResult } from "@worldcoin/minikit-js";
+
+interface IRequestPayload {
+  payload: ISuccessResult;
+  action: string;
+  signal: string;
+}
 
 export async function POST(req: NextRequest) {
   try {
-    const { proof, action, signal } = await req.json();
+    const { payload, action, signal } = (await req.json()) as IRequestPayload;
     const app_id = process.env.NEXT_PUBLIC_APP_ID as `app_${string}`;
     
-    if (!app_id) {
-      console.error("APP_ID not configured");
-      return NextResponse.json({ error: "APP_ID not configured" }, { status: 500 });
-    }
-
-    console.log("Verification payload:", { proof, action, signal, app_id });
-
-    const verifyRes = await verifyCloudProof(proof, app_id, action, signal);
-    console.log("Verification response:", verifyRes);
+    console.log("Received verification payload:", payload);
+    const verifyRes = await verifyCloudProof(payload, app_id, action, signal);
+    console.log("VerifyRes from WorldCoin:", verifyRes);
 
     if (verifyRes.success) {
-      return NextResponse.json({ verifyRes, status: 200 });
+      console.log("Verification successful!");
+      return NextResponse.json({ verifyRes });
     } else {
-      console.error("Verification failed:", verifyRes.error);
-      return NextResponse.json({ 
-        error: verifyRes.error || "Verification failed",
-        status: 400 
-      });
+      console.log("Verification failed:", verifyRes);
+      return NextResponse.json({ verifyRes });
     }
   } catch (error) {
     console.error("Verification error:", error);
