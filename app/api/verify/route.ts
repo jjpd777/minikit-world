@@ -16,9 +16,10 @@ export async function POST(req: NextRequest) {
     const verifyRes = await verifyCloudProof(payload, app_id, action, signal);
 
     if (verifyRes.success) {
-      return NextResponse.json({ verifyRes, status: 200 });
+      return NextResponse.json({ success: true, status: 200 });
     } else {
       return NextResponse.json({ 
+        success: false,
         error: verifyRes.error || "Verification failed",
         status: 400 
       });
