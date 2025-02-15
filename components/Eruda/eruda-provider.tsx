@@ -1,13 +1,11 @@
 
 "use client";
+import eruda from "eruda";
 import { useEffect } from "react";
 
 export function ErudaProvider() {
   useEffect(() => {
-    (async () => {
-      const eruda = await import("eruda");
-      eruda.init();
-    })();
+    eruda.init();
   }, []);
   return null;
 }

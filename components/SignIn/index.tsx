@@ -14,41 +14,19 @@ export const SignIn = () => {
   const uploadAudioTest = async () => {
     setIsUploading(true);
     try {
-      // Generate unique filename using timestamp
-      const filename = `audio_${Date.now()}.mp3`;
-      
-      console.log('Starting audio file fetch...');
       const response = await fetch('/audio_sample.mp3');
-      if (!response.ok) {
-        throw new Error(`Failed to fetch audio file: ${response.statusText}`);
-      }
-      
       const audioBlob = await response.blob();
-      if (audioBlob.size === 0) {
-        throw new Error('Audio file is empty');
-      }
       
-      console.log(`Audio file size: ${(audioBlob.size / 1024).toFixed(2)}KB`);
+      const filename = `audio_${Date.now()}.mp3`;
+      const audioRef = ref(storage, `uploads/${filename}`);
       
-      const storageRef = ref(storage, `uploads/${filename}`);
+      await uploadBytes(audioRef, audioBlob, { contentType: 'audio/mpeg' });
+      const url = await getDownloadURL(audioRef);
       
-      const uploadTask = uploadBytes(storageRef, audioBlob, {
-        contentType: 'audio/mpeg'
-      });
-      
-      const uploadResult = await uploadTask;
-      console.log('Upload successful:', uploadResult.metadata);
-      
-      const downloadURL = await getDownloadURL(uploadResult.ref);
-      console.log('File available at:', downloadURL);
-      
-      return downloadURL;
-    } catch (error: any) {
-      console.error('Upload failed:', {
-        message: error.message,
-        code: error?.code,
-        name: error?.name
-      });
+      console.log('File uploaded:', url);
+      return url;
+    } catch (error) {
+      console.error('Upload failed:', error);
       throw error;
     } finally {
       setIsUploading(false);
