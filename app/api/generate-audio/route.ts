@@ -33,8 +33,25 @@ export async function POST(request: NextRequest) {
 
     if (!response.ok) {
       const errorText = await response.text();
-      console.error('Error details:', errorText);
-      throw new Error(`Failed to generate audio: ${response.status} - ${errorText}`);
+      console.error('ElevenLabs API Error:', {
+        status: response.status,
+        statusText: response.statusText,
+        body: errorText
+      });
+      return NextResponse.json(
+        { 
+          success: false, 
+          error: `Failed to generate audio: ${response.status} - ${errorText}` 
+        },
+        { status: response.status }
+      );
+    }
+
+    if (!response.body) {
+      return NextResponse.json(
+        { success: false, error: 'No audio data received' },
+        { status: 500 }
+      );
     }
 
     const audioBuffer = await response.arrayBuffer();

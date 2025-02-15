@@ -87,13 +87,10 @@ export default function VerifiedPage() {
                       }),
                     });
 
-                    if (!response.ok) {
-                      throw new Error("Failed to generate audio");
-                    }
-
                     const data = await response.json();
-                    if (!data.success) {
-                      throw new Error("Failed to generate audio");
+                    if (!response.ok || !data.success) {
+                      console.error('Audio generation failed:', data.error);
+                      throw new Error(data.error || "Failed to generate audio");
                     }
                     
                     console.log('Firebase Storage Path:', data.gsPath);
