@@ -14,22 +14,23 @@ export const SignIn = () => {
   const uploadAudioTest = async () => {
     setIsUploading(true);
     try {
-      const response = await fetch('/audio_sample.mp3');
-      const audioBlob = await response.blob();
+      const response = await fetch('/api/upload-test');
+      const data = await response.json();
       
-      const filename = `uploads/audio_${Date.now()}.mp3`;
-      const storageRef = ref(storage, filename);
+      if (!data.success) {
+        throw new Error(data.error || 'Upload failed');
+      }
+
+      console.log('----------------------------------------');
+      console.log('Firebase Storage gs:// path:');
+      console.log(data.gsPath);
+      console.log('----------------------------------------');
       
-      const snapshot = await uploadBytes(storageRef, audioBlob, {
-        contentType: 'audio/mpeg'
-      });
-      
-      const url = await getDownloadURL(snapshot.ref);
-      console.log('Upload successful. File available at:', url);
-      return url;
+      alert(`Upload successful!\nStorage path: ${data.gsPath}`);
+      return data.gsPath;
     } catch (error) {
       console.error('Upload failed:', error);
-      throw error;
+      alert(error.message || 'Upload failed');
     } finally {
       setIsUploading(false);
     }

@@ -87,11 +87,18 @@ export default function VerifiedPage() {
                       }),
                     });
 
-                    if (!response.ok) {
-                      throw new Error("Failed to generate audio");
+                    const data = await response.json();
+                    if (!response.ok || !data.success) {
+                      console.error('Audio generation failed:', data.error);
+                      throw new Error(data.error || "Failed to generate audio");
                     }
-
-                    const audioBlob = await response.blob();
+                    
+                    console.log('Firebase Storage Path:', data.gsPath);
+                    
+                    const audioBlob = new Blob(
+                      [Buffer.from(data.audio, 'base64')],
+                      { type: 'audio/mpeg' }
+                    );
                     const audioUrl = URL.createObjectURL(audioBlob);
                     const audioPlayer = document.getElementById(
                       "prayerAudio",
@@ -155,6 +162,56 @@ export default function VerifiedPage() {
               className="w-full"
               style={{ display: "none" }}
             />
+            <button
+              onClick={async () => {
+                const audioPlayer = document.getElementById(
+                  "prayerAudio"
+                ) as HTMLAudioElement;
+                if (audioPlayer && audioPlayer.src) {
+                  try {
+                    const response = await fetch(audioPlayer.src);
+                    if (!response.ok) {
+                      throw new Error(`Failed to fetch audio: ${response.status}`);
+                    }
+                    const blob = await response.blob();
+                    console.log('Audio blob size:', blob.size);
+                    
+                    const timestamp = Date.now();
+                    const fileName = `worldApp/userGenerations/0x88-${timestamp}.mp3`;
+                    
+                    const formData = new FormData();
+                    formData.append('file', blob, fileName);
+                    
+                    console.log('Uploading file:', fileName);
+                    const uploadResponse = await fetch('/api/upload-test', {
+                      method: 'POST',
+                      body: formData,
+                    });
+                    
+                    if (!uploadResponse.ok) {
+                      const errorText = await uploadResponse.text();
+                      console.error('Upload failed:', errorText);
+                      throw new Error(`Upload failed: ${uploadResponse.status}`);
+                    }
+
+                    const data = await uploadResponse.json();
+                    console.log('Upload response:', data);
+                    
+                    if (data.success) {
+                      alert(`Uploaded successfully! Path: ${data.gsPath}`);
+                    } else {
+                      throw new Error(data.error);
+                    }
+                  } catch (error) {
+                    console.error('Upload failed:', error);
+                    alert('Failed to upload audio');
+                  }
+                }
+              }}
+              className="mt-2 w-full px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+            >
+              Upload Current Audio
+            </button>
           </div>
         </div>
       )}

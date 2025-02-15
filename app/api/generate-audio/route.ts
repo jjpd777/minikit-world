@@ -1,5 +1,6 @@
 
 import { NextRequest, NextResponse } from 'next/server';
+import { bucket } from "@/lib/firebase-admin";
 
 export async function POST(request: NextRequest) {
   try {
@@ -32,15 +33,43 @@ export async function POST(request: NextRequest) {
 
     if (!response.ok) {
       const errorText = await response.text();
-      console.error('Error details:', errorText);
-      throw new Error(`Failed to generate audio: ${response.status} - ${errorText}`);
+      console.error('ElevenLabs API Error:', {
+        status: response.status,
+        statusText: response.statusText,
+        body: errorText
+      });
+      return NextResponse.json(
+        { 
+          success: false, 
+          error: `Failed to generate audio: ${response.status} - ${errorText}` 
+        },
+        { status: response.status }
+      );
+    }
+
+    if (!response.body) {
+      return NextResponse.json(
+        { success: false, error: 'No audio data received' },
+        { status: 500 }
+      );
     }
 
     const audioBuffer = await response.arrayBuffer();
-    return new Response(audioBuffer, {
-      headers: {
-        'Content-Type': 'audio/mpeg',
-      },
+    const timestamp = Date.now();
+    const fileName = `worldApp/userGenerations/0x88-${timestamp}.mp3`;
+
+    // Upload to Firebase Storage
+    const file = bucket.file(fileName);
+    await file.save(Buffer.from(audioBuffer), {
+      contentType: 'audio/mpeg',
+    });
+
+    const gsPath = `gs://${bucket.name}/${fileName}`;
+
+    return NextResponse.json({
+      success: true,
+      gsPath,
+      audio: Buffer.from(audioBuffer).toString('base64'),
     });
   } catch (error) {
     console.error('Error generating audio:', error);
