@@ -1,5 +1,5 @@
 "use client";
-import { MiniKit } from "@worldcoin/minikit-js";
+import { MiniKit, VerificationLevel } from "@worldcoin/minikit-js";
 import Image from "next/image";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -124,6 +124,7 @@ export const SignIn = () => {
               const result = await MiniKit.commandsAsync.verify({
                 action: process.env.NEXT_PUBLIC_ACTION_NAME as string,
                 signal: "user_verification",
+                verification_level: VerificationLevel.Device,
                 });
 
               if (result?.finalPayload?.status === "success") {
