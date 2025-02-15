@@ -28,19 +28,23 @@ export const SignIn = () => {
     return () => window.removeEventListener('storage', loadBookmarkedFiles);
   }, []);
 
-  const playAudioFile = async (filename: string) => {
+  const playAudioFile = async (storagePath: string) => {
     try {
-      const response = await fetch(`/api/upload-audio?file=${encodeURIComponent(filename)}`, {
-        method: 'GET'
+      // Convert gs:// path to a download URL
+      const response = await fetch('/api/upload-audio', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ storagePath })
       });
       
       if (!response.ok) {
-        throw new Error('Failed to fetch audio file');
+        throw new Error('Failed to get download URL');
       }
 
-      const blob = await response.blob();
-      const url = URL.createObjectURL(blob);
-      setSelectedAudioFile(url);
+      const { downloadUrl } = await response.json();
+      setSelectedAudioFile(downloadUrl);
     } catch (error) {
       console.error('Error playing audio file:', error);
       alert('Failed to play audio file');

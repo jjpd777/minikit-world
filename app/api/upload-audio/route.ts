@@ -60,3 +60,30 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Upload failed' }, { status: 500 });
   }
 }
+import { storage } from '@/lib/firebase-admin';
+
+export async function POST(request: Request) {
+  try {
+    const { storagePath } = await request.json();
+    
+    // Remove the gs://bucket-name/ prefix
+    const filePath = storagePath.replace(/^gs:\/\/[^/]+\//, '');
+    
+    // Get download URL
+    const [url] = await storage.bucket().file(filePath).getSignedUrl({
+      action: 'read',
+      expires: Date.now() + 1000 * 60 * 60, // 1 hour
+    });
+
+    return new Response(JSON.stringify({ downloadUrl: url }), {
+      status: 200,
+      headers: { 'Content-Type': 'application/json' },
+    });
+  } catch (error) {
+    console.error('Error getting download URL:', error);
+    return new Response(JSON.stringify({ error: 'Failed to get download URL' }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' },
+    });
+  }
+}
