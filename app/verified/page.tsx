@@ -9,6 +9,7 @@ export default function VerifiedPage() {
   const [isGeneratingAudio, setIsGeneratingAudio] = useState(false);
   const [hasGeneratedAudio, setHasGeneratedAudio] = useState(false);
   const [currentAudioData, setCurrentAudioData] = useState(null); // Added state for audio data
+  const [audioUrl, setAudioUrl] = useState(null); // Added state for audio URL
 
   return (
     <div className="flex min-h-screen flex-col items-center p-24">
@@ -70,13 +71,8 @@ export default function VerifiedPage() {
               </a>
               <button
                 onClick={async () => {
-                  const audioPlayer = document.getElementById(
-                    "prayerAudio",
-                  ) as HTMLAudioElement;
-                  if (audioPlayer) {
-                    audioPlayer.style.display = "none";
-                  }
                   setIsGeneratingAudio(true);
+                  setHasGeneratedAudio(false);
                   try {
                     const response = await fetch("/api/generate-audio", {
                       method: "POST",
@@ -90,15 +86,11 @@ export default function VerifiedPage() {
 
                     const data = await response.json();
                     if (!response.ok || !data.success) {
-                      console.error('Audio generation failed:', data.error);
                       throw new Error(data.error || "Failed to generate audio");
                     }
 
-                    setCurrentAudioData(data.audio); // Store the audio data
-                    setHasGeneratedAudio(true); // Indicate audio generation is complete
-
-                    //Removed audio playing part for two-step approach
-
+                    setAudioUrl(`data:audio/mpeg;base64,${data.audio}`);
+                    setHasGeneratedAudio(true);
                   } catch (error) {
                     console.error("Error generating audio:", error);
                     alert("Failed to generate audio. Please try again.");
@@ -112,19 +104,27 @@ export default function VerifiedPage() {
                 Generate Audio
               </button>
             </div>
-            {hasGeneratedAudio && ( //Only show upload button if audio is generated
-              <button
-                onClick={async () => {
-                  if (currentAudioData) {
-                    try {
-                      const timestamp = Date.now();
-                      const audioBlob = new Blob(
-                        [Buffer.from(currentAudioData, 'base64')],
-                        { type: 'audio/mpeg' }
-                      );
-
-                      const formData = new FormData();
-                      formData.append('file', audioBlob, `prayer-${timestamp}.mp3`);
+            {audioUrl && (
+                <audio 
+                  src={audioUrl}
+                  controls 
+                  autoPlay
+                  className="mt-4 w-full" 
+                />
+              )}
+              {hasGeneratedAudio && audioUrl && (
+                <button
+                  onClick={async () => {
+                    if (currentAudioData) {
+                      try {
+                        const timestamp = Date.now();
+                        const audioBlob = new Blob(
+                          [Buffer.from(currentAudioData, 'base64')],
+                          { type: 'audio/mpeg' }
+                        );
+                        
+                        const formData = new FormData();
+                        formData.append('audio', audioBlob, `prayer-${timestamp}.mp3`);
 
                       const uploadResponse = await fetch('/api/upload-test', {
                         method: 'POST',
