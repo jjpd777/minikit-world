@@ -57,18 +57,12 @@ export const SignIn = () => {
   };
 
   const uploadAudioTest = async () => {
-    if (!audioUrl) {
-      alert('Please generate audio first');
-      return;
-    }
-
     setIsUploading(true);
     try {
-      // Convert base64 to blob
-      const response = await fetch(audioUrl);
-      const blob = await response.blob();
-
       const formData = new FormData();
+      // Use the sample audio file for testing
+      const response = await fetch('/audio_sample.mp3');
+      const blob = await response.blob();
       formData.append('file', blob, `${Date.now()}.mp3`);
 
       const uploadResponse = await fetch('/api/upload-test', {
