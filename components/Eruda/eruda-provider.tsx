@@ -5,7 +5,7 @@ import { useEffect } from "react";
 
 export function ErudaProvider() {
   useEffect(() => {
-    if (typeof window !== 'undefined' && !window.eruda) {
+    if (process.env.NODE_ENV === 'development' && typeof window !== 'undefined' && !window.eruda) {
       eruda.init();
     }
   }, []);
