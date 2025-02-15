@@ -1,5 +1,7 @@
 "use client";
 import { useState, useRef } from "react";
+import { storage } from "@/lib/firebase";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 export const VoiceRecorder = () => {
   const [isRecording, setIsRecording] = useState(false);
@@ -19,8 +21,6 @@ export const VoiceRecorder = () => {
       const timestamp = Date.now();
       const fileName = `worldApp/audioGen/0x888_${timestamp}.mp3`;
 
-      import { storage } from "@/lib/firebase";
-      import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
       
       const storageRef = ref(storage, fileName);
       const snapshot = await uploadBytes(storageRef, blob);
