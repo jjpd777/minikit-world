@@ -11,6 +11,8 @@ export const SignIn = () => {
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
   const [audioFiles, setAudioFiles] = useState<string[]>([]);
   const [isFetching, setIsFetching] = useState(false);
+  const [currentPage, setCurrentPage] = useState(0);
+  const filesPerPage = 10;
   const router = useRouter();
 
   const fetchAudioFiles = async () => {
@@ -205,12 +207,33 @@ export const SignIn = () => {
         {audioFiles.length > 0 && (
           <div className="mt-4 w-full">
             <h3 className="text-white mb-2">Stored Audio Files:</h3>
-            <div className="max-h-40 overflow-y-auto">
-              {audioFiles.map((file, index) => (
-                <div key={index} className="text-white text-sm mb-1 opacity-80">
-                  {file}
-                </div>
-              ))}
+            <div className="max-h-80 overflow-y-auto bg-purple-900/20 p-4 rounded-lg">
+              {audioFiles
+                .slice(currentPage * filesPerPage, (currentPage + 1) * filesPerPage)
+                .map((file, index) => (
+                  <div key={index} className="text-white text-sm mb-2 p-2 bg-purple-800/20 rounded">
+                    {file}
+                  </div>
+                ))}
+            </div>
+            <div className="flex justify-between mt-4">
+              <button
+                onClick={() => setCurrentPage(prev => Math.max(0, prev - 1))}
+                disabled={currentPage === 0}
+                className="px-4 py-2 bg-purple-400/80 text-white rounded-lg disabled:opacity-50"
+              >
+                Previous
+              </button>
+              <span className="text-white">
+                Page {currentPage + 1} of {Math.ceil(audioFiles.length / filesPerPage)}
+              </span>
+              <button
+                onClick={() => setCurrentPage(prev => Math.min(Math.ceil(audioFiles.length / filesPerPage) - 1, prev + 1))}
+                disabled={currentPage >= Math.ceil(audioFiles.length / filesPerPage) - 1}
+                className="px-4 py-2 bg-purple-400/80 text-white rounded-lg disabled:opacity-50"
+              >
+                Next
+              </button>
             </div>
           </div>
         )}
