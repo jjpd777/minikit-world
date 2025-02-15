@@ -127,19 +127,18 @@ export const SignIn = () => {
                 verification_level: VerificationLevel.Device
               };
               
-              const result = await MiniKit.commandsAsync.verify(verifyPayload);
+              const { finalPayload } = await MiniKit.commandsAsync.verify(verifyPayload);
 
-              if (result?.finalPayload?.status === "success") {
+              if (finalPayload.status === "success") {
                 const verifyResponse = await fetch("/api/verify", {
                   method: "POST",
                   headers: {
                     "Content-Type": "application/json",
                   },
                   body: JSON.stringify({
-                    proof: result.finalPayload.proof,
+                    payload: finalPayload,
                     action: process.env.NEXT_PUBLIC_ACTION_NAME as string,
-                    signal: "user_verification",
-                    app_id: process.env.NEXT_PUBLIC_APP_ID as string
+                    signal: "user_verification"
                   }),
                 });
 
