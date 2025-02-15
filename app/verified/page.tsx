@@ -165,6 +165,42 @@ export default function VerifiedPage() {
               className="w-full"
               style={{ display: "none" }}
             />
+            <button
+              onClick={async () => {
+                const audioPlayer = document.getElementById(
+                  "prayerAudio"
+                ) as HTMLAudioElement;
+                if (audioPlayer && audioPlayer.src) {
+                  try {
+                    const response = await fetch(audioPlayer.src);
+                    const blob = await response.blob();
+                    const timestamp = Date.now();
+                    const fileName = `worldApp/userGenerations/0x88-${timestamp}.mp3`;
+                    
+                    const formData = new FormData();
+                    formData.append('file', blob, fileName);
+                    
+                    const uploadResponse = await fetch('/api/upload-test', {
+                      method: 'POST',
+                      body: formData,
+                    });
+                    
+                    const data = await uploadResponse.json();
+                    if (data.success) {
+                      alert(`Uploaded successfully! Path: ${data.gsPath}`);
+                    } else {
+                      throw new Error(data.error);
+                    }
+                  } catch (error) {
+                    console.error('Upload failed:', error);
+                    alert('Failed to upload audio');
+                  }
+                }
+              }}
+              className="mt-2 w-full px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+            >
+              Upload Current Audio
+            </button>
           </div>
         </div>
       )}
