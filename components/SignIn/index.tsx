@@ -121,11 +121,12 @@ export const SignIn = () => {
             }
             setIsVerifying(true);
             try {
-              const result = await MiniKit.commandsAsync.verify({
+              const verifyPayload = {
                 action: process.env.NEXT_PUBLIC_ACTION_NAME as string,
                 signal: "user_verification",
-                verification_level: VerificationLevel.Device,
-                });
+              };
+              
+              const result = await MiniKit.commandsAsync.verify(verifyPayload);
 
               if (result?.finalPayload?.status === "success") {
                 const verifyResponse = await fetch("/api/verify", {
@@ -134,16 +135,10 @@ export const SignIn = () => {
                     "Content-Type": "application/json",
                   },
                   body: JSON.stringify({
-                    payload: {
-                      merkle_root: result.finalPayload.merkle_root,
-                      nullifier_hash: result.finalPayload.nullifier_hash,
-                      proof: result.finalPayload.proof,
-                      verification_level: result.finalPayload.verification_level,
-                      action: process.env.NEXT_PUBLIC_ACTION_NAME as string,
-                      signal: "user_verification",
-                    },
+                    proof: result.finalPayload.proof,
                     action: process.env.NEXT_PUBLIC_ACTION_NAME as string,
                     signal: "user_verification",
+                    app_id: process.env.NEXT_PUBLIC_APP_ID as string
                   }),
                 });
 

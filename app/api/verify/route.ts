@@ -4,14 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
   try {
-    const { merkle_root, nullifier_hash, proof, verification_level, action, signal } = await req.json();
-    const verificationProof = {
-      merkle_root,
-      nullifier_hash,
-      proof,
-      verification_level
-    };
-    const app_id = process.env.NEXT_PUBLIC_APP_ID as `app_${string}`;
+    const { proof, action, signal, app_id } = await req.json();
     
     if (!app_id) {
       console.error("APP_ID not configured");
