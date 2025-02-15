@@ -9,6 +9,7 @@ import { storage } from "@/lib/firebase-admin";
 export const SignIn = () => {
   const [isVerifying, setIsVerifying] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
+  const [audioUrl, setAudioUrl] = useState<string | null>(null);
   const router = useRouter();
 
   const uploadAudioTest = async () => {
@@ -117,8 +118,46 @@ export const SignIn = () => {
           disabled={isUploading}
           className="mt-4 px-8 py-4 bg-blue-400/80 text-white rounded-xl hover:bg-blue-500 transition-all duration-200 transform hover:scale-105 font-medium text-lg shadow-lg flex items-center justify-center gap-2"
         >
-          {isUploading ? "Uploading..." : "Test Firebase Upload"}
+          {isUploading ? "Uploading..." : "Test Static Firebase"}
         </button>
+
+        <button
+          onClick={async () => {
+            try {
+              const response = await fetch("/api/generate-audio", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  text: "God Willing, we are poised to WIN",
+                }),
+              });
+
+              const data = await response.json();
+              if (!response.ok || !data.success) {
+                throw new Error(data.error || "Failed to generate audio");
+              }
+
+              const audioUrl = `data:audio/mpeg;base64,${data.audio}`;
+              setAudioUrl(audioUrl);
+            } catch (error) {
+              console.error("Error generating audio:", error);
+              alert("Failed to generate audio");
+            }
+          }}
+          className="mt-4 px-8 py-4 bg-green-400/80 text-white rounded-xl hover:bg-green-500 transition-all duration-200 transform hover:scale-105 font-medium text-lg shadow-lg flex items-center justify-center gap-2"
+        >
+          Test Audio Gen
+        </button>
+        
+        {audioUrl && (
+          <audio 
+            controls 
+            src={audioUrl}
+            className="mt-4 w-full" 
+          />
+        )}
       </div>
     </>
   );
