@@ -12,7 +12,7 @@ export const SignIn = () => {
   const [bookmarkedFiles, setBookmarkedFiles] = useState<string[]>([]);
   const [currentPage, setCurrentPage] = useState(0);
   const [selectedAudioFile, setSelectedAudioFile] = useState<string | null>(null);
-  const filesPerPage = 10;
+  const filesPerPage = 5;
   const router = useRouter();
 
   useEffect(() => {
