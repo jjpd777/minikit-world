@@ -1,7 +1,7 @@
 "use client";
 import { MiniKit, VerificationLevel } from "@worldcoin/minikit-js";
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
 
