@@ -16,6 +16,10 @@ export const SignIn = () => {
   const filesPerPage = 10;
   const router = useRouter();
 
+  useEffect(() => {
+    fetchAudioFiles();
+  }, []);
+
   const playAudioFile = async (filename: string) => {
     try {
       const response = await fetch(`/api/upload-audio?file=${encodeURIComponent(filename)}`, {
