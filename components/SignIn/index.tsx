@@ -117,16 +117,14 @@ export const SignIn = () => {
         <Image
           src="/bendiga_logo.png"
           alt="Bendiga Logo"
-          width={300}
-          height={300}
+          width={200}
+          height={200}
           priority
           className="mb-8 animate-glow"
         />
         <div className="absolute inset-0 rounded-full animate-pulse bg-purple-500/20 filter blur-xl"></div>
       </div>
-      <h1 className="text-2xl text-white text-center font-bold mb-8">
-        Generate Daily Prayers
-      </h1>
+    
       <div className="flex flex-col gap-4">
         <button
           onClick={async () => {
@@ -193,7 +191,7 @@ export const SignIn = () => {
     
         {bookmarkedFiles.length > 0 && (
           <div className="mt-4 w-full">
-            <h3 className="text-white mb-2">Bookmarked Audio Files:</h3>
+            {/* <h3 className="text-white mb-2">Bookmarked:</h3> */}
             <div className="max-h-80 overflow-y-auto bg-purple-900/20 p-4 rounded-lg">
               {[...bookmarkedFiles]
                 .reverse()
