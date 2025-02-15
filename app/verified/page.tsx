@@ -91,7 +91,17 @@ export default function VerifiedPage() {
                       throw new Error("Failed to generate audio");
                     }
 
-                    const audioBlob = await response.blob();
+                    const data = await response.json();
+                    if (!data.success) {
+                      throw new Error("Failed to generate audio");
+                    }
+                    
+                    console.log('Firebase Storage Path:', data.gsPath);
+                    
+                    const audioBlob = new Blob(
+                      [Buffer.from(data.audio, 'base64')],
+                      { type: 'audio/mpeg' }
+                    );
                     const audioUrl = URL.createObjectURL(audioBlob);
                     const audioPlayer = document.getElementById(
                       "prayerAudio",
