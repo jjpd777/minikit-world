@@ -44,33 +44,15 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Get the audio buffer
+    // Get the audio buffer and convert to base64 for immediate playback
     const audioBuffer = await response.arrayBuffer();
-    
-    // Generate unique filename
-    const timestamp = Date.now();
-    const filename = `worldApp/NewAudio/${timestamp}.mp3`;
-    
-    try {
-      // Upload to Firebase
-      const file = bucket.file(filename);
-      await file.save(Buffer.from(audioBuffer), {
-        metadata: {
-          contentType: 'audio/mpeg',
-        },
-      });
+    const base64Audio = Buffer.from(audioBuffer).toString('base64');
 
-      // Get the Firebase storage path
-      const gsPath = `gs://${bucket.name}/${filename}`;
-      
-      // Also return base64 for immediate playback
-      const base64Audio = Buffer.from(audioBuffer).toString('base64');
-
-      return NextResponse.json({
-        success: true,
-        audio: base64Audio,
-        gsPath: gsPath
-      });
+    return NextResponse.json({
+      success: true,
+      audio: base64Audio,
+      audioBuffer: Array.from(new Uint8Array(audioBuffer)) // Send buffer data for later storage
+    });
     } catch (uploadError) {
       console.error('Firebase Upload Error:', uploadError);
       return NextResponse.json(

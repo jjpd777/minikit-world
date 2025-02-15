@@ -90,6 +90,7 @@ export default function VerifiedPage() {
                     }
 
                     setAudioUrl(`data:audio/mpeg;base64,${data.audio}`);
+                    setCurrentAudioData(data.audioBuffer);
                     setHasGeneratedAudio(true);
                   } catch (error) {
                     console.error("Error generating audio:", error);
@@ -119,7 +120,7 @@ export default function VerifiedPage() {
                       try {
                         const timestamp = Date.now();
                         const audioBlob = new Blob(
-                          [Buffer.from(currentAudioData, 'base64')],
+                          [new Uint8Array(currentAudioData)],
                           { type: 'audio/mpeg' }
                         );
                         
