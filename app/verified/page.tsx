@@ -11,6 +11,7 @@ export default function VerifiedPage() {
   const [audioData, setAudioData] = useState<string | null>(null);
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
   const [isUploading, setIsUploading] = useState(false);
+  const [storagePath, setStoragePath] = useState<string | null>(null);
 
   return (
     <div className="flex min-h-screen flex-col items-center p-24">
@@ -116,6 +117,8 @@ export default function VerifiedPage() {
                     const uploadData = await uploadResponse.json();
                     if (uploadData.success) {
                       console.log('Audio uploaded successfully:', uploadData.gsPath);
+                      setStoragePath(uploadData.gsPath);
+                      setHasGeneratedAudio(true);
                     } else {
                       throw new Error(uploadData.error || 'Upload failed');
                     }
@@ -126,12 +129,23 @@ export default function VerifiedPage() {
                     setIsGeneratingAudio(false);
                   }
                 }}
-                disabled={isGeneratingAudio}
+                disabled={isGeneratingAudio || hasGeneratedAudio}
                 className="flex-1 px-4 py-2 bg-white text-purple-600 border border-purple-600 rounded-lg hover:bg-purple-50 transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
               >
-                {isGeneratingAudio ? "Generating..." : "Generate Audio"}
+                {isGeneratingAudio ? "Generating..." : hasGeneratedAudio ? "Audio Generated" : "Generate Audio"}
               </button>
             </div>
+            {storagePath && (
+              <button
+                onClick={() => console.log('Firebase Storage Path:', storagePath)}
+                className="w-full px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors flex items-center justify-center gap-2"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                  <path d="M5 4a2 2 0 012-2h6a2 2 0 012 2v14l-5-2.5L5 18V4z" />
+                </svg>
+                Show Storage Path
+              </button>
+            )}
             {audioUrl && (
                 <audio 
                   src={audioUrl}
