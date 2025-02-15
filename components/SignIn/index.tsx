@@ -14,40 +14,42 @@ export const SignIn = () => {
   const uploadAudioTest = async () => {
     setIsUploading(true);
     try {
+      // Generate unique filename using timestamp
+      const filename = `audio_${Date.now()}.mp3`;
+      
       console.log('Starting audio file fetch...');
       const response = await fetch('/audio_sample.mp3');
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        throw new Error(`Failed to fetch audio file: ${response.statusText}`);
       }
-      console.log('Audio file fetched successfully');
       
       const audioBlob = await response.blob();
-      console.log('Audio blob created:', {
-        size: audioBlob.size,
-        type: audioBlob.type
+      if (audioBlob.size === 0) {
+        throw new Error('Audio file is empty');
+      }
+      
+      console.log(`Audio file size: ${(audioBlob.size / 1024).toFixed(2)}KB`);
+      
+      const storageRef = ref(storage, `uploads/${filename}`);
+      
+      const uploadTask = uploadBytes(storageRef, audioBlob, {
+        contentType: 'audio/mpeg'
       });
       
-      console.log('Creating storage reference...');
-      const storageRef = ref(storage, 'test/audio_sample.mp3');
-      console.log('Storage reference created:', storageRef);
+      const uploadResult = await uploadTask;
+      console.log('Upload successful:', uploadResult.metadata);
       
-      console.log('Starting upload...');
-      const uploadResult = await uploadBytes(storageRef, audioBlob);
-      console.log('Upload completed:', uploadResult);
+      const downloadURL = await getDownloadURL(uploadResult.ref);
+      console.log('File available at:', downloadURL);
       
-      console.log('Getting download URL...');
-      const downloadURL = await getDownloadURL(storageRef);
-      console.log('Download URL obtained:', downloadURL);
-      
-      alert('Audio uploaded successfully! Check console for URL');
-    } catch (error) {
-      console.error('Detailed error information:', {
+      return downloadURL;
+    } catch (error: any) {
+      console.error('Upload failed:', {
         message: error.message,
-        code: error.code,
-        name: error.name,
-        stack: error.stack
+        code: error?.code,
+        name: error?.name
       });
-      alert(`Failed to upload audio: ${error.message}`);
+      throw error;
     } finally {
       setIsUploading(false);
     }
