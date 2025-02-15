@@ -12,18 +12,26 @@ export const SignIn = () => {
   const router = useRouter();
 
   const uploadAudioTest = async () => {
+    if (!audioUrl) {
+      alert('Please generate audio first');
+      return;
+    }
+    
     setIsUploading(true);
     try {
-      const formData = new FormData();
-      const audioFile = new File([''], 'audio_sample.mp3', { type: 'audio/mpeg' });
-      formData.append('file', audioFile);
+      // Convert base64 to blob
+      const response = await fetch(audioUrl);
+      const blob = await response.blob();
       
-      const response = await fetch('/api/upload-test', {
+      const formData = new FormData();
+      formData.append('file', blob, 'generated_audio.mp3');
+      
+      const uploadResponse = await fetch('/api/upload-test', {
         method: 'POST',
         body: formData
       });
       
-      const data = await response.json();
+      const data = await uploadResponse.json();
       
       if (!data.success) {
         throw new Error(data.error || 'Upload failed');
@@ -125,7 +133,7 @@ export const SignIn = () => {
           disabled={isUploading}
           className="mt-4 px-8 py-4 bg-blue-400/80 text-white rounded-xl hover:bg-blue-500 transition-all duration-200 transform hover:scale-105 font-medium text-lg shadow-lg flex items-center justify-center gap-2"
         >
-          {isUploading ? "Uploading..." : "Test Static Firebase"}
+          {isUploading ? "Uploading..." : "Test Upload"}
         </button>
 
         <button
