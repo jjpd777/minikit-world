@@ -12,7 +12,7 @@ try {
 
 const app = initializeApp({
   credential: cert(serviceAccount),
-  storageBucket: "bendiga-4d926.appspot.com"
+  storageBucket: "gs://bendiga-4d926.firebasestorage.app"
 });
 
 export const storage = getStorage(app);
