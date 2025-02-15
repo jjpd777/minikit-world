@@ -1,5 +1,7 @@
 "use client";
 import { useState, useRef } from "react";
+import { storage } from "@/lib/firebase";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 export const VoiceRecorder = () => {
   const [isRecording, setIsRecording] = useState(false);
@@ -17,15 +19,22 @@ export const VoiceRecorder = () => {
     try {
       const blob = new Blob(chunksRef.current, { type: "audio/webm" });
       const timestamp = Date.now();
-      const fileName = `0x9777-${timestamp}.mp3`;
+      const fileName = `worldApp/audioGen/0x888_${timestamp}.mp3`;
 
-      import { storage, bucket } from "@/lib/firebase-admin";
-      const storageRef = ref(storage, `worldApp/audioGen/${fileName}`);
-
-      await uploadBytes(storageRef, blob);
-      const downloadUrl = await getDownloadURL(storageRef);
-      console.log("File uploaded successfully:", downloadUrl);
-      alert("Audio uploaded successfully!");
+      
+      const storageRef = ref(storage, fileName);
+      const snapshot = await uploadBytes(storageRef, blob);
+      const gsPath = `gs://${snapshot.ref.bucket}/${snapshot.ref.fullPath}`;
+      const downloadUrl = await getDownloadURL(snapshot.ref);
+      console.log('----------------------------------------');
+      console.log('Firebase Storage gs:// path:');
+      console.log(gsPath);
+      console.log('----------------------------------------');
+      console.log('Firebase Storage signed URL:');
+      console.log(downloadUrl);
+      console.log('----------------------------------------');
+      alert(`Audio uploaded successfully!\nStorage path: ${gsPath}`);
+      return { gsPath, downloadUrl };
     } catch (error) {
       console.error("Error uploading file:", error);
       alert("Failed to upload audio");
