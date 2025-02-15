@@ -9,15 +9,23 @@ export const SignIn = () => {
   const [isVerifying, setIsVerifying] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
-  const [audioFiles, setAudioFiles] = useState<string[]>([]);
-  const [isFetching, setIsFetching] = useState(false);
+  const [bookmarkedFiles, setBookmarkedFiles] = useState<string[]>([]);
   const [currentPage, setCurrentPage] = useState(0);
   const [selectedAudioFile, setSelectedAudioFile] = useState<string | null>(null);
   const filesPerPage = 10;
   const router = useRouter();
 
   useEffect(() => {
-    fetchAudioFiles();
+    // Load bookmarked files from localStorage
+    const loadBookmarkedFiles = () => {
+      const bookmarked = JSON.parse(localStorage.getItem('bookmarkedAudios') || '[]');
+      setBookmarkedFiles(bookmarked);
+    };
+
+    loadBookmarkedFiles();
+    // Add event listener for storage changes
+    window.addEventListener('storage', loadBookmarkedFiles);
+    return () => window.removeEventListener('storage', loadBookmarkedFiles);
   }, []);
 
   const playAudioFile = async (filename: string) => {
@@ -180,11 +188,11 @@ export const SignIn = () => {
         
 
     
-        {audioFiles.length > 0 && (
+        {bookmarkedFiles.length > 0 && (
           <div className="mt-4 w-full">
-            <h3 className="text-white mb-2">Stored Audio Files:</h3>
+            <h3 className="text-white mb-2">Bookmarked Audio Files:</h3>
             <div className="max-h-80 overflow-y-auto bg-purple-900/20 p-4 rounded-lg">
-              {audioFiles
+              {bookmarkedFiles
                 .slice(currentPage * filesPerPage, (currentPage + 1) * filesPerPage)
                 .map((file, index) => (
                   <div 
@@ -213,11 +221,11 @@ export const SignIn = () => {
                 Previous
               </button>
               <span className="text-white">
-                Page {currentPage + 1} of {Math.ceil(audioFiles.length / filesPerPage)}
+                Page {currentPage + 1} of {Math.ceil(bookmarkedFiles.length / filesPerPage)}
               </span>
               <button
-                onClick={() => setCurrentPage(prev => Math.min(Math.ceil(audioFiles.length / filesPerPage) - 1, prev + 1))}
-                disabled={currentPage >= Math.ceil(audioFiles.length / filesPerPage) - 1}
+                onClick={() => setCurrentPage(prev => Math.min(Math.ceil(bookmarkedFiles.length / filesPerPage) - 1, prev + 1))}
+                disabled={currentPage >= Math.ceil(bookmarkedFiles.length / filesPerPage) - 1}
                 className="px-4 py-2 bg-purple-400/80 text-white rounded-lg disabled:opacity-50"
               >
                 Next
