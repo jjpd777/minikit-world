@@ -12,8 +12,28 @@ export const SignIn = () => {
   const [audioFiles, setAudioFiles] = useState<string[]>([]);
   const [isFetching, setIsFetching] = useState(false);
   const [currentPage, setCurrentPage] = useState(0);
+  const [selectedAudioFile, setSelectedAudioFile] = useState<string | null>(null);
   const filesPerPage = 10;
   const router = useRouter();
+
+  const playAudioFile = async (filename: string) => {
+    try {
+      const response = await fetch(`/api/upload-audio?file=${encodeURIComponent(filename)}`, {
+        method: 'GET'
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to fetch audio file');
+      }
+
+      const blob = await response.blob();
+      const url = URL.createObjectURL(blob);
+      setSelectedAudioFile(url);
+    } catch (error) {
+      console.error('Error playing audio file:', error);
+      alert('Failed to play audio file');
+    }
+  };
 
   const fetchAudioFiles = async () => {
     setIsFetching(true);
@@ -211,10 +231,22 @@ export const SignIn = () => {
               {audioFiles
                 .slice(currentPage * filesPerPage, (currentPage + 1) * filesPerPage)
                 .map((file, index) => (
-                  <div key={index} className="text-white text-sm mb-2 p-2 bg-purple-800/20 rounded">
-                    {file}
+                  <div 
+                    key={index} 
+                    onClick={() => playAudioFile(file)}
+                    className="text-white text-sm mb-2 p-2 bg-purple-800/20 rounded cursor-pointer hover:bg-purple-700/20"
+                  >
+                    🎵 {file}
                   </div>
                 ))}
+            </div>
+            {selectedAudioFile && (
+              <audio 
+                controls 
+                src={selectedAudioFile}
+                className="mt-4 w-full" 
+                autoPlay
+              />
             </div>
             <div className="flex justify-between mt-4">
               <button
