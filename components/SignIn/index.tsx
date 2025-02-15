@@ -16,23 +16,23 @@ export const SignIn = () => {
       alert('Please generate audio first');
       return;
     }
-    
+
     setIsUploading(true);
     try {
       // Convert base64 to blob
       const response = await fetch(audioUrl);
       const blob = await response.blob();
-      
+
       const formData = new FormData();
       formData.append('file', blob, `${Date.now()}.mp3`);
-      
+
       const uploadResponse = await fetch('/api/upload-test', {
         method: 'POST',
         body: formData
       });
-      
+
       const data = await uploadResponse.json();
-      
+
       if (!data.success) {
         throw new Error(data.error || 'Upload failed');
       }
@@ -46,7 +46,7 @@ export const SignIn = () => {
       console.log('Firebase Storage gs:// path:');
       console.log(data.gsPath);
       console.log('----------------------------------------');
-      
+
       alert(`Upload successful!\nStorage path: ${data.gsPath}`);
       return data.gsPath;
     } catch (error) {
@@ -133,7 +133,7 @@ export const SignIn = () => {
           <Image src="/world_c.png" alt="World Coin" width={24} height={24} />
           {isVerifying ? "Verifying..." : "Verify with World ID"}
         </button>
-      <button
+        <button
           onClick={uploadAudioTest}
           disabled={isUploading}
           className="mt-4 px-8 py-4 bg-blue-400/80 text-white rounded-xl hover:bg-blue-500 transition-all duration-200 transform hover:scale-105 font-medium text-lg shadow-lg flex items-center justify-center gap-2"
@@ -170,7 +170,7 @@ export const SignIn = () => {
         >
           Test Audio Gen
         </button>
-        
+
         {audioUrl && (
           <audio 
             controls 
