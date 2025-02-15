@@ -72,7 +72,6 @@ export default function VerifiedPage() {
               <button
                 onClick={async () => {
                   setIsGeneratingAudio(true);
-                  setHasGeneratedAudio(false);
                   try {
                     const response = await fetch("/api/generate-audio", {
                       method: "POST",
@@ -90,7 +89,6 @@ export default function VerifiedPage() {
                     }
 
                     setAudioUrl(`data:audio/mpeg;base64,${data.audio}`);
-                    setHasGeneratedAudio(true);
                   } catch (error) {
                     console.error("Error generating audio:", error);
                     alert("Failed to generate audio. Please try again.");
@@ -98,10 +96,10 @@ export default function VerifiedPage() {
                     setIsGeneratingAudio(false);
                   }
                 }}
-                disabled={isGeneratingAudio || hasGeneratedAudio}
+                disabled={isGeneratingAudio}
                 className="flex-1 px-4 py-2 bg-white text-purple-600 border border-purple-600 rounded-lg hover:bg-purple-50 transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
               >
-                Generate Audio
+                {isGeneratingAudio ? "Generating..." : "Generate Audio"}
               </button>
             </div>
             {audioUrl && (
@@ -112,14 +110,13 @@ export default function VerifiedPage() {
                   className="mt-4 w-full" 
                 />
               )}
-              {hasGeneratedAudio && audioUrl && (
                 <button
                   onClick={async () => {
                     if (currentAudioData) {
                       try {
                         const timestamp = Date.now();
                         const audioBlob = new Blob(
-                          [Buffer.from(currentAudioData, 'base64')],
+                          [new Uint8Array(currentAudioData)],
                           { type: 'audio/mpeg' }
                         );
                         
@@ -155,7 +152,6 @@ export default function VerifiedPage() {
               >
                 Upload Current Audio
               </button>
-            )}
           </div>
         </div>
       )}
