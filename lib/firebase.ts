@@ -1,12 +1,10 @@
-import { initializeApp, cert } from 'firebase-admin/app';
-import { getStorage } from 'firebase-admin/storage';
 
-const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT || '{}');
+import { initializeApp } from 'firebase/app';
+import { getStorage } from 'firebase/storage';
 
-const app = initializeApp({
-  credential: cert(serviceAccount),
+const firebaseConfig = {
   storageBucket: "bendiga-4d926.firebasestorage.app"
-});
+};
 
+const app = initializeApp(firebaseConfig);
 export const storage = getStorage(app);
-export const bucket = storage.bucket();
