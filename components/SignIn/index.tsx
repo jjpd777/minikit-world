@@ -17,13 +17,15 @@ export const SignIn = () => {
       const response = await fetch('/audio_sample.mp3');
       const audioBlob = await response.blob();
       
-      const filename = `audio_${Date.now()}.mp3`;
-      const audioRef = ref(storage, `uploads/${filename}`);
+      const filename = `uploads/audio_${Date.now()}.mp3`;
+      const storageRef = ref(storage, filename);
       
-      await uploadBytes(audioRef, audioBlob, { contentType: 'audio/mpeg' });
-      const url = await getDownloadURL(audioRef);
+      const snapshot = await uploadBytes(storageRef, audioBlob, {
+        contentType: 'audio/mpeg'
+      });
       
-      console.log('File uploaded:', url);
+      const url = await getDownloadURL(snapshot.ref);
+      console.log('Upload successful. File available at:', url);
       return url;
     } catch (error) {
       console.error('Upload failed:', error);
