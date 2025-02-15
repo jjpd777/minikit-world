@@ -73,10 +73,17 @@ export const PrayerForm = ({
     }
 
     try {
+      // Convert base64 to blob
+      const base64Data = audioData.split(',')[1];
+      const binaryData = atob(base64Data);
+      const byteArray = new Uint8Array(binaryData.length);
+      for (let i = 0; i < binaryData.length; i++) {
+        byteArray[i] = binaryData.charCodeAt(i);
+      }
+      const blob = new Blob([byteArray], { type: 'audio/mpeg' });
+      
       const timestamp = Math.floor(Date.now() / 1000);
-      const fileName = `0x333${timestamp}.mp3`;
-      const response = await fetch(audioData);
-      const blob = await response.blob();
+      const fileName = `worldApp/NewAudio/0x333${timestamp}.mp3`;
       
       const formData = new FormData();
       formData.append('file', blob, fileName);
