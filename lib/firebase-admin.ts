@@ -13,3 +13,20 @@ const app = initializeApp({
 // Get Storage instance
 export const storage = getStorage(app);
 export const bucket = storage.bucket();
+
+// Add logging
+bucket.on('response', (response) => {
+  console.log('Firebase Storage Response:', {
+    status: response.statusCode,
+    statusMessage: response.statusMessage,
+    headers: response.headers
+  });
+});
+
+bucket.on('error', (error) => {
+  console.error('Firebase Storage Error:', {
+    code: error.code,
+    message: error.message,
+    stack: error.stack
+  });
+});
