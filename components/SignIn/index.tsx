@@ -24,7 +24,7 @@ export const SignIn = () => {
       const blob = await response.blob();
       
       const formData = new FormData();
-      formData.append('file', blob, 'generated_audio.mp3');
+      formData.append('file', blob, `${Date.now()}.mp3`);
       
       const uploadResponse = await fetch('/api/upload-test', {
         method: 'POST',
