@@ -23,12 +23,12 @@ export async function GET() {
 export async function POST(request: NextRequest) {
   try {
     const formData = await request.formData();
-    const audioFile = formData.get('file') as File;
-    if (!audioFile) {
+    const file = formData.get('file') as File;
+    if (!file) {
       throw new Error('No file provided');
     }
 
-    const buffer = Buffer.from(await audioFile.arrayBuffer());
+    const buffer = Buffer.from(await file.arrayBuffer());
     const destinationPath = `worldApp/NewAudio/${Date.now()}.mp3`;
     
     await bucket.file(destinationPath).save(buffer, {

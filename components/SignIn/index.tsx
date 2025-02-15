@@ -3,7 +3,6 @@ import { MiniKit } from "@worldcoin/minikit-js";
 import Image from "next/image";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { AudioList } from "@/components/AudioList";
 
 
 export const SignIn = () => {
@@ -174,7 +173,6 @@ export const SignIn = () => {
             className="mt-4 w-full" 
           />
         )}
-        <AudioList />
       </div>
     </>
   );
