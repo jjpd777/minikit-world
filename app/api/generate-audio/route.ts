@@ -58,7 +58,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         { success: false, error: 'Failed to upload audio to storage' },
         { status: 500 }
-      );
+      );;
     }
   } catch (error) {
     console.error('Error generating audio:', error);
