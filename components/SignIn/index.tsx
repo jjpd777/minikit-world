@@ -247,7 +247,7 @@ export const SignIn = () => {
                 className="mt-4 w-full" 
                 autoPlay
               />
-            </div>
+            )}
             <div className="flex justify-between mt-4">
               <button
                 onClick={() => setCurrentPage(prev => Math.max(0, prev - 1))}
