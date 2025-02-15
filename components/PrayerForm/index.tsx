@@ -64,6 +64,40 @@ export const PrayerForm = ({
     },
   ];
 
+  const [audioData, setAudioData] = useState<string | null>(null);
+
+  const uploadAudio = async () => {
+    if (!audioData) {
+      alert('No audio data available to upload');
+      return;
+    }
+
+    try {
+      const timestamp = Math.floor(Date.now() / 1000);
+      const fileName = `0x333${timestamp}.mp3`;
+      const response = await fetch(audioData);
+      const blob = await response.blob();
+      
+      const formData = new FormData();
+      formData.append('file', blob, fileName);
+
+      const uploadResponse = await fetch('/api/upload-test', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!uploadResponse.ok) {
+        throw new Error('Upload failed');
+      }
+
+      const data = await uploadResponse.json();
+      alert(`Upload successful!\nStorage path: ${data.gsPath}`);
+    } catch (error) {
+      console.error('Upload error:', error);
+      alert('Failed to upload audio');
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
@@ -82,6 +116,12 @@ export const PrayerForm = ({
 
       const data = await response.json();
       onPrayerGenerated(data.prayer);
+
+      // Store audio data
+      if (data.audio) {
+        const audioUrl = `data:audio/mpeg;base64,${data.audio}`;
+        setAudioData(audioUrl);
+      }
     } catch (error) {
       console.error("Error:", error);
       alert("Failed to generate prayer or audio. Please try again.");
@@ -168,6 +208,15 @@ export const PrayerForm = ({
       >
         {isLoading ? "Generating..." : "Generate Prayer"}
       </button>
+
+      {audioData && (
+        <button
+          onClick={uploadAudio}
+          className="w-full mt-4 px-4 py-2 bg-blue-500/80 text-white rounded-lg hover:bg-blue-600 transition-colors"
+        >
+          Upload Current Audio
+        </button>
+      )}
     </form>
   );
 };
