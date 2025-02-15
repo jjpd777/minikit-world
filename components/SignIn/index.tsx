@@ -37,6 +37,11 @@ export const SignIn = () => {
         throw new Error(data.error || 'Upload failed');
       }
 
+      // Store the new path in localStorage
+      const existingPaths = JSON.parse(localStorage.getItem('audioUrls') || '[]');
+      const newPaths = [...existingPaths, data.gsPath];
+      localStorage.setItem('audioUrls', JSON.stringify(newPaths));
+
       console.log('----------------------------------------');
       console.log('Firebase Storage gs:// path:');
       console.log(data.gsPath);
