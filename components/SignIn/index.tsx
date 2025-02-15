@@ -179,14 +179,7 @@ export const SignIn = () => {
         </button>
         
 
-        <button
-          onClick={fetchAudioFiles}
-          disabled={isFetching}
-          className="mt-4 px-8 py-4 bg-purple-400/80 text-white rounded-xl hover:bg-purple-500 transition-all duration-200 transform hover:scale-105 font-medium text-lg shadow-lg flex items-center justify-center gap-2"
-        >
-          {isFetching ? "Fetching..." : "Show Audio Files"}
-        </button>
-
+    
         {audioFiles.length > 0 && (
           <div className="mt-4 w-full">
             <h3 className="text-white mb-2">Stored Audio Files:</h3>
