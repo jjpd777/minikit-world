@@ -71,12 +71,6 @@ export default function VerifiedPage() {
               </a>
               <button
                 onClick={async () => {
-                  const audioPlayer = document.getElementById(
-                    "prayerAudio",
-                  ) as HTMLAudioElement;
-                  if (audioPlayer) {
-                    audioPlayer.style.display = "none";
-                  }
                   setIsGeneratingAudio(true);
                   try {
                     const response = await fetch("/api/generate-audio", {
@@ -91,14 +85,11 @@ export default function VerifiedPage() {
 
                     const data = await response.json();
                     if (!response.ok || !data.success) {
-                      console.error('Audio generation failed:', data.error);
                       throw new Error(data.error || "Failed to generate audio");
                     }
 
-                    setCurrentAudioData(data.audio); // Store the audio data
-                    setHasGeneratedAudio(true); // Indicate audio generation is complete
-                    setAudioUrl(`data:audio/mpeg;base64,${data.audio}`); //Set audio URL
-
+                    setAudioUrl(`data:audio/mpeg;base64,${data.audio}`);
+                    setHasGeneratedAudio(true);
                   } catch (error) {
                     console.error("Error generating audio:", error);
                     alert("Failed to generate audio. Please try again.");
@@ -120,7 +111,6 @@ export default function VerifiedPage() {
                   className="mt-4 w-full" 
                 />
               )}
-            {hasGeneratedAudio && ( //Only show upload button if audio is generated
               <button
                 onClick={async () => {
                   if (currentAudioData) {
