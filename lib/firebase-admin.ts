@@ -7,7 +7,7 @@ const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT || '{}');
 // Initialize Firebase Admin
 const app = initializeApp({
   credential: cert(serviceAccount),
-  storageBucket: "bendiga-4d926.firebasestorage.rapp"
+  storageBucket: "bendiga-4d926.firebasestorage.app"
 });
 
 // Get Storage instance
