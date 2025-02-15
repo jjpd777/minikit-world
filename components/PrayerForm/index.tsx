@@ -75,15 +75,15 @@ export const PrayerForm = ({
     try {
       // Convert base64 to blob
       const base64Data = audioData.split(',')[1];
-      const binaryData = atob(base64Data);
-      const byteArray = new Uint8Array(binaryData.length);
-      for (let i = 0; i < binaryData.length; i++) {
-        byteArray[i] = binaryData.charCodeAt(i);
+      const binaryString = atob(base64Data);
+      const byteArray = new Uint8Array(binaryString.length);
+      for (let i = 0; i < binaryString.length; i++) {
+        byteArray[i] = binaryString.charCodeAt(i);
       }
       const blob = new Blob([byteArray], { type: 'audio/mpeg' });
       
       const timestamp = Math.floor(Date.now() / 1000);
-      const fileName = `worldApp/NewAudio/0x333${timestamp}.mp3`;
+      const fileName = `0x333${timestamp}.mp3`;
       
       const formData = new FormData();
       formData.append('file', blob, fileName);
@@ -94,11 +94,19 @@ export const PrayerForm = ({
       });
 
       if (!uploadResponse.ok) {
-        throw new Error('Upload failed');
+        const errorText = await uploadResponse.text();
+        console.error('Upload failed:', errorText);
+        throw new Error(`Upload failed: ${uploadResponse.status}`);
       }
 
       const data = await uploadResponse.json();
-      alert(`Upload successful!\nStorage path: ${data.gsPath}`);
+      console.log('Upload response:', data);
+
+      if (data.success) {
+        alert(`Upload successful!\nStorage path: ${data.gsPath}`);
+      } else {
+        throw new Error(data.error || 'Upload failed');
+      }
     } catch (error) {
       console.error('Upload error:', error);
       alert('Failed to upload audio');
