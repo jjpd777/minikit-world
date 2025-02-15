@@ -170,17 +170,30 @@ export default function VerifiedPage() {
                 if (audioPlayer && audioPlayer.src) {
                   try {
                     const response = await fetch(audioPlayer.src);
+                    if (!response.ok) {
+                      throw new Error(`Failed to fetch audio: ${response.status}`);
+                    }
                     const blob = await response.blob();
+                    console.log('Audio blob size:', blob.size);
+                    
                     const timestamp = Date.now();
                     const fileName = `worldApp/userGenerations/0x88-${timestamp}.mp3`;
                     
                     const formData = new FormData();
                     formData.append('file', blob, fileName);
                     
+                    console.log('Uploading file:', fileName);
                     const uploadResponse = await fetch('/api/upload-test', {
                       method: 'POST',
                       body: formData,
                     });
+                    
+                    const responseData = await uploadResponse.json();
+                    console.log('Upload response:', responseData);
+                    
+                    if (!uploadResponse.ok) {
+                      throw new Error(`Upload failed: ${responseData.error || uploadResponse.status}`);
+                    }
                     
                     const data = await uploadResponse.json();
                     if (data.success) {
