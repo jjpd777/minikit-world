@@ -19,11 +19,13 @@ export const VoiceRecorder = () => {
       const timestamp = Date.now();
       const fileName = `worldApp/audioGen/0x888_${timestamp}.mp3`;
 
-      import { storage, bucket } from "@/lib/firebase-admin";
+      import { storage } from "@/lib/firebase";
+      import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+      
       const storageRef = ref(storage, fileName);
-
-      await uploadBytes(storageRef, blob);
-      const downloadUrl = await getDownloadURL(storageRef);
+      const snapshot = await uploadBytes(storageRef, blob);
+      const downloadUrl = await getDownloadURL(snapshot.ref);
+      console.log('File uploaded to:', `gs://${snapshot.ref.bucket}/${snapshot.ref.fullPath}`);
       console.log("File uploaded successfully:", downloadUrl);
       alert("Audio uploaded successfully!");
     } catch (error) {
