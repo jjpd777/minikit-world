@@ -3,7 +3,7 @@ import { initializeApp } from 'firebase/app';
 import { getStorage } from 'firebase/storage';
 
 const firebaseConfig = {
-  storageBucket: "bendiga-4d926.firebasestorage.app"
+  storageBucket: "bendiga-4d926.appspot.com"
 };
 
 const app = initializeApp(firebaseConfig);
