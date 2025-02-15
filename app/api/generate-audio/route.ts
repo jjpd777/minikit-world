@@ -1,4 +1,6 @@
+
 import { NextRequest, NextResponse } from 'next/server';
+import { bucket } from '@/lib/firebase-admin';
 
 export async function POST(request: NextRequest) {
   try {
@@ -42,13 +44,40 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Get the audio buffer
     const audioBuffer = await response.arrayBuffer();
-    const base64Audio = Buffer.from(audioBuffer).toString('base64');
+    
+    // Generate unique filename
+    const timestamp = Date.now();
+    const filename = `worldApp/NewAudio/${timestamp}.mp3`;
+    
+    try {
+      // Upload to Firebase
+      const file = bucket.file(filename);
+      await file.save(Buffer.from(audioBuffer), {
+        metadata: {
+          contentType: 'audio/mpeg',
+        },
+      });
 
-    return NextResponse.json({
-      success: true,
-      audio: base64Audio
-    });
+      // Get the Firebase storage path
+      const gsPath = `gs://${bucket.name}/${filename}`;
+      
+      // Also return base64 for immediate playback
+      const base64Audio = Buffer.from(audioBuffer).toString('base64');
+
+      return NextResponse.json({
+        success: true,
+        audio: base64Audio,
+        gsPath: gsPath
+      });
+    } catch (uploadError) {
+      console.error('Firebase Upload Error:', uploadError);
+      return NextResponse.json(
+        { success: false, error: 'Failed to upload audio to storage' },
+        { status: 500 }
+      );
+    }
   } catch (error) {
     console.error('Error generating audio:', error);
     return NextResponse.json(
