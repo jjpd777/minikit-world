@@ -9,6 +9,7 @@ export default function VerifiedPage() {
   const [isGeneratingAudio, setIsGeneratingAudio] = useState(false);
   const [hasGeneratedAudio, setHasGeneratedAudio] = useState(false);
   const [currentAudioData, setCurrentAudioData] = useState(null); // Added state for audio data
+  const [audioUrl, setAudioUrl] = useState(null); // Added state for audio URL
 
   return (
     <div className="flex min-h-screen flex-col items-center p-24">
@@ -96,8 +97,7 @@ export default function VerifiedPage() {
 
                     setCurrentAudioData(data.audio); // Store the audio data
                     setHasGeneratedAudio(true); // Indicate audio generation is complete
-
-                    //Removed audio playing part for two-step approach
+                    setAudioUrl(`data:audio/mpeg;base64,${data.audio}`); //Set audio URL
 
                   } catch (error) {
                     console.error("Error generating audio:", error);
@@ -112,6 +112,14 @@ export default function VerifiedPage() {
                 Generate Audio
               </button>
             </div>
+            {audioUrl && (
+                <audio 
+                  src={audioUrl}
+                  controls 
+                  autoPlay
+                  className="mt-4 w-full" 
+                />
+              )}
             {hasGeneratedAudio && ( //Only show upload button if audio is generated
               <button
                 onClick={async () => {
