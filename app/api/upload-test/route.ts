@@ -29,7 +29,7 @@ export async function POST(request: NextRequest) {
     }
 
     const buffer = Buffer.from(await file.arrayBuffer());
-    const destinationPath = `worldApp/NewAudio/${Date.now()}.mp3`;
+    const destinationPath = 'worldApp/NewAudio/' + file.name;
     
     await bucket.file(destinationPath).save(buffer, {
       contentType: file.type,
