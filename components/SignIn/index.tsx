@@ -147,11 +147,17 @@ export const SignIn = () => {
                 }
 
                 const data = await verifyResponse.json();
-                if (data.verifyRes.success) {
+                console.log("Verification response data:", data);
+                console.log("verifyRes object:", data.verifyRes);
+                console.log("Success value:", data.verifyRes?.success);
+                
+                if (data.verifyRes?.success) {
+                  console.log("Verification succeeded!");
                   localStorage.setItem('worldcoin_verified', 'true');
                   router.push("/verified");
                 } else {
-                  throw new Error(data.verifyRes.error || "Verification failed");
+                  console.log("Verification failed with data:", data);
+                  throw new Error(data.verifyRes?.error || "Verification failed");
                 }
               }
             } catch (error) {
