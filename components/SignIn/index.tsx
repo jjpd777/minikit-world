@@ -178,15 +178,6 @@ export const SignIn = () => {
             className="mt-4 w-full" 
           />
         )}
-
-        <div className="mt-4 p-4 bg-purple-100 rounded-xl">
-          <h3 className="text-lg font-semibold mb-2">Stored Audio Files:</h3>
-          {JSON.parse(localStorage.getItem('audioUrls') || '[]').map((url: string, index: number) => (
-            <div key={index} className="text-sm text-gray-700 mb-1">
-              {url}
-            </div>
-          ))}
-        </div>
       </div>
     </>
   );
