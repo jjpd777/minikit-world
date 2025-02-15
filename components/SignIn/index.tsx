@@ -14,7 +14,15 @@ export const SignIn = () => {
   const uploadAudioTest = async () => {
     setIsUploading(true);
     try {
-      const response = await fetch('/api/upload-test');
+      const formData = new FormData();
+      const audioFile = new File([''], 'audio_sample.mp3', { type: 'audio/mpeg' });
+      formData.append('file', audioFile);
+      
+      const response = await fetch('/api/upload-test', {
+        method: 'POST',
+        body: formData
+      });
+      
       const data = await response.json();
       
       if (!data.success) {
