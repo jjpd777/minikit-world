@@ -140,9 +140,28 @@ export const SignIn = () => {
 
               const audioUrl = `data:audio/mpeg;base64,${data.audio}`;
               setAudioUrl(audioUrl);
+
+              // Create a Blob from the base64 audio
+              const audioBlob = await fetch(audioUrl).then(r => r.blob());
+              const formData = new FormData();
+              formData.append('audio', audioBlob, 'generated-audio.mp3');
+
+              // Upload to Firebase through our API
+              const uploadResponse = await fetch('/api/upload-audio', {
+                method: 'POST',
+                body: formData
+              });
+
+              if (!uploadResponse.ok) {
+                throw new Error('Failed to upload to Firebase');
+              }
+
+              const uploadData = await uploadResponse.json();
+              console.log('Uploaded to Firebase:', uploadData.gsPath);
+              alert(`Audio uploaded successfully!\nPath: ${uploadData.gsPath}`);
             } catch (error) {
-              console.error("Error generating audio:", error);
-              alert("Failed to generate audio");
+              console.error("Error:", error);
+              alert(error.message || "Operation failed");
             }
           }}
           className="mt-4 px-8 py-4 bg-green-400/80 text-white rounded-xl hover:bg-green-500 transition-all duration-200 transform hover:scale-105 font-medium text-lg shadow-lg flex items-center justify-center gap-2"
