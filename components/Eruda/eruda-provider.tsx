@@ -5,7 +5,9 @@ import { useEffect } from "react";
 
 export function ErudaProvider() {
   useEffect(() => {
-    eruda.init();
+    if (typeof window !== 'undefined' && !window.eruda) {
+      eruda.init();
+    }
   }, []);
   return null;
 }
