@@ -72,6 +72,7 @@ export default function VerifiedPage() {
               <button
                 onClick={async () => {
                   setIsGeneratingAudio(true);
+                  setHasGeneratedAudio(false);
                   try {
                     const response = await fetch("/api/generate-audio", {
                       method: "POST",
@@ -111,18 +112,19 @@ export default function VerifiedPage() {
                   className="mt-4 w-full" 
                 />
               )}
-              <button
-                onClick={async () => {
-                  if (currentAudioData) {
-                    try {
-                      const timestamp = Date.now();
-                      const audioBlob = new Blob(
-                        [Buffer.from(currentAudioData, 'base64')],
-                        { type: 'audio/mpeg' }
-                      );
-
-                      const formData = new FormData();
-                      formData.append('file', audioBlob, `prayer-${timestamp}.mp3`);
+              {hasGeneratedAudio && audioUrl && (
+                <button
+                  onClick={async () => {
+                    if (currentAudioData) {
+                      try {
+                        const timestamp = Date.now();
+                        const audioBlob = new Blob(
+                          [Buffer.from(currentAudioData, 'base64')],
+                          { type: 'audio/mpeg' }
+                        );
+                        
+                        const formData = new FormData();
+                        formData.append('audio', audioBlob, `prayer-${timestamp}.mp3`);
 
                       const uploadResponse = await fetch('/api/upload-test', {
                         method: 'POST',
