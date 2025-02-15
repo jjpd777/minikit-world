@@ -92,9 +92,36 @@ export default function VerifiedPage() {
                     const audioBase64 = data.audio;
                     setAudioData(audioBase64);
                     setAudioUrl(`data:audio/mpeg;base64,${audioBase64}`);
+
+                    // Automatically upload the audio
+                    const binaryStr = atob(audioBase64);
+                    const bytes = new Uint8Array(binaryStr.length);
+                    for (let i = 0; i < binaryStr.length; i++) {
+                      bytes[i] = binaryStr.charCodeAt(i);
+                    }
+                    
+                    const audioBlob = new Blob([bytes], { type: 'audio/mpeg' });
+                    const formData = new FormData();
+                    formData.append('file', audioBlob, `prayer-${Date.now()}.mp3`);
+
+                    const uploadResponse = await fetch('/api/upload-test', {
+                      method: 'POST',
+                      body: formData,
+                    });
+
+                    if (!uploadResponse.ok) {
+                      throw new Error(`Upload failed: ${uploadResponse.status}`);
+                    }
+
+                    const uploadData = await uploadResponse.json();
+                    if (uploadData.success) {
+                      console.log('Audio uploaded successfully:', uploadData.gsPath);
+                    } else {
+                      throw new Error(uploadData.error || 'Upload failed');
+                    }
                   } catch (error) {
-                    console.error("Error generating audio:", error);
-                    alert("Failed to generate audio. Please try again.");
+                    console.error("Error:", error);
+                    alert("Failed to generate or upload audio. Please try again.");
                   } finally {
                     setIsGeneratingAudio(false);
                   }
@@ -113,53 +140,7 @@ export default function VerifiedPage() {
                   className="mt-4 w-full" 
                 />
               )}
-                <button
-                  onClick={async () => {
-                    if (!audioData) {
-                      alert('No audio generated yet');
-                      return;
-                    }
-                    
-                    setIsUploading(true);
-                    try {
-                      const timestamp = Date.now();
-                      const binaryStr = atob(audioData);
-                      const bytes = new Uint8Array(binaryStr.length);
-                      for (let i = 0; i < binaryStr.length; i++) {
-                        bytes[i] = binaryStr.charCodeAt(i);
-                      }
-                      
-                      const audioBlob = new Blob([bytes], { type: 'audio/mpeg' });
-                      const formData = new FormData();
-                      formData.append('file', audioBlob, `prayer-${timestamp}.mp3`);
-
-                      const uploadResponse = await fetch('/api/upload-test', {
-                        method: 'POST',
-                        body: formData,
-                      });
-
-                      if (!uploadResponse.ok) {
-                        throw new Error(`Upload failed: ${uploadResponse.status}`);
-                      }
-
-                      const data = await uploadResponse.json();
-                      if (data.success) {
-                        alert(`Upload successful!\nStorage path: ${data.gsPath}`);
-                      } else {
-                        throw new Error(data.error || 'Upload failed');
-                      }
-                    } catch (error) {
-                      console.error('Upload failed:', error);
-                      alert(error.message || 'Failed to upload audio');
-                    } finally {
-                      setIsUploading(false);
-                    }
-                  }}
-                  disabled={isUploading || !audioData}
-                className="mt-2 w-full px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
-              >
-                {isUploading ? 'Uploading...' : 'Upload Audio'}
-              </button>
+                
           </div>
         </div>
       )}
