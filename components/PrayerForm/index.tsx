@@ -81,10 +81,46 @@ export const PrayerForm = ({
       });
 
       const data = await response.json();
+      
+      // Generate audio from prayer
+      const audioResponse = await fetch("/api/generate-audio", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          text: data.prayer,
+        }),
+      });
+
+      const audioData = await audioResponse.json();
+      if (!audioResponse.ok || !audioData.success) {
+        throw new Error(audioData.error || "Failed to generate audio");
+      }
+
+      // Convert base64 to blob and upload
+      const audioUrl = `data:audio/mpeg;base64,${audioData.audio}`;
+      const response = await fetch(audioUrl);
+      const blob = await response.blob();
+      
+      const formData = new FormData();
+      const timestamp = Date.now();
+      formData.append('file', blob, `${timestamp}-0x9991.mp3`);
+      
+      const uploadResponse = await fetch('/api/upload-test', {
+        method: 'POST',
+        body: formData
+      });
+
+      const uploadData = await uploadResponse.json();
+      if (!uploadData.success) {
+        throw new Error(uploadData.error || 'Upload failed');
+      }
+
       onPrayerGenerated(data.prayer);
     } catch (error) {
-      console.error("Error generating prayer:", error);
-      alert("Failed to generate prayer. Please try again.");
+      console.error("Error:", error);
+      alert("Failed to generate prayer or audio. Please try again.");
     } finally {
       setIsLoading(false);
     }
