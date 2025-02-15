@@ -195,17 +195,21 @@ export const SignIn = () => {
           <div className="mt-4 w-full">
             <h3 className="text-white mb-2">Bookmarked Audio Files:</h3>
             <div className="max-h-80 overflow-y-auto bg-purple-900/20 p-4 rounded-lg">
-              {bookmarkedFiles
+              {[...bookmarkedFiles]
+                .reverse()
                 .slice(currentPage * filesPerPage, (currentPage + 1) * filesPerPage)
-                .map((file, index) => (
-                  <div 
-                    key={index} 
-                    onClick={() => playAudioFile(file)}
-                    className="text-white text-sm mb-2 p-2 bg-purple-800/20 rounded cursor-pointer hover:bg-purple-700/20"
-                  >
-                    🎵 {file}
-                  </div>
-                ))}
+                .map((file, index) => {
+                  const globalIndex = bookmarkedFiles.length - (currentPage * filesPerPage + index);
+                  return (
+                    <div 
+                      key={index} 
+                      onClick={() => playAudioFile(file)}
+                      className="text-white text-sm mb-2 p-2 bg-purple-800/20 rounded cursor-pointer hover:bg-purple-700/20"
+                    >
+                      🎵 Prayer #{globalIndex}
+                    </div>
+                  );
+                })}
             </div>
             {selectedAudioFile && (
               <audio 
