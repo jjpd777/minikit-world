@@ -4,7 +4,13 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
   try {
-    const { proof, action, signal } = await req.json();
+    const { merkle_root, nullifier_hash, proof, verification_level, action, signal } = await req.json();
+    const verificationProof = {
+      merkle_root,
+      nullifier_hash,
+      proof,
+      verification_level
+    };
     const app_id = process.env.NEXT_PUBLIC_APP_ID as `app_${string}`;
     
     if (!app_id) {
