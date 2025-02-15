@@ -1,5 +1,5 @@
 
-import { initializeApp, cert } from "firebase-admin/app";
+import { initializeApp, getApp, cert } from "firebase-admin/app";
 import { getStorage } from "firebase-admin/storage";
 
 let serviceAccount;
@@ -20,6 +20,7 @@ try {
   if (error.code === 'app/duplicate-app') {
     app = getApp();
   } else {
+    console.error('Firebase initialization error:', error);
     throw error;
   }
 }
