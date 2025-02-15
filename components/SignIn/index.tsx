@@ -124,8 +124,7 @@ export const SignIn = () => {
               const result = await MiniKit.commandsAsync.verify({
                 action: process.env.NEXT_PUBLIC_ACTION_NAME as string,
                 signal: "user_verification",
-                verification_level: "orb",
-              });
+                });
 
               if (result?.finalPayload?.status === "success") {
                 const verifyResponse = await fetch("/api/verify", {
