@@ -126,18 +126,7 @@ export const ProfileButton = () => {
                     }
 
                     if (finalPayload.status === "success") {
-                      const confirmRes = await fetch("/api/confirm-payment", {
-                        method: "POST",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({ payload: result.finalPayload }),
-                      });
-
-                      const payment = await confirmRes.json();
-                      if (payment.success) {
-                        alert("Payment sent successfully!");
-                      } else {
-                        throw new Error("Payment confirmation failed");
-                      }
+                      setTransactionId(finalPayload.transaction_id);
                     }
                   } catch (error) {
                     console.error("Payment failed:", error);
