@@ -3,12 +3,10 @@ import { MiniKit, VerificationLevel } from "@worldcoin/minikit-js";
 import Image from "next/image";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { ClaimTokens } from "@/components/ClaimTokens";
 
 
 export const SignIn = () => {
   const [isVerifying, setIsVerifying] = useState(false);
-  const [isVerified, setIsVerified] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
   const [bookmarkedFiles, setBookmarkedFiles] = useState<string[]>([]);
@@ -169,7 +167,7 @@ export const SignIn = () => {
                 if (data.verifyRes?.success) {
                   console.log("Verification succeeded!");
                   localStorage.setItem('worldcoin_verified', 'true');
-                  setIsVerified(true);
+                  router.push("/verified");
                 } else {
                   console.log("Verification failed with data:", data);
                   throw new Error(data.verifyRes?.error || "Verification failed");
@@ -188,9 +186,9 @@ export const SignIn = () => {
           <Image src="/world_c.png" alt="World Coin" width={24} height={24} />
           {isVerifying ? "Verifying..." : "Verify with World ID"}
         </button>
-
-        {isVerified && <ClaimTokens />}
         
+
+    
         {bookmarkedFiles.length > 0 && (
           <div className="mt-4 w-full">
             {/* <h3 className="text-white mb-2">Bookmarked:</h3> */}
