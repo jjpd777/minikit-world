@@ -23,6 +23,27 @@ export const ProfileButton = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [walletAddress, setWalletAddress] = useState<string>("");
   const [transactionId, setTransactionId] = useState<string>("");
+  const [tokenBalance, setTokenBalance] = useState<string>("0");
+
+  const fetchBalance = async () => {
+    if (!walletAddress || !MiniKit.isInstalled()) return;
+    try {
+      const balance = await MiniKit.commandsAsync.getBalance({
+        address: walletAddress,
+        token: "0xF10106a1C3dB402955e9E172E01685E2a19820e6" // Your token contract address
+      });
+      setTokenBalance(balance.toString());
+    } catch (error) {
+      console.error("Error fetching balance:", error);
+    }
+  };
+
+  // Fetch balance when wallet is connected
+  useEffect(() => {
+    if (walletAddress) {
+      fetchBalance();
+    }
+  }, [walletAddress]);
 
   const { isLoading: isConfirming, isSuccess: isConfirmed } = useWaitForTransactionReceipt({
     client,
@@ -80,6 +101,11 @@ export const ProfileButton = () => {
               </button>
             </div>
             <WalletAuth onAddressChange={setWalletAddress} />
+            {walletAddress && (
+              <div className="mt-2 text-sm text-gray-300">
+                Token Balance: {tokenBalance}
+              </div>
+            )}
             <div className="mt-4 space-y-2">
               <button
                 onClick={async () => {
