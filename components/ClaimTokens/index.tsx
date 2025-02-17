@@ -30,6 +30,15 @@ export const ClaimTokens = () => {
     }
 
     try {
+      const network = await MiniKit.commandsAsync.getNetwork();
+      console.log("Current network:", network);
+      
+      if (network.chainId !== "0x2330" && network.chainId !== "9008") { // WorldChain mainnet chainId
+        alert("Please switch to WorldChain mainnet");
+        return;
+      }
+
+    try {
       setClaiming(true);
       
       // Get user's address
