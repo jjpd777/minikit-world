@@ -14,7 +14,6 @@ export default function VerifiedPage() {
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
   const [isUploading, setIsUploading] = useState(false);
   const [storagePath, setStoragePath] = useState<string | null>(null);
-  const [walletAddress, setWalletAddress] = useState<string>("");
 
   return (
     <div className="flex min-h-screen flex-col items-center p-24">
@@ -60,11 +59,7 @@ export default function VerifiedPage() {
                   />
                 </svg>
               </button>
-              {!walletAddress ? (
-                <WalletAuth onAddressChange={setWalletAddress} />
-              ) : (
-                <ClaimTokens />
-              )}
+              <WalletAuth onAddressChange={setPrayer} />
               <a
                 href={`https://wa.me/?text=${encodeURIComponent(prayer)}`}
                 target="_blank"
