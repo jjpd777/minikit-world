@@ -43,7 +43,7 @@ export const ProfileButton = () => {
     if (walletAddress) {
       fetchBalance();
     }
-  }, [walletAddress]);
+  }, [walletAddress, isConfirmed]);
 
   const { isLoading: isConfirming, isSuccess: isConfirmed } = useWaitForTransactionReceipt({
     client,
