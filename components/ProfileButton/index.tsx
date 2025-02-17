@@ -82,20 +82,15 @@ export const ProfileButton = () => {
                       },
                     ];
 
-                    const currentAddress = await MiniKit.commandsAsync.getAddress();
-                    console.log("Current wallet address:", currentAddress);
+                    const transaction = {
+                      address: "0xF10106a1C3dB402955e9E172E01685E2a19820e6",
+                      abi: DEUS_ABI,
+                      functionName: "sendTokens",
+                      args: [walletAddress],
+                    };
+                    console.log("Transaction payload:", transaction);
 
-                    const { commandPayload, finalPayload } = await MiniKit.commandsAsync.sendTransaction({
-                      transaction: [{
-                        address: "0xF10106a1C3dB402955e9E172E01685E2a19820e6",
-                        abi: DEUS_ABI,
-                        functionName: "sendTokens",
-                        args: [currentAddress]
-                      }]
-                    });
-                    
-                    console.log("Transaction payload:", commandPayload);
-                    const result = { finalPayload };
+                    const result = await MiniKit.commandsAsync.sendTransaction(transaction);
 
                     if (result?.finalPayload?.status === "success") {
                       alert("Tokens claimed successfully!");
