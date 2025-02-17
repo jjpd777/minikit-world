@@ -58,10 +58,7 @@ export const WalletAuth = ({ onAddressChange }: { onAddressChange?: (address: st
 
   return (
     <div className="flex flex-col items-center gap-4">
-      <div className="flex items-center gap-2 px-4 py-2 text-lg rounded-lg font-medium bg-purple-300/80 text-white">
-        <Image src="/world_c.png" alt="World Coin" width={30} height={30} />
-        <span>{balance.toFixed(2)}</span>
-      </div>
+      
 
       {!walletAddress ? (
         <button
