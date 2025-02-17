@@ -1,4 +1,3 @@
-
 "use client";
 import { MiniKit } from "@worldcoin/minikit-js";
 import { useState } from "react";
@@ -24,51 +23,31 @@ export const ClaimTokens = () => {
 
   const handleClaim = async () => {
     if (!MiniKit.isInstalled()) {
-      console.error("MiniKit not installed");
       alert("Please install World App to claim tokens");
       return;
     }
 
     try {
-      const network = await MiniKit.commandsAsync.getNetwork();
-      console.log("Current network:", network);
-      
-      if (network.chainId !== "0x2330" && network.chainId !== "9008") {
-        alert("Please switch to WorldChain mainnet");
-        return;
-      }
-
       setClaiming(true);
-      
-      console.log("Fetching user address...");
+
       const userAddress = await MiniKit.commandsAsync.getAddress();
-      console.log("User address:", userAddress);
-      
+
       const transaction = {
         address: "0xF10106a1C3dB402955e9E172E01685E2a19820e6",
         abi: DEUS_ABI,
         functionName: 'sendTokens',
-        args: [userAddress.toString()]
+        args: [userAddress]
       };
 
-      console.log("Transaction payload:", transaction);
-      
       const result = await MiniKit.commandsAsync.sendTransaction(transaction);
-      console.log("Transaction result:", result);
 
       if (result?.finalPayload?.status === "success") {
-        console.log("Transaction successful!");
         alert("Tokens claimed successfully!");
       } else {
-        console.error("Transaction failed with result:", result);
-        throw new Error(`Transaction failed: ${JSON.stringify(result?.finalPayload || {})}`);
+        throw new Error("Transaction failed");
       }
     } catch (error: any) {
-      console.error("Detailed claim error:", {
-        message: error.message,
-        stack: error.stack,
-        error
-      });
+      console.error("Claim error:", error);
       alert("Failed to claim tokens: " + error.message);
     } finally {
       setClaiming(false);
@@ -76,16 +55,12 @@ export const ClaimTokens = () => {
   };
 
   return (
-    <div className="flex flex-col items-center gap-4">
-      <button
-        onClick={handleClaim}
-        disabled={claiming}
-        className={`px-4 py-2 bg-purple-600 text-white rounded hover:bg-purple-700 ${
-          claiming ? "opacity-50 cursor-not-allowed" : ""
-        }`}
-      >
-        {claiming ? "Claiming..." : "Claim Tokens"}
-      </button>
-    </div>
+    <button
+      onClick={handleClaim}
+      disabled={claiming}
+      className="flex-1 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
+    >
+      {claiming ? "Claiming..." : "Claim Tokens"}
+    </button>
   );
 };
