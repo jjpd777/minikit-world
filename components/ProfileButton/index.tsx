@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { WalletAuth } from '../WalletAuth';
 import Image from 'next/image';
+import { MiniKit, tokenToDecimals, Tokens } from "@worldcoin/minikit-js";
 
 export const ProfileButton = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -33,6 +34,56 @@ export const ProfileButton = () => {
               </button>
             </div>
             <WalletAuth />
+            <div className="mt-4">
+              <button
+                onClick={async () => {
+                  if (!MiniKit.isInstalled()) {
+                    alert("Please install World App to send payments");
+                    return;
+                  }
+
+                  try {
+                    const initRes = await fetch('/api/initiate-payment', {
+                      method: 'POST',
+                    });
+                    const { id } = await initRes.json();
+
+                    const payload = {
+                      reference: id,
+                      to: "0xaBF8609C0678948b1FA06498cB4508a65bB1a0f2",
+                      tokens: [{
+                        symbol: Tokens.WLD,
+                        token_amount: tokenToDecimals(0.1, Tokens.WLD).toString()
+                      }],
+                      description: "Payment via World ID"
+                    };
+
+                    const result = await MiniKit.commandsAsync.pay(payload);
+                    
+                    if (result?.finalPayload?.status === "success") {
+                      const confirmRes = await fetch('/api/confirm-payment', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ payload: result.finalPayload }),
+                      });
+                      
+                      const payment = await confirmRes.json();
+                      if (payment.success) {
+                        alert("Payment sent successfully!");
+                      } else {
+                        throw new Error("Payment confirmation failed");
+                      }
+                    }
+                  } catch (error) {
+                    console.error("Payment failed:", error);
+                    alert("Payment failed: " + error.message);
+                  }
+                }}
+                className="w-full px-4 py-2 mt-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+              >
+                Send 0.1 WLD
+              </button>
+            </div>
           </div>
         </div>
       )}
