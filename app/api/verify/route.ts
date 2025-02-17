@@ -13,7 +13,17 @@ export async function POST(req: NextRequest) {
     const { payload, action, signal } = (await req.json()) as IRequestPayload;
     const app_id = process.env.NEXT_PUBLIC_APP_ID as `app_${string}`;
     
-    console.log("Received verification payload:", payload);
+    console.log("Verification attempt with:", {
+      app_id,
+      action,
+      signal,
+      payload_summary: {
+        merkle_root: payload.merkle_root,
+        nullifier_hash: payload.nullifier_hash,
+        verification_level: payload.verification_level
+      }
+    });
+    
     const verifyRes = await verifyCloudProof(payload, app_id, action, signal);
     console.log("VerifyRes from WorldCoin:", verifyRes);
 
