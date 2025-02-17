@@ -38,15 +38,20 @@ export const ProfileButton = () => {
     }
   };
 
-  // Fetch balance when wallet is connected
+  const { isLoading: isConfirming, isSuccess: isConfirmed } = useWaitForTransactionReceipt({
+    client,
+    appConfig: {
+      app_id: process.env.NEXT_PUBLIC_APP_ID || "",
+    },
+    transactionId,
+  });
+
+  // Fetch balance when wallet is connected or transaction is confirmed
   useEffect(() => {
     if (walletAddress) {
       fetchBalance();
     }
   }, [walletAddress, isConfirmed]);
-
-  const { isLoading: isConfirming, isSuccess: isConfirmed } = useWaitForTransactionReceipt({
-    client,
     appConfig: {
       app_id: process.env.NEXT_PUBLIC_APP_ID || "",
     },
