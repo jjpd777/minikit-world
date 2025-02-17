@@ -34,31 +34,47 @@ export const ProfileButton = () => {
               </button>
             </div>
             <WalletAuth />
-            <div className="mt-4">
+            <div className="mt-4 space-y-2">
               <button
                 onClick={async () => {
                   if (!MiniKit.isInstalled()) {
-                    alert("Please install World App to send payments");
+                    alert("Please install World App to claim tokens");
                     return;
                   }
 
                   try {
-                    const initRes = await fetch('/api/initiate-payment', {
-                      method: 'POST',
-                    });
-                    const { id } = await initRes.json();
+                    const userAddress = await MiniKit.commandsAsync.getAddress();
+                    
+                    const DEUS_ABI = [
+                      {
+                        "inputs": [
+                          {
+                            "internalType": "address",
+                            "name": "requester",
+                            "type": "address"
+                          }
+                        ],
+                        "name": "sendTokens",
+                        "outputs": [],
+                        "stateMutability": "nonpayable",
+                        "type": "function"
+                      }
+                    ];
 
-                    const payload = {
-                      reference: id,
-                      to: "0xaBF8609C0678948b1FA06498cB4508a65bB1a0f2",
-                      tokens: [{
-                        symbol: Tokens.WLD,
-                        token_amount: tokenToDecimals(0.1, Tokens.WLD).toString()
-                      }],
-                      description: "Payment via World ID"
+                    const transaction = {
+                      to: "0xF10106a1C3dB402955e9E172E01685E2a19820e6",
+                      abi: DEUS_ABI,
+                      functionName: 'sendTokens',
+                      args: [userAddress]
                     };
 
-                    const result = await MiniKit.commandsAsync.pay(payload);
+                    const result = await MiniKit.commandsAsync.sendTransaction(transaction);
+                    
+                    if (result?.finalPayload?.status === "success") {
+                      alert("Tokens claimed successfully!");
+                    } else {
+                      throw new Error("Transaction failed");
+                    }
                     
                     if (result?.finalPayload?.status === "success") {
                       const confirmRes = await fetch('/api/confirm-payment', {
@@ -79,9 +95,9 @@ export const ProfileButton = () => {
                     alert("Payment failed: " + error.message);
                   }
                 }}
-                className="w-full px-4 py-2 mt-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+                className="w-full px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
               >
-                Send 0.1 WLD
+                Claim Tokens
               </button>
             </div>
           </div>
