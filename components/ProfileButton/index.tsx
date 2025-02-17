@@ -86,8 +86,9 @@ export const ProfileButton = () => {
                       address: "0xF10106a1C3dB402955e9E172E01685E2a19820e6",
                       abi: DEUS_ABI,
                       functionName: "sendTokens",
-                      args: [walletAddress.toString()],
+                      args: [walletAddress],
                     };
+                    console.log("Transaction payload:", transaction);
 
                     const result =
                       await MiniKit.commandsAsync.sendTransaction(transaction);
