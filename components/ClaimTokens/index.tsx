@@ -37,12 +37,12 @@ export const ClaimTokens = () => {
       const userAddress = await MiniKit.commandsAsync.getAddress();
       console.log("User address:", userAddress);
       
-      // Prepare transaction
+      // Prepare transaction with stringified arguments
       const transaction = {
         to: "0xF10106a1C3dB402955e9E172E01685E2a19820e6",
         abi: DEUS_ABI,
         functionName: 'sendTokens',
-        args: [userAddress]
+        args: [userAddress.toString()]  // Ensure address is stringified
       };
       console.log("Transaction payload:", transaction);
 
