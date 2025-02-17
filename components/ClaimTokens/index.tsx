@@ -23,7 +23,7 @@ export const ClaimTokens = () => {
   const [claiming, setClaiming] = useState(false);
 
   const handleClaim = async () => {
-    console.log("STARTING TO CLAIM TOKENS")
+    console.log("STARTING TO CLAIM TOKENS");
     if (!MiniKit.isInstalled()) {
       console.error("MiniKit not installed");
       alert("Please install World App to claim tokens");
@@ -34,20 +34,17 @@ export const ClaimTokens = () => {
       const network = await MiniKit.commandsAsync.getNetwork();
       console.log("Current network:", network);
       
-      if (network.chainId !== "0x2330" && network.chainId !== "9008") { // WorldChain mainnet chainId
+      if (network.chainId !== "0x2330" && network.chainId !== "9008") {
         alert("Please switch to WorldChain mainnet");
         return;
       }
 
-    try {
       setClaiming(true);
       
-      // Get user's address
       console.log("Fetching user address...");
       const userAddress = await MiniKit.commandsAsync.getAddress();
       console.log("User address:", userAddress);
       
-      // Prepare simple transaction
       const transaction = {
         to: "0xF10106a1C3dB402955e9E172E01685E2a19820e6",
         abi: DEUS_ABI,
@@ -56,10 +53,8 @@ export const ClaimTokens = () => {
       };
 
       console.log("Transaction payload:", transaction);
-
-      // Send transaction through MiniKit
-      console.log("Sending transaction...");
-      const result = await MiniKit.commandsAsync.sendTransaction(sendTransactionInput);
+      
+      const result = await MiniKit.commandsAsync.sendTransaction(transaction);
       console.log("Transaction result:", result);
 
       if (result?.finalPayload?.status === "success") {
@@ -69,7 +64,7 @@ export const ClaimTokens = () => {
         console.error("Transaction failed with result:", result);
         throw new Error(`Transaction failed: ${JSON.stringify(result?.finalPayload || {})}`);
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error("Detailed claim error:", {
         message: error.message,
         stack: error.stack,
