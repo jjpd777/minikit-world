@@ -8,8 +8,16 @@ export const PrayerForm = ({
   onPrayerGenerated: (prayer: string) => void;
 }) => {
   const [language, setLanguage] = useState("en");
+  const [religion, setReligion] = useState("christian");
   const [intentions, setIntentions] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+
+  const religions = [
+    { code: "christian", icon: "✝️", name: "Christianity" },
+    { code: "jewish", icon: "✡️", name: "Judaism" },
+    { code: "islamic", icon: "☪️", name: "Islam" },
+    { code: "buddhist", icon: "☸️", name: "Buddhism" },
+  ];
 
   const languages = [
     {
@@ -125,6 +133,7 @@ export const PrayerForm = ({
         },
         body: JSON.stringify({
           language,
+          religion,
           intentions,
         }),
       });
@@ -148,6 +157,23 @@ export const PrayerForm = ({
   return (
     <form onSubmit={handleSubmit} className="w-full max-w-md space-y-4">
       <div className="flex flex-col gap-2">
+        <div className="grid grid-cols-4 gap-2 mb-4">
+          {religions.map((rel) => (
+            <button
+              key={rel.code}
+              type="button"
+              onClick={() => setReligion(rel.code)}
+              className={`p-2 rounded-lg border text-2xl ${
+                religion === rel.code
+                  ? "border-purple-500 bg-purple-500/20"
+                  : "border-transparent bg-transparent"
+              } flex flex-col items-center gap-2 hover:border-purple-500/50 transition-colors`}
+              title={rel.name}
+            >
+              {rel.icon}
+            </button>
+          ))}
+        </div>
         <div className="flex justify-center mb-4">
           <Image
             src="/bendiga_logo.png"
