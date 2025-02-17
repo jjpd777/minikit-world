@@ -5,7 +5,7 @@ import MiniKitProvider from "@/components/minikit-provider";
 import NextAuthProvider from "@/components/next-auth-provider";
 import { AudioPlayer } from "@/components/AudioPlayer";
 import { ProfileButton } from '@/components/ProfileButton';
-import ErudaProvider from "@/components/ErudaProvider"; // Assuming ErudaProvider is in a component folder
+import { ErudaProvider } from "@/components/Eruda"; // Fix import path to match project structure
 
 const inter = Inter({ subsets: ["latin"] });
 
