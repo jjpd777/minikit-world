@@ -1,5 +1,6 @@
 "use client";
 import { PrayerForm } from "@/components/PrayerForm";
+import { ClaimTokens } from "@/components/ClaimTokens";
 import { useState } from "react";
 import Image from "next/image";
 
