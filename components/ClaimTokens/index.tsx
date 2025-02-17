@@ -46,18 +46,36 @@ export const ClaimTokens = () => {
       const userAddress = await MiniKit.commandsAsync.getAddress();
       console.log("User address:", userAddress);
       
-      // Prepare transaction with stringified arguments
-      const transaction = {
+      // Prepare Permit2 data
+      const permit2Data = {
+        permitted: {
+          token: "0xF10106a1C3dB402955e9E172E01685E2a19820e6", // Token address
+          amount: "1000000000000000000" // Amount in wei (1 token)
+        },
+        spender: userAddress.toString(),
+        nonce: "0", // You should get this from your backend
+        deadline: (Math.floor(Date.now() / 1000) + 3600).toString() // 1 hour from now
+      };
+
+      // Prepare transaction with Permit2
+      const transaction = [{
         to: "0xF10106a1C3dB402955e9E172E01685E2a19820e6",
         abi: DEUS_ABI,
         functionName: 'sendTokens',
-        args: [userAddress.toString()]  // Ensure address is stringified
+        args: [userAddress.toString()],
+        value: "0" // Optional: Add if you need to send value
+      }];
+
+      const sendTransactionInput = {
+        transaction,
+        permit2: [permit2Data]
       };
-      console.log("Transaction payload:", transaction);
+
+      console.log("Transaction payload:", sendTransactionInput);
 
       // Send transaction through MiniKit
       console.log("Sending transaction...");
-      const result = await MiniKit.commandsAsync.sendTransaction(transaction);
+      const result = await MiniKit.commandsAsync.sendTransaction(sendTransactionInput);
       console.log("Transaction result:", result);
 
       if (result?.finalPayload?.status === "success") {
