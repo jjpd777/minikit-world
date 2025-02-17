@@ -7,6 +7,7 @@ import { MiniKit, tokenToDecimals, Tokens } from "@worldcoin/minikit-js";
 
 export const ProfileButton = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [walletAddress, setWalletAddress] = useState<string>("");
 
   return (
     <>
@@ -33,7 +34,7 @@ export const ProfileButton = () => {
                 </svg>
               </button>
             </div>
-            <WalletAuth />
+            <WalletAuth onAddressChange={setWalletAddress} />
             <div className="mt-4 space-y-2">
               <button
                 onClick={async () => {

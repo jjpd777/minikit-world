@@ -4,7 +4,7 @@ import { MiniKit } from "@worldcoin/minikit-js";
 import { useState } from "react";
 import Image from "next/image";
 
-export const WalletAuth = () => {
+export const WalletAuth = ({ onAddressChange }: { onAddressChange?: (address: string) => void }) => {
   const [walletAddress, setWalletAddress] = useState<string>("");
   const [balance, setBalance] = useState(0.33);
   const [loading, setLoading] = useState(false);
@@ -30,6 +30,7 @@ export const WalletAuth = () => {
       if (result?.finalPayload?.status === "success") {
         const address = result.finalPayload.address;
         setWalletAddress(address);
+        if (onAddressChange) onAddressChange(address);
         alert("Wallet authenticated successfully!");
       }
     } catch (error) {
@@ -42,6 +43,7 @@ export const WalletAuth = () => {
 
   const handleDisconnect = () => {
     setWalletAddress("");
+    if (onAddressChange) onAddressChange("");
   };
 
   const copyToClipboard = async () => {
