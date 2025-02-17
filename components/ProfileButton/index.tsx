@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { WalletAuth } from "../WalletAuth";
 import Image from "next/image";
 import { MiniKit } from "@worldcoin/minikit-js";
@@ -38,20 +38,15 @@ export const ProfileButton = () => {
     }
   };
 
-  const { isLoading: isConfirming, isSuccess: isConfirmed } = useWaitForTransactionReceipt({
-    client,
-    appConfig: {
-      app_id: process.env.NEXT_PUBLIC_APP_ID || "",
-    },
-    transactionId,
-  });
-
-  // Fetch balance when wallet is connected or transaction is confirmed
+  // Fetch balance when wallet is connected
   useEffect(() => {
     if (walletAddress) {
       fetchBalance();
     }
-  }, [walletAddress, isConfirmed]);
+  }, [walletAddress]);
+
+  const { isLoading: isConfirming, isSuccess: isConfirmed } = useWaitForTransactionReceipt({
+    client,
     appConfig: {
       app_id: process.env.NEXT_PUBLIC_APP_ID || "",
     },
