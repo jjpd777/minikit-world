@@ -2,11 +2,35 @@
 import { useState } from "react";
 import { WalletAuth } from "../WalletAuth";
 import Image from "next/image";
-import { MiniKit, tokenToDecimals, Tokens } from "@worldcoin/minikit-js";
+import { MiniKit } from "@worldcoin/minikit-js";
+import { useWaitForTransactionReceipt } from '@worldcoin/minikit-react';
+import { createPublicClient, http } from 'viem';
+
+const client = createPublicClient({
+  chain: {
+    id: 9008,
+    name: 'Worldchain',
+    network: 'worldchain',
+    nativeCurrency: { name: 'WLD', symbol: 'WLD', decimals: 18 },
+    rpcUrls: {
+      default: { http: ['https://worldchain-mainnet.g.alchemy.com/public'] }
+    }
+  },
+  transport: http('https://worldchain-mainnet.g.alchemy.com/public')
+});
 
 export const ProfileButton = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [walletAddress, setWalletAddress] = useState<string>("");
+  const [transactionId, setTransactionId] = useState<string>("");
+
+  const { isLoading: isConfirming, isSuccess: isConfirmed } = useWaitForTransactionReceipt({
+    client,
+    appConfig: {
+      app_id: process.env.NEXT_PUBLIC_APP_ID || "",
+    },
+    transactionId,
+  });
 
   return (
     <>
@@ -94,13 +118,14 @@ export const ProfileButton = () => {
                     console.log("Transaction payload:", commandPayload);
                     const result = { finalPayload };
 
-                    if (result?.finalPayload?.status === "success") {
-                      alert("Tokens claimed successfully!");
-                    } else {
+                    if (finalPayload.status === "error") {
+                      console.error("Error sending transaction", finalPayload);
                       throw new Error("Transaction failed");
+                    } else {
+                      setTransactionId(finalPayload.transaction_id);
                     }
 
-                    if (result?.finalPayload?.status === "success") {
+                    if (finalPayload.status === "success") {
                       const confirmRes = await fetch("/api/confirm-payment", {
                         method: "POST",
                         headers: { "Content-Type": "application/json" },
@@ -121,8 +146,14 @@ export const ProfileButton = () => {
                 }}
                 className="w-full px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
               >
-                Claim Tokens
+                {isConfirming ? "Confirming..." : isConfirmed ? "Tokens Claimed!" : "Claim Tokens"}
               </button>
+              {transactionId && (
+                <div className="mt-2 text-sm text-gray-300">
+                  {isConfirming && "Waiting for confirmation..."}
+                  {isConfirmed && "Transaction confirmed!"}
+                </div>
+              )}
             </div>
           </div>
         </div>
