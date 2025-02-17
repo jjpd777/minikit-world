@@ -23,6 +23,7 @@ export const ClaimTokens = () => {
   const [claiming, setClaiming] = useState(false);
 
   const handleClaim = async () => {
+    console.log("STARTING TO CLAIM TOKENS")
     if (!MiniKit.isInstalled()) {
       console.error("MiniKit not installed");
       alert("Please install World App to claim tokens");
