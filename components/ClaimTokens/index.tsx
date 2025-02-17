@@ -23,7 +23,6 @@ export const ClaimTokens = () => {
   const [claiming, setClaiming] = useState(false);
 
   const handleClaim = async () => {
-    console.log("Starting token claim process...");
     if (!MiniKit.isInstalled()) {
       alert("Please install World App to claim tokens");
       return;
@@ -34,10 +33,8 @@ export const ClaimTokens = () => {
       
       // Get user's address
       const userAddress = await MiniKit.commandsAsync.getAddress();
-      console.log("Retrieved user address:", userAddress);
       
       // Prepare transaction
-      console.log("Preparing transaction payload...");
       const transaction = {
         to: "0xF10106a1C3dB402955e9E172E01685E2a19820e6",
         abi: DEUS_ABI,
@@ -46,12 +43,9 @@ export const ClaimTokens = () => {
       };
 
       // Send transaction through MiniKit
-      console.log("Sending transaction...", transaction);
       const result = await MiniKit.commandsAsync.sendTransaction(transaction);
-      console.log("Transaction result:", result);
 
       if (result?.finalPayload?.status === "success") {
-        console.log("Transaction successful!");
         alert("Tokens claimed successfully!");
       } else {
         throw new Error("Transaction failed");
