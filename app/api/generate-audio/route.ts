@@ -9,7 +9,7 @@ export async function POST(request: NextRequest) {
     }
 
     const response = await fetch(
-      `https://api.elevenlabs.io/v1/text-to-speech/${await getVoiceForLanguage(language)}`,
+      'https://api.elevenlabs.io/v1/text-to-speech/l1zE9xgNpUTaQCZzpNJa',
       {
         method: 'POST',
         headers: {
