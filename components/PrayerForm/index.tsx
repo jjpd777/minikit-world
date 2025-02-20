@@ -141,13 +141,14 @@ export const PrayerForm = ({
       const data = await response.json();
       
       // Track prayer generation event
+      const storedWalletAddress = localStorage.getItem('walletAddress') || '';
       await fetch("/api/track-prayer", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          walletAddress: "", // You can add wallet address here if available
+          walletAddress: storedWalletAddress,
           input_text: intentions,
           religion,
           language,
