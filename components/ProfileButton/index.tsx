@@ -107,7 +107,7 @@ export const ProfileButton = () => {
               </div>
             )}
             <div className="mt-4 space-y-2">
-              <button
+              { walletAddress && <button
                 onClick={async () => {
                   if (!MiniKit.isInstalled()) {
                     alert("Please install World App to claim tokens");
@@ -117,27 +117,23 @@ export const ProfileButton = () => {
 
                   try {
                     const DEUS_ABI = [
-                      {
-                        inputs: [
-                          {
-                            internalType: "address",
-                            name: "requester",
-                            type: "address",
-                          },
-                        ],
-                        name: "sendTokens",
-                        outputs: [],
-                        stateMutability: "nonpayable",
-                        type: "function",
-                      },
-                    ];
-
+                        {
+                          inputs: [],
+                          name: "claimTokens",
+                          outputs: [],
+                          stateMutability: "nonpayable",
+                          type: "function",
+                        },
+                      ];
+                    //0x0E384B20618D355552A005509eA2E814198CBBdE
+/// CHECKPOINT TO REVERT TO
+                    /// CHECKPOINT
                     const { commandPayload, finalPayload } = await MiniKit.commandsAsync.sendTransaction({
                       transaction: [{
-                        address: "0xF10106a1C3dB402955e9E172E01685E2a19820e6",
+                        address: "0x0E384B20618D355552A005509eA2E814198CBBdE",
                         abi: DEUS_ABI,
-                        functionName: "sendTokens",
-                        args: [walletAddress]
+                        functionName: "claimTokens",
+                        args: [] // empty array since claimTokens doesn't take any parameters
                       }]
                     });
                     
@@ -162,7 +158,7 @@ export const ProfileButton = () => {
                 className="w-full px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
               >
                 {isConfirming ? "Confirming..." : isConfirmed ? "Tokens Claimed!" : "Claim Tokens"}
-              </button>
+              </button>}
               {transactionId && (
                 <div className="mt-2 text-sm text-gray-300">
                   {isConfirming && "Waiting for confirmation..."}
