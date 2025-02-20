@@ -1,46 +1,12 @@
 "use client";
 import { MiniKit, VerificationLevel } from "@worldcoin/minikit-js";
 import Image from "next/image";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { WalletAuth } from "@/components/WalletAuth";
 
 export const SignIn = () => {
   const [isVerifying, setIsVerifying] = useState(false);
-  const [walletAddress, setWalletAddress] = useState<string>("");
   const router = useRouter();
-
-  useEffect(() => {
-    // Check for stored wallet address on component mount
-    const storedAddress = localStorage.getItem('wallet_address');
-    if (storedAddress) {
-      setWalletAddress(storedAddress);
-    }
-  }, []);
-
-  const handleWalletConnection = (address: string) => {
-    localStorage.setItem('wallet_address', address);
-    setWalletAddress(address);
-  };
-
-  if (!walletAddress) {
-    return (
-      <div className="flex flex-col items-center gap-4">
-        <Image
-          src="/bendiga_logo.png"
-          alt="Bendiga Logo"
-          width={200}
-          height={200}
-          priority
-          className="mb-8 animate-glow"
-        />
-        <div className="relative">
-          <div className="absolute inset-0 rounded-full animate-pulse bg-purple-500/20 filter blur-xl"></div>
-        </div>
-        <WalletAuth onAddressChange={handleWalletConnection} />
-      </div>
-    );
-  }
 
   return (
     <>
@@ -124,7 +90,7 @@ export const SignIn = () => {
             const itemsPerPage = 3;
             const bookmarked = JSON.parse(localStorage.getItem('bookmarkedAudios') || '[]');
             const totalPages = Math.ceil(bookmarked.length / itemsPerPage);
-            
+
             const currentItems = bookmarked.slice(
               (currentPage - 1) * itemsPerPage,
               currentPage * itemsPerPage
