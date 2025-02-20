@@ -121,11 +121,22 @@ export const PrayerForm = ({
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  import { trackPrayer } from '@/lib/prayer-tracker';
+
+const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
 
     try {
+      // Track the prayer
+      await trackPrayer({
+        walletAddress: localStorage.getItem('walletAddress') || '',
+        unix_timestamp: Math.floor(Date.now() / 1000),
+        timestamp: new Date().toISOString(),
+        input_text: intentions,
+        religion,
+        language
+      });
       const response = await fetch("/api/generate-prayer", {
         method: "POST",
         headers: {
