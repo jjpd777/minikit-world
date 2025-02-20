@@ -157,6 +157,18 @@ export const PrayerForm = ({
   return (
     <form onSubmit={handleSubmit} className="w-full max-w-md space-y-4">
       <div className="flex flex-col gap-2">
+     
+        <div className="flex justify-center mb-4">
+          <Image
+            src="/bendiga_logo.png"
+            alt="Bendiga Logo"
+            width={150}
+            height={150}
+            priority
+            className="animate-glow"
+            style={{ marginTop:'-60px', marginBottom: "-22px" }}
+          />
+        </div>
         <div className="grid grid-cols-4 gap-2 mb-4">
           {religions.map((rel) => (
             <button
@@ -173,17 +185,6 @@ export const PrayerForm = ({
               {rel.icon}
             </button>
           ))}
-        </div>
-        <div className="flex justify-center mb-4">
-          <Image
-            src="/bendiga_logo.png"
-            alt="Bendiga Logo"
-            width={150}
-            height={150}
-            priority
-            className="animate-glow"
-            style={{ marginTop:'-60px', marginBottom: "-22px" }}
-          />
         </div>
         <div className="grid grid-cols-3 gap-2">
           {languages.map((lang) => (
