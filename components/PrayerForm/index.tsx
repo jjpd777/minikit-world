@@ -121,22 +121,11 @@ export const PrayerForm = ({
     }
   };
 
-  import { trackPrayer } from '@/lib/prayer-tracker';
-
-const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
 
     try {
-      // Track the prayer
-      await trackPrayer({
-        walletAddress: localStorage.getItem('walletAddress') || '',
-        unix_timestamp: Math.floor(Date.now() / 1000),
-        timestamp: new Date().toISOString(),
-        input_text: intentions,
-        religion,
-        language
-      });
       const response = await fetch("/api/generate-prayer", {
         method: "POST",
         headers: {
@@ -168,18 +157,6 @@ const handleSubmit = async (e: React.FormEvent) => {
   return (
     <form onSubmit={handleSubmit} className="w-full max-w-md space-y-4">
       <div className="flex flex-col gap-2">
-     
-        <div className="flex justify-center mb-4">
-          <Image
-            src="/bendiga_logo.png"
-            alt="Bendiga Logo"
-            width={150}
-            height={150}
-            priority
-            className="animate-glow"
-            style={{ marginTop:'-60px', marginBottom: "-22px" }}
-          />
-        </div>
         <div className="grid grid-cols-4 gap-2 mb-4">
           {religions.map((rel) => (
             <button
@@ -196,6 +173,17 @@ const handleSubmit = async (e: React.FormEvent) => {
               {rel.icon}
             </button>
           ))}
+        </div>
+        <div className="flex justify-center mb-4">
+          <Image
+            src="/bendiga_logo.png"
+            alt="Bendiga Logo"
+            width={150}
+            height={150}
+            priority
+            className="animate-glow"
+            style={{ marginTop:'-60px', marginBottom: "-22px" }}
+          />
         </div>
         <div className="grid grid-cols-3 gap-2">
           {languages.map((lang) => (
