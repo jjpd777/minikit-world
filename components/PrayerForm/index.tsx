@@ -139,6 +139,21 @@ export const PrayerForm = ({
       });
 
       const data = await response.json();
+      
+      // Track prayer generation event
+      await fetch("/api/track-prayer", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          walletAddress: "", // You can add wallet address here if available
+          input_text: intentions,
+          religion,
+          language,
+        }),
+      });
+
       onPrayerGenerated(data.prayer);
 
       // Store audio data

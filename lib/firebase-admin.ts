@@ -1,6 +1,7 @@
 
 import { initializeApp, getApp, cert } from "firebase-admin/app";
 import { getStorage } from "firebase-admin/storage";
+import { getDatabase } from "firebase-admin/database";
 
 let serviceAccount;
 try {
@@ -14,7 +15,8 @@ let app;
 try {
   app = initializeApp({
     credential: cert(serviceAccount),
-    storageBucket: "gs://bendiga-4d926.firebasestorage.app"
+    storageBucket: "gs://bendiga-4d926.firebasestorage.app",
+    databaseURL: "https://bendiga-4d926-default-rtdb.firebaseio.com"
   });
 } catch (error) {
   if (error.code === 'app/duplicate-app') {
@@ -27,6 +29,7 @@ try {
 
 export const storage = getStorage(app);
 export const bucket = storage.bucket();
+export const database = getDatabase(app);
 
 // Add error recovery
 const getValidBucket = async () => {
