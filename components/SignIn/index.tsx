@@ -143,6 +143,17 @@ export const SignIn = () => {
               {isVerifying ? "Verifying..." : "Verify with World ID"}
             </button>
 
+            <button
+              onClick={() => {
+                localStorage.removeItem('walletAddress');
+                setWalletAddress('');
+                handleAddressChange(''); // Call to update the state consistently
+              }}
+              className="px-4 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 text-sm"
+            >
+              Clear Storage
+            </button>
+
             {bookmarkedFiles.length > 0 && (
               <div className="mt-4 w-full">
                 <div className="max-h-80 overflow-y-auto bg-purple-900/20 p-4 rounded-lg">
@@ -152,8 +163,8 @@ export const SignIn = () => {
                     .map((file, index) => {
                       const globalIndex = bookmarkedFiles.length - (currentPage * filesPerPage + index);
                       return (
-                        <div 
-                          key={index} 
+                        <div
+                          key={index}
                           onClick={() => playAudioFile(file)}
                           className="text-white text-sm mb-2 p-2 bg-purple-800/20 rounded cursor-pointer hover:bg-purple-700/20"
                         >
@@ -163,10 +174,10 @@ export const SignIn = () => {
                     })}
                 </div>
                 {selectedAudioFile && (
-                  <audio 
-                    controls 
+                  <audio
+                    controls
                     src={selectedAudioFile}
-                    className="mt-4 w-full" 
+                    className="mt-4 w-full"
                     autoPlay
                   />
                 )}
@@ -193,10 +204,10 @@ export const SignIn = () => {
             )}
 
             {audioUrl && (
-              <audio 
-                controls 
+              <audio
+                controls
                 src={audioUrl}
-                className="mt-4 w-full" 
+                className="mt-4 w-full"
               />
             )}
           </>
