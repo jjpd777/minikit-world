@@ -114,6 +114,62 @@ export const SignIn = () => {
           {isVerifying ? "Verifying..." : "Verify with World ID"}
         </button>
       </div>
+
+      {/* Display stored audio tracks with pagination */}
+      <div className="mt-8">
+        <h3 className="text-white text-lg mb-4">Your Saved Prayers</h3>
+        {(() => {
+          try {
+            const [currentPage, setCurrentPage] = useState(1);
+            const itemsPerPage = 3;
+            const bookmarked = JSON.parse(localStorage.getItem('bookmarkedAudios') || '[]');
+            const totalPages = Math.ceil(bookmarked.length / itemsPerPage);
+            
+            const currentItems = bookmarked.slice(
+              (currentPage - 1) * itemsPerPage,
+              currentPage * itemsPerPage
+            );
+
+            return bookmarked.length > 0 ? (
+              <>
+                <div className="space-y-4">
+                  {currentItems.map((path: string, index: number) => (
+                    <div key={index} className="bg-purple-500/20 p-4 rounded-lg">
+                      <audio controls src={`/api/upload-audio?file=${encodeURIComponent(path)}`} className="w-full" />
+                    </div>
+                  ))}
+                </div>
+                {totalPages > 1 && (
+                  <div className="flex justify-center gap-2 mt-4">
+                    <button
+                      onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                      disabled={currentPage === 1}
+                      className="px-3 py-1 bg-purple-500/50 rounded-lg disabled:opacity-50"
+                    >
+                      Previous
+                    </button>
+                    <span className="text-white px-2">
+                      {currentPage} / {totalPages}
+                    </span>
+                    <button
+                      onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                      disabled={currentPage === totalPages}
+                      className="px-3 py-1 bg-purple-500/50 rounded-lg disabled:opacity-50"
+                    >
+                      Next
+                    </button>
+                  </div>
+                )}
+              </>
+            ) : (
+              <p className="text-gray-400">No saved prayers yet</p>
+            );
+          } catch (error) {
+            console.error('Error loading bookmarked audios:', error);
+            return <p className="text-red-400">Error loading saved prayers</p>;
+          }
+        })()}
+      </div>
     </>
   );
 };
