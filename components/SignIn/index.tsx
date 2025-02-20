@@ -114,30 +114,6 @@ export const SignIn = () => {
           {isVerifying ? "Verifying..." : "Verify with World ID"}
         </button>
       </div>
-
-      {/* Display stored audio tracks */}
-      <div className="mt-8">
-        <h3 className="text-white text-lg mb-4">Your Saved Prayers</h3>
-        {(() => {
-          try {
-            const bookmarked = JSON.parse(localStorage.getItem('bookmarkedAudios') || '[]');
-            return bookmarked.length > 0 ? (
-              <div className="space-y-4">
-                {bookmarked.map((path: string, index: number) => (
-                  <div key={index} className="bg-purple-500/20 p-4 rounded-lg">
-                    <audio controls src={`/api/upload-audio?file=${encodeURIComponent(path)}`} className="w-full" />
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <p className="text-gray-400">No saved prayers yet</p>
-            );
-          } catch (error) {
-            console.error('Error loading bookmarked audios:', error);
-            return <p className="text-red-400">Error loading saved prayers</p>;
-          }
-        })()}
-      </div>
     </>
   );
 };
