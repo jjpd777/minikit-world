@@ -1,8 +1,6 @@
 "use client";
 import { useState } from "react";
 import Image from "next/image";
-import { trackPrayer } from '@/lib/prayer-tracker';
-
 
 export const PrayerForm = ({
   onPrayerGenerated,
@@ -123,6 +121,7 @@ export const PrayerForm = ({
     }
   };
 
+  import { trackPrayer } from '@/lib/prayer-tracker';
 
 const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
