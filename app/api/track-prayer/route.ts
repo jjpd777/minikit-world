@@ -1,13 +1,10 @@
 
 import { NextRequest, NextResponse } from 'next/server';
-import { getDatabase } from 'firebase-admin/database';
-import '../../../lib/firebase-admin';
+import { db } from '../../../lib/firebase-admin';
 
 export async function POST(request: NextRequest) {
   try {
     const data = await request.json();
-    const db = getDatabase();
-    const prayerEventsRef = db.ref('prayer_events');
     
     const eventData = {
       walletAddress: data.walletAddress || '',
@@ -18,7 +15,7 @@ export async function POST(request: NextRequest) {
       language: data.language || '',
     };
 
-    await prayerEventsRef.push(eventData);
+    await db.collection('prayer_events').add(eventData);
 
     return NextResponse.json({ success: true });
   } catch (error) {

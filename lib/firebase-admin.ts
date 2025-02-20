@@ -1,7 +1,7 @@
 
 import { initializeApp, getApp, cert } from "firebase-admin/app";
 import { getStorage } from "firebase-admin/storage";
-import { getDatabase } from "firebase-admin/database";
+import { getFirestore } from "firebase-admin/firestore";
 
 let serviceAccount;
 try {
@@ -29,7 +29,7 @@ try {
 
 export const storage = getStorage(app);
 export const bucket = storage.bucket();
-export const database = getDatabase(app);
+export const db = getFirestore(app);
 
 // Add error recovery
 const getValidBucket = async () => {
