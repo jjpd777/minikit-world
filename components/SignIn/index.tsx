@@ -63,10 +63,12 @@ export const SignIn = () => {
     }
   };
 
+  const [trackingComplete, setTrackingComplete] = useState(false);
+  
   const handlePlayGame = async () => {
     const walletAddress = localStorage.getItem('walletAddress') || '';
     try {
-      await fetch('/api/track-gameplay', {
+      const response = await fetch('/api/track-gameplay', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -77,11 +79,17 @@ export const SignIn = () => {
           unix_timestamp: Date.now(),
         }),
       });
-      await router.push('/gameplay');
+      
+      if (response.ok) {
+        setTrackingComplete(true);
+      }
     } catch (error) {
       console.error('Failed to track game start:', error);
-      router.push('/gameplay');
     }
+  };
+
+  const handleStartGame = () => {
+    router.push('/gameplay');
   };
 
   return (
@@ -99,12 +107,21 @@ export const SignIn = () => {
       </div>
 
       <div className="flex flex-col gap-4">
-        <button
-          onClick={handlePlayGame}
-          className="px-6 py-3 bg-green-600 text-white rounded-xl hover:bg-green-700 transition-colors duration-200"
-        >
-          Play Game
-        </button>
+        {!trackingComplete ? (
+          <button
+            onClick={handlePlayGame}
+            className="px-6 py-3 bg-green-600 text-white rounded-xl hover:bg-green-700 transition-colors duration-200"
+          >
+            Play Game!
+          </button>
+        ) : (
+          <button
+            onClick={handleStartGame}
+            className="px-6 py-3 bg-purple-600 text-white rounded-xl hover:bg-purple-700 transition-colors duration-200 animate-pulse"
+          >
+            Let's Go
+          </button>
+        )}
         {!walletAddress ? (
           <WalletAuth onAddressChange={handleAddressChange} />
         ) : (
