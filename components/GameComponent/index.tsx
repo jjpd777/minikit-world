@@ -224,7 +224,7 @@ const GameComponent = () => {
   }, [gameOver]);
 
   return (
-    <div className="relative w-full max-w-lg mx-auto">
+    <div className="relative w-full max-w-lg mx-auto flex flex-col items-center">
       <canvas
         ref={canvasRef}
         width={Math.min(BOARD_WIDTH * BLOCK_SIZE * 3, window.innerWidth - 32)}  
