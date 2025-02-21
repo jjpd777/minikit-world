@@ -13,7 +13,6 @@ const GameComponent = () => {
   const [gameOver, setGameOver] = useState(false);
   const [score, setScore] = useState(0);
   const filesPerPage = 5;
-  const [hasTrackedStart, setHasTrackedStart] = useState(false);
 
   useEffect(() => {
     const loadBookmarkedFiles = () => {
@@ -46,30 +45,6 @@ const GameComponent = () => {
     }
   };
 
-  useEffect(() => {
-    const trackGameStart = async () => {
-      if (!hasTrackedStart) {
-        const walletAddress = localStorage.getItem('walletAddress') || '';
-        try {
-          await fetch('/api/track-gameplay', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              walletAddress,
-              timestamp: new Date().toISOString(),
-              unix_timestamp: Date.now(),
-            }),
-          });
-          setHasTrackedStart(true);
-        } catch (error) {
-          console.error('Failed to track game start:', error);
-        }
-      }
-    };
-    trackGameStart();
-  }, [hasTrackedStart]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
