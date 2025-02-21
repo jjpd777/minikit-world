@@ -93,7 +93,9 @@ export default function VerifiedPage() {
                     body: JSON.stringify({
                       walletAddress: storedWalletAddress,
                       input_text: prayer,
-                      source: 'whatsapp'
+                      source: 'whatsapp',
+                      llm_response: prayer,
+                      voice_generation: hasGeneratedAudio
                     }),
                   });
                 }}

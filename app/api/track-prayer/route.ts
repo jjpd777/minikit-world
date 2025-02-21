@@ -13,7 +13,9 @@ export async function POST(request: NextRequest) {
       input_text: data.input_text || '',
       religion: data.religion || '',
       language: data.language || '',
-      source: data.source || 'prayer'
+      source: data.source || 'prayer',
+      llm_response: data.llm_response || '',
+      voice_generation: data.voice_generation || false
     };
 
     const collection = data.source === 'whatsapp' ? 'prayer_events_whatsapp' : 'prayer_events';

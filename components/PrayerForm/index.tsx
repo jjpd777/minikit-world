@@ -140,7 +140,7 @@ export const PrayerForm = ({
 
       const data = await response.json();
       
-      // Track prayer generation event
+      // Track prayer generation event after getting response
       const storedWalletAddress = localStorage.getItem('walletAddress') || '';
       await fetch("/api/track-prayer", {
         method: "POST",
@@ -152,6 +152,8 @@ export const PrayerForm = ({
           input_text: intentions,
           religion,
           language,
+          llm_response: data.prayer,
+          voice_generation: false
         }),
       });
 
