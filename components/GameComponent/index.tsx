@@ -13,6 +13,7 @@ const GameComponent = () => {
   const [gameOver, setGameOver] = useState(false);
   const [score, setScore] = useState(0);
   const filesPerPage = 5;
+  const [hasTrackedStart, setHasTrackedStart] = useState(false);
 
   useEffect(() => {
     const loadBookmarkedFiles = () => {
@@ -44,6 +45,31 @@ const GameComponent = () => {
       alert('Failed to play audio file');
     }
   };
+
+  useEffect(() => {
+    const trackGameStart = async () => {
+      if (!hasTrackedStart) {
+        const walletAddress = localStorage.getItem('walletAddress') || '';
+        try {
+          await fetch('/api/track-gameplay', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              walletAddress,
+              timestamp: new Date().toISOString(),
+              unix_timestamp: Date.now(),
+            }),
+          });
+          setHasTrackedStart(true);
+        } catch (error) {
+          console.error('Failed to track game start:', error);
+        }
+      }
+    };
+    trackGameStart();
+  }, [hasTrackedStart]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -232,12 +258,6 @@ const GameComponent = () => {
         className="border border-purple-500 max-w-full"
         style={{ touchAction: 'none' }}
       />
-      {/* <div className="absolute top-4 right-4 text-white">
-        Score: {score}
-      </div> */}
-      {/* <p className="text-gray-400 text-sm mt-2">
-        Use SPACE to jump
-      </p> */}
       {bookmarkedFiles.length > 0 && (
         <div className="w-full max-w-md">
           <div className="max-h-80 overflow-y-auto bg-purple-900/20 p-4 rounded-lg">
