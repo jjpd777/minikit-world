@@ -22,6 +22,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
+        <ErudaProvider /> 
         <ProfileButton />
         <NextAuthProvider>
           <MiniKitProvider>
@@ -29,7 +30,7 @@ export default function RootLayout({
             <AudioPlayer />
           </MiniKitProvider>
         </NextAuthProvider>
-      </body>
+      </body>rel
     </html>
   );
 }
