@@ -7,17 +7,43 @@ const BLOCK_SIZE = 30;
 
 const GameComponent = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [prayers, setPrayers] = useState<{text: string, timestamp: string}[]>([]);
+  const [bookmarkedFiles, setBookmarkedFiles] = useState<string[]>([]);
+  const [selectedAudioFile, setSelectedAudioFile] = useState<string | null>(null);
+  const [currentPage, setCurrentPage] = useState(0);
   const [gameOver, setGameOver] = useState(false);
   const [score, setScore] = useState(0);
+  const filesPerPage = 5;
 
   useEffect(() => {
-    // Get stored prayers on component mount
-    const storedPrayers = localStorage.getItem('prayers');
-    if (storedPrayers) {
-      setPrayers(JSON.parse(storedPrayers));
-    }
+    const loadBookmarkedFiles = () => {
+      const bookmarked = JSON.parse(localStorage.getItem('bookmarkedAudios') || '[]');
+      setBookmarkedFiles(bookmarked);
+    };
+
+    loadBookmarkedFiles();
+    window.addEventListener('storage', loadBookmarkedFiles);
+    return () => window.removeEventListener('storage', loadBookmarkedFiles);
   }, []);
+
+  const playAudioFile = async (gsPath: string) => {
+    try {
+      const filePath = gsPath.replace(/^gs:\/\/[^/]+\//, '');
+      const response = await fetch(`/api/upload-audio?file=${encodeURIComponent(filePath)}`, {
+        method: 'GET'
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch audio file');
+      }
+
+      const blob = await response.blob();
+      const url = URL.createObjectURL(blob);
+      setSelectedAudioFile(url);
+    } catch (error) {
+      console.error('Error playing audio file:', error);
+      alert('Failed to play audio file');
+    }
+  };
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -158,29 +184,66 @@ const GameComponent = () => {
       />
       {gameOver && (
         <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/80">
-          <p className="text-white text-2xl mb-4">Game Over! Score: {score}</p>
+          <h2 className="text-3xl font-bold text-white mb-4">Game Over!</h2>
+          <p className="text-xl text-white mb-4">Score: {score}</p>
           <button
-            onClick={handleRestart}
-            className="px-4 py-2 bg-purple-600 text-white rounded hover:bg-purple-700"
+            onClick={() => window.location.reload()}
+            className="px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600"
           >
             Play Again
           </button>
         </div>
       )}
-      <div className="w-full max-w-md space-y-4">
-        <h2 className="text-xl font-bold text-white text-center">Your Prayers</h2>
-        <div className="space-y-2">
-          {prayers.map((prayer, index) => (
-            <div
-              key={index}
-              className="p-4 rounded-lg bg-gray-800 text-white"
+
+      {bookmarkedFiles.length > 0 && (
+        <div className="w-full max-w-md">
+          <div className="max-h-80 overflow-y-auto bg-purple-900/20 p-4 rounded-lg">
+            {[...bookmarkedFiles]
+              .reverse()
+              .slice(currentPage * filesPerPage, (currentPage + 1) * filesPerPage)
+              .map((file, index) => {
+                const globalIndex = bookmarkedFiles.length - (currentPage * filesPerPage + index);
+                return (
+                  <div
+                    key={index}
+                    onClick={() => playAudioFile(file)}
+                    className="text-white text-sm mb-2 p-2 bg-purple-800/20 rounded cursor-pointer hover:bg-purple-700/20"
+                  >
+                    🎵 Prayer #{globalIndex}
+                  </div>
+                );
+              })}
+          </div>
+          {selectedAudioFile && (
+            <audio
+              controls
+              src={selectedAudioFile}
+              className="mt-4 w-full"
+              autoPlay
+            />
+          )}
+          <div className="flex justify-between mt-4">
+            <button
+              onClick={() => setCurrentPage(prev => Math.max(0, prev - 1))}
+              disabled={currentPage === 0}
+              className="px-4 py-2 bg-purple-400/80 text-white rounded-lg disabled:opacity-50"
             >
-              <p className="mb-2">{prayer.text}</p>
-              <p className="text-sm text-gray-400">{prayer.timestamp}</p>
-            </div>
-          ))}
+              Previous
+            </button>
+            <span className="text-white">
+              Page {currentPage + 1} of {Math.ceil(bookmarkedFiles.length / filesPerPage)}
+            </span>
+            <button
+              onClick={() => setCurrentPage(prev => Math.min(Math.ceil(bookmarkedFiles.length / filesPerPage) - 1, prev + 1))}
+              disabled={currentPage >= Math.ceil(bookmarkedFiles.length / filesPerPage) - 1}
+              className="px-4 py-2 bg-purple-400/80 text-white rounded-lg disabled:opacity-50"
+            >
+              Next
+            </button>
+          </div>
         </div>
-      </div>
+      )}
+
       <p className="text-white mt-2">Score: {score}</p>
       <p className="text-gray-400 text-sm mt-2">
         Press SPACE or click to jump
