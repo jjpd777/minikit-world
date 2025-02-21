@@ -59,8 +59,8 @@ export const ProfileButton = () => {
   });
 
   return (
-    <>
-      <button
+    <> {
+      walletAddress ? <> <button
         onClick={() => setIsOpen(true)}
         className="fixed top-4 left-4 p-2 rounded-full bg-purple-500/30 hover:bg-purple-500/50 transition-all z-50"
       >
@@ -105,7 +105,7 @@ export const ProfileButton = () => {
                 </svg>
               </button>
             </div>
-            <WalletAuth onAddressChange={setWalletAddress} />
+            {/* <WalletAuth onAddressChange={setWalletAddress} /> */}
             {walletAddress && (
               <div className="mt-2 text-sm text-gray-300">
                 Token Balance: {tokenBalance}
@@ -139,7 +139,7 @@ export const ProfileButton = () => {
                           args: [] // empty array since c
                       }]
                     });
-                    
+
                     console.log("Transaction payload:", commandPayload);
                     const result = { finalPayload };
 
@@ -171,7 +171,9 @@ export const ProfileButton = () => {
             </div>
           </div>
         </div>
-      )}
+      )}</> : <></>
+    }
+      
     </>
   );
 };
