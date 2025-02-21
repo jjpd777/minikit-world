@@ -132,9 +132,41 @@ const GameComponent = () => {
       // Clear canvas
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      // Draw player
-      ctx.fillStyle = '#4CAF50';
-      ctx.fillRect(player.x, playerY, player.width, player.height);
+      // Draw player glow effect
+      const gradient = ctx.createRadialGradient(
+        player.x + player.width/2, 
+        playerY + player.height/2, 
+        player.width/4,
+        player.x + player.width/2, 
+        playerY + player.height/2, 
+        player.width
+      );
+      gradient.addColorStop(0, 'rgba(255, 255, 255, 0.8)');
+      gradient.addColorStop(0.4, 'rgba(255, 255, 150, 0.4)');
+      gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
+      
+      ctx.fillStyle = gradient;
+      ctx.beginPath();
+      ctx.arc(
+        player.x + player.width/2,
+        playerY + player.height/2,
+        player.width,
+        0,
+        Math.PI * 2
+      );
+      ctx.fill();
+
+      // Draw player circle
+      ctx.fillStyle = '#FFD700';
+      ctx.beginPath();
+      ctx.arc(
+        player.x + player.width/2,
+        playerY + player.height/2,
+        player.width/2,
+        0,
+        Math.PI * 2
+      );
+      ctx.fill();
 
       // Draw obstacles
       ctx.fillStyle = '#F44336';
