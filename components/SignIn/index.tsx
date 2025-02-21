@@ -64,7 +64,7 @@ export const SignIn = () => {
   };
 
   const [trackingComplete, setTrackingComplete] = useState(false);
-  
+
   const handlePlayGame = async () => {
     const walletAddress = localStorage.getItem('walletAddress') || '';
     try {
@@ -79,7 +79,7 @@ export const SignIn = () => {
           unix_timestamp: Date.now(),
         }),
       });
-      
+
       if (response.ok) {
         setTrackingComplete(true);
       }
