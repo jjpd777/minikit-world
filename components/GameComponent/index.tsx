@@ -58,36 +58,33 @@ const GameComponent = () => {
     let velocityY = 0;
     let velocityX = 0;
     const gravity = 0.4;
-    const jumpForce = -10;
-    const moveSpeed = 5;
+    const jumpForce = -15;
     let platforms: { x: number; y: number; width: number; height: number }[] = [];
     let isJumping = false;
+    let consecutiveJumps = 0;
+    const maxConsecutiveJumps = 2;
 
     const player = {
       width: 25,
       height: 25,
     };
 
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.code === 'Space' && !isJumping) {
-        velocityY = jumpForce;
+    const handleJump = () => {
+      if (consecutiveJumps < maxConsecutiveJumps) {
+        velocityY = jumpForce * (consecutiveJumps + 1);
         isJumping = true;
-      }
-      if (e.code === 'ArrowLeft') {
-        velocityX = -moveSpeed;
-      }
-      if (e.code === 'ArrowRight') {
-        velocityX = moveSpeed;
+        consecutiveJumps++;
       }
     };
 
-    const handleKeyUp = (e: KeyboardEvent) => {
-      if (e.code === 'ArrowLeft' && velocityX < 0) {
-        velocityX = 0;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.code === 'Space') {
+        handleJump();
       }
-      if (e.code === 'ArrowRight' && velocityX > 0) {
-        velocityX = 0;
-      }
+    };
+
+    const handleTouch = () => {
+      handleJump();
     };
 
     const addPlatform = () => {
@@ -107,7 +104,6 @@ const GameComponent = () => {
       // Update player
       velocityY += gravity;
       playerY += velocityY;
-      playerX += velocityX;
 
       // Keep player in bounds
       if (playerX < 0) playerX = 0;
@@ -118,6 +114,7 @@ const GameComponent = () => {
         playerY = canvas.height - player.height;
         velocityY = 0;
         isJumping = false;
+        consecutiveJumps = 0;
       }
 
       // Update platforms
@@ -135,6 +132,7 @@ const GameComponent = () => {
             playerY = platform.y - player.height;
             velocityY = 0;
             isJumping = false;
+            consecutiveJumps = 0;
           }
         }
 
@@ -214,12 +212,13 @@ const GameComponent = () => {
     };
 
     window.addEventListener('keydown', handleKeyDown);
-    window.addEventListener('keyup', handleKeyUp);
+    canvas.addEventListener('touchstart', handleTouch);
+
     gameLoop();
 
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
-      window.removeEventListener('keyup', handleKeyUp);
+      canvas.removeEventListener('touchstart', handleTouch);
       cancelAnimationFrame(animationFrameId);
     };
   }, [gameOver]);
@@ -236,7 +235,7 @@ const GameComponent = () => {
         Score: {score}
       </div>
       <p className="text-gray-400 text-sm mt-2">
-        Use SPACE to jump, LEFT/RIGHT arrows to move
+        Use SPACE to jump
       </p>
       {bookmarkedFiles.length > 0 && (
         <div className="w-full max-w-md">
