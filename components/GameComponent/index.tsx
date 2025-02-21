@@ -2,7 +2,7 @@
 import { useRef, useEffect, useState } from 'react';
 
 const BOARD_WIDTH = 10;
-const BOARD_HEIGHT = 20;
+const BOARD_HEIGHT = 10;
 const BLOCK_SIZE = 30;
 
 const GameComponent = () => {
