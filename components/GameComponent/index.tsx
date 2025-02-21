@@ -227,9 +227,10 @@ const GameComponent = () => {
     <div className="relative w-full max-w-lg mx-auto">
       <canvas
         ref={canvasRef}
-        width={BOARD_WIDTH * BLOCK_SIZE * 3}
+        width={Math.min(BOARD_WIDTH * BLOCK_SIZE * 3, window.innerWidth - 32)}  
         height={BOARD_HEIGHT * BLOCK_SIZE}
-        className="border border-purple-500"
+        className="border border-purple-500 max-w-full"
+        style={{ touchAction: 'none' }}
       />
       {/* <div className="absolute top-4 right-4 text-white">
         Score: {score}
