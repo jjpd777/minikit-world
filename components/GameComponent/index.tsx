@@ -13,7 +13,25 @@ const GameComponent = () => {
   const [gameOver, setGameOver] = useState(false);
   const [score, setScore] = useState(0);
   const filesPerPage = 5;
-  const [hasTrackedStart, setHasTrackedStart] = useState(false);
+
+  const trackGameStart = async () => {
+    const walletAddress = localStorage.getItem('walletAddress') || '';
+    try {
+      await fetch('/api/track-gameplay', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          walletAddress,
+          timestamp: new Date().toISOString(),
+          unix_timestamp: Date.now(),
+        }),
+      });
+    } catch (error) {
+      console.error('Failed to track game start:', error);
+    }
+  };
 
   useEffect(() => {
     const loadBookmarkedFiles = () => {
@@ -46,30 +64,6 @@ const GameComponent = () => {
     }
   };
 
-  useEffect(() => {
-    const trackGameStart = async () => {
-      if (!hasTrackedStart) {
-        const walletAddress = localStorage.getItem('walletAddress') || '';
-        try {
-          await fetch('/api/track-gameplay', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              walletAddress,
-              timestamp: new Date().toISOString(),
-              unix_timestamp: Date.now(),
-            }),
-          });
-          setHasTrackedStart(true);
-        } catch (error) {
-          console.error('Failed to track game start:', error);
-        }
-      }
-    };
-    trackGameStart();
-  }, [hasTrackedStart]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -251,6 +245,7 @@ const GameComponent = () => {
 
   return (
     <div className="relative w-full max-w-lg mx-auto flex flex-col items-center">
+      <button onClick={trackGameStart}>Play Game</button> {/* Added Play Game button */}
       <canvas
         ref={canvasRef}
         width={Math.min(BOARD_WIDTH * BLOCK_SIZE * 3, window.innerWidth - 32)}  
