@@ -21,7 +21,12 @@ const client = createPublicClient({
 
 export const ProfileButton = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [walletAddress, setWalletAddress] = useState<string>("");
+  const [walletAddress, setWalletAddress] = useState<string>(() => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('walletAddress') || "";
+    }
+    return "";
+  });
   const [transactionId, setTransactionId] = useState<string>("");
   const [tokenBalance, setTokenBalance] = useState<string>("0");
 
