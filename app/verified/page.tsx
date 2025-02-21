@@ -3,6 +3,7 @@ import { PrayerForm } from "@/components/PrayerForm";
 import { ClaimTokens } from "@/components/ClaimTokens";
 import { useState } from "react";
 import Image from "next/image";
+// AWESOME PROGRESS
 
 export default function VerifiedPage() {
   const [prayer, setPrayer] = useState("");
