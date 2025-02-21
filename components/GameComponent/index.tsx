@@ -12,7 +12,6 @@ const GameComponent = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const [gameOver, setGameOver] = useState(false);
   const [score, setScore] = useState(0);
-  const [lives, setLives] = useState(3);
   const filesPerPage = 5;
 
   useEffect(() => {
@@ -55,74 +54,96 @@ const GameComponent = () => {
 
     let animationFrameId: number;
     let playerY = 250;
-    let velocity = 0;
+    let playerX = 30;
+    let velocityY = 0;
+    let velocityX = 0;
     const gravity = 0.4;
-    const jumpForce = -8;
-    let obstacles: { x: number; width: number; height: number }[] = [];
-    let gameSpeed = 4;
+    const jumpForce = -10;
+    const moveSpeed = 5;
+    let platforms: { x: number; y: number; width: number; height: number }[] = [];
     let isJumping = false;
 
     const player = {
-      x: 30,
       width: 25,
       height: 25,
     };
 
-    const handleJump = () => {
-      if (!isJumping) {
-        velocity = jumpForce;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.code === 'Space' && !isJumping) {
+        velocityY = jumpForce;
         isJumping = true;
+      }
+      if (e.code === 'ArrowLeft') {
+        velocityX = -moveSpeed;
+      }
+      if (e.code === 'ArrowRight') {
+        velocityX = moveSpeed;
       }
     };
 
-    const addObstacle = () => {
-      obstacles.push({
+    const handleKeyUp = (e: KeyboardEvent) => {
+      if (e.code === 'ArrowLeft' && velocityX < 0) {
+        velocityX = 0;
+      }
+      if (e.code === 'ArrowRight' && velocityX > 0) {
+        velocityX = 0;
+      }
+    };
+
+    const addPlatform = () => {
+      const minHeight = canvas.height * 0.3;
+      const maxHeight = canvas.height * 0.7;
+      const platformHeight = Math.random() * (maxHeight - minHeight) + minHeight;
+
+      platforms.push({
         x: canvas.width,
-        width: 15,
-        height: 30,
+        y: platformHeight,
+        width: 80,
+        height: 15
       });
     };
 
     const update = () => {
       // Update player
-      velocity += gravity;
-      playerY += velocity;
+      velocityY += gravity;
+      playerY += velocityY;
+      playerX += velocityX;
+
+      // Keep player in bounds
+      if (playerX < 0) playerX = 0;
+      if (playerX + player.width > canvas.width) playerX = canvas.width - player.width;
 
       // Ground collision
       if (playerY > canvas.height - player.height) {
         playerY = canvas.height - player.height;
-        velocity = 0;
+        velocityY = 0;
         isJumping = false;
       }
 
-      // Update obstacles
-      obstacles = obstacles.filter(obstacle => {
-        obstacle.x -= gameSpeed;
+      // Update platforms
+      platforms = platforms.filter(platform => {
+        platform.x -= 2;
 
-        // Collision detection
-        if (
-          player.x < obstacle.x + obstacle.width &&
-          player.x + player.width > obstacle.x &&
-          playerY < canvas.height - obstacle.height &&
-          playerY + player.height > canvas.height - obstacle.height
-        ) {
-          if (lives > 1) {
-            setLives(prev => prev - 1);
-            // Reset player position and remove obstacle
-            playerY = 250;
-            velocity = 0;
-            obstacles = obstacles.filter(obs => obs !== obstacle);
-          } else {
-            setGameOver(true);
+        // Platform collision
+        if (playerX + player.width > platform.x &&
+            playerX < platform.x + platform.width &&
+            playerY + player.height > platform.y &&
+            playerY < platform.y + platform.height) {
+
+          // Landing on top of platform
+          if (velocityY > 0 && playerY < platform.y) {
+            playerY = platform.y - player.height;
+            velocityY = 0;
+            isJumping = false;
           }
         }
 
-        return obstacle.x > -obstacle.width;
+        return platform.x > -platform.width;
       });
 
-      // Add new obstacles
-      if (obstacles.length === 0 || obstacles[obstacles.length - 1].x < canvas.width - 300) {
-        addObstacle();
+      // Add new platforms
+      if (platforms.length === 0 || platforms[platforms.length - 1].x < canvas.width - 300) {
+        addPlatform();
       }
 
       setScore(prev => prev + 1);
@@ -134,21 +155,21 @@ const GameComponent = () => {
 
       // Draw player glow effect
       const gradient = ctx.createRadialGradient(
-        player.x + player.width/2, 
+        playerX + player.width/2, 
         playerY + player.height/2, 
         player.width/4,
-        player.x + player.width/2, 
+        playerX + player.width/2, 
         playerY + player.height/2, 
         player.width
       );
       gradient.addColorStop(0, 'rgba(255, 255, 255, 0.8)');
       gradient.addColorStop(0.4, 'rgba(255, 255, 150, 0.4)');
       gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
-      
+
       ctx.fillStyle = gradient;
       ctx.beginPath();
       ctx.arc(
-        player.x + player.width/2,
+        playerX + player.width/2,
         playerY + player.height/2,
         player.width,
         0,
@@ -160,7 +181,7 @@ const GameComponent = () => {
       ctx.fillStyle = '#FFD700';
       ctx.beginPath();
       ctx.arc(
-        player.x + player.width/2,
+        playerX + player.width/2,
         playerY + player.height/2,
         player.width/2,
         0,
@@ -168,14 +189,14 @@ const GameComponent = () => {
       );
       ctx.fill();
 
-      // Draw obstacles
-      ctx.fillStyle = '#F44336';
-      obstacles.forEach(obstacle => {
+      // Draw platforms
+      ctx.fillStyle = '#4CAF50';
+      platforms.forEach(platform => {
         ctx.fillRect(
-          obstacle.x,
-          canvas.height - obstacle.height,
-          obstacle.width,
-          obstacle.height
+          platform.x,
+          platform.y,
+          platform.width,
+          platform.height
         );
       });
 
@@ -192,59 +213,31 @@ const GameComponent = () => {
       }
     };
 
-    // Event listeners
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.code === 'Space') {
-        handleJump();
-      }
-    };
-
-    canvas.addEventListener('click', handleJump);
     window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('keyup', handleKeyUp);
     gameLoop();
 
     return () => {
-      canvas.removeEventListener('click', handleJump);
       window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('keyup', handleKeyUp);
       cancelAnimationFrame(animationFrameId);
     };
   }, [gameOver]);
 
-  const handleRestart = () => {
-    setGameOver(false);
-    setScore(0);
-  };
-
   return (
-    <div className="flex flex-col items-center gap-8">
+    <div className="relative w-full max-w-lg mx-auto">
       <canvas
         ref={canvasRef}
-        width={BOARD_WIDTH * BLOCK_SIZE}
+        width={BOARD_WIDTH * BLOCK_SIZE * 3}
         height={BOARD_HEIGHT * BLOCK_SIZE}
         className="border border-purple-500"
       />
-      {/* <div className="absolute top-4 right-4 flex items-center gap-2">
-        <span className="text-white">Lives: {lives}</span>
-        <span className="text-white">Score: {score}</span>
-      </div> */}
-      
-      {gameOver && (
-        <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/80">
-          <h2 className="text-3xl font-bold text-white mb-4">Game Over!</h2>
-          <p className="text-xl text-white mb-4">Final Score: {score}</p>
-          <button
-            onClick={() => {
-              setGameOver(false);
-              setScore(0);
-              setLives(3);
-            }}
-            className="px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600"
-          >
-            Play Again
-          </button>
-        </div>
-      )}
-
+      <div className="absolute top-4 right-4 text-white">
+        Score: {score}
+      </div>
+      <p className="text-gray-400 text-sm mt-2">
+        Use SPACE to jump, LEFT/RIGHT arrows to move
+      </p>
       {bookmarkedFiles.length > 0 && (
         <div className="w-full max-w-md">
           <div className="max-h-80 overflow-y-auto bg-purple-900/20 p-4 rounded-lg">
@@ -293,11 +286,6 @@ const GameComponent = () => {
           </div>
         </div>
       )}
-
-      <p className="text-white mt-2">Score: {score}</p>
-      <p className="text-gray-400 text-sm mt-2">
-        Press SPACE or click to jump
-      </p>
     </div>
   );
 };
