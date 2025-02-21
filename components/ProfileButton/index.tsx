@@ -59,8 +59,8 @@ export const ProfileButton = () => {
   });
 
   return (
-    <div className="relative">
-      {walletAddress ? <button
+    <> {
+      walletAddress ? <> <button
         onClick={() => setIsOpen(true)}
         className="fixed top-4 left-4 p-2 rounded-full bg-purple-500/30 hover:bg-purple-500/50 transition-all z-50"
       >
@@ -171,7 +171,9 @@ export const ProfileButton = () => {
             </div>
           </div>
         </div>
-      )} : null}
-    </div>
+      )}</> : <><p></p></>
+    }
+      
+    </>
   );
 };
