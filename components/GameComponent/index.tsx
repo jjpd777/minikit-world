@@ -1,11 +1,177 @@
 
-"use client";
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useEffect, useState } from 'react';
+
+const BOARD_WIDTH = 10;
+const BOARD_HEIGHT = 20;
+const BLOCK_SIZE = 30;
+
+interface Piece {
+  shape: number[][];
+  x: number;
+  y: number;
+  color: string;
+}
+
+const TETROMINOS = {
+  I: {
+    shape: [[1, 1, 1, 1]],
+    color: '#00f0f0'
+  },
+  O: {
+    shape: [[1, 1], [1, 1]],
+    color: '#f0f000'
+  },
+  T: {
+    shape: [[0, 1, 0], [1, 1, 1]],
+    color: '#a000f0'
+  },
+  L: {
+    shape: [[1, 0], [1, 0], [1, 1]],
+    color: '#f0a000'
+  },
+  J: {
+    shape: [[0, 1], [0, 1], [1, 1]],
+    color: '#0000f0'
+  },
+  S: {
+    shape: [[0, 1, 1], [1, 1, 0]],
+    color: '#00f000'
+  },
+  Z: {
+    shape: [[1, 1, 0], [0, 1, 1]],
+    color: '#f00000'
+  }
+};
 
 const GameComponent = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [gameOver, setGameOver] = useState(false);
   const [score, setScore] = useState(0);
+  const [board, setBoard] = useState<string[][]>(
+    Array(BOARD_HEIGHT).fill(null).map(() => Array(BOARD_WIDTH).fill(''))
+  );
+  const [currentPiece, setCurrentPiece] = useState<Piece | null>(null);
+
+  const createNewPiece = () => {
+    const pieces = Object.keys(TETROMINOS);
+    const tetromino = TETROMINOS[pieces[Math.floor(Math.random() * pieces.length)] as keyof typeof TETROMINOS];
+    return {
+      shape: tetromino.shape,
+      x: Math.floor(BOARD_WIDTH / 2) - Math.floor(tetromino.shape[0].length / 2),
+      y: 0,
+      color: tetromino.color
+    };
+  };
+
+  const drawBoard = (ctx: CanvasRenderingContext2D) => {
+    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+    
+    // Draw board
+    board.forEach((row, y) => {
+      row.forEach((color, x) => {
+        if (color) {
+          ctx.fillStyle = color;
+          ctx.fillRect(x * BLOCK_SIZE, y * BLOCK_SIZE, BLOCK_SIZE - 1, BLOCK_SIZE - 1);
+        }
+      });
+    });
+
+    // Draw current piece
+    if (currentPiece) {
+      ctx.fillStyle = currentPiece.color;
+      currentPiece.shape.forEach((row, y) => {
+        row.forEach((value, x) => {
+          if (value) {
+            ctx.fillRect(
+              (currentPiece.x + x) * BLOCK_SIZE,
+              (currentPiece.y + y) * BLOCK_SIZE,
+              BLOCK_SIZE - 1,
+              BLOCK_SIZE - 1
+            );
+          }
+        });
+      });
+    }
+  };
+
+  const isValidMove = (piece: Piece, offsetX: number, offsetY: number) => {
+    return piece.shape.every((row, y) => {
+      return row.every((value, x) => {
+        const newX = piece.x + x + offsetX;
+        const newY = piece.y + y + offsetY;
+        return (
+          value === 0 ||
+          (newX >= 0 &&
+            newX < BOARD_WIDTH &&
+            newY < BOARD_HEIGHT &&
+            (newY < 0 || board[newY][newX] === ''))
+        );
+      });
+    });
+  };
+
+  const mergePiece = (piece: Piece) => {
+    piece.shape.forEach((row, y) => {
+      row.forEach((value, x) => {
+        if (value) {
+          const boardY = piece.y + y;
+          if (boardY >= 0) {
+            board[boardY][piece.x + x] = piece.color;
+          }
+        }
+      });
+    });
+
+    // Check for completed lines
+    let linesCleared = 0;
+    for (let y = BOARD_HEIGHT - 1; y >= 0; y--) {
+      if (board[y].every(cell => cell !== '')) {
+        board.splice(y, 1);
+        board.unshift(Array(BOARD_WIDTH).fill(''));
+        linesCleared++;
+        y++;
+      }
+    }
+
+    setScore(prev => prev + linesCleared * 100);
+    setBoard([...board]);
+  };
+
+  const moveDown = () => {
+    if (!currentPiece) return;
+    
+    if (isValidMove(currentPiece, 0, 1)) {
+      setCurrentPiece({
+        ...currentPiece,
+        y: currentPiece.y + 1
+      });
+    } else {
+      mergePiece(currentPiece);
+      const newPiece = createNewPiece();
+      if (!isValidMove(newPiece, 0, 0)) {
+        setGameOver(true);
+      } else {
+        setCurrentPiece(newPiece);
+      }
+    }
+  };
+
+  const rotatePiece = () => {
+    if (!currentPiece) return;
+
+    const rotated = currentPiece.shape[0].map((_, i) =>
+      currentPiece.shape.map(row => row[row.length - 1 - i])
+    );
+
+    const newPiece = {
+      ...currentPiece,
+      shape: rotated
+    };
+
+    if (isValidMove(newPiece, 0, 0)) {
+      setCurrentPiece(newPiece);
+    }
+  };
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -14,151 +180,72 @@ const GameComponent = () => {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    let animationFrameId: number;
-    let playerY = 250;
-    let velocity = 0;
-    const gravity = 0.4;
-    const jumpForce = -8;
-    let obstacles: { x: number; width: number; height: number }[] = [];
-    let gameSpeed = 4;
-    let isJumping = false;
+    canvas.width = BOARD_WIDTH * BLOCK_SIZE;
+    canvas.height = BOARD_HEIGHT * BLOCK_SIZE;
 
-    const player = {
-      x: 30,
-      width: 25,
-      height: 25,
-    };
+    if (!currentPiece && !gameOver) {
+      setCurrentPiece(createNewPiece());
+    }
 
-    const handleJump = () => {
-      if (!isJumping) {
-        velocity = jumpForce;
-        isJumping = true;
-      }
-    };
-
-    const addObstacle = () => {
-      obstacles.push({
-        x: canvas.width,
-        width: 15,
-        height: 30,
-      });
-    };
-
-    const update = () => {
-      // Update player
-      velocity += gravity;
-      playerY += velocity;
-
-      // Ground collision
-      if (playerY > canvas.height - player.height) {
-        playerY = canvas.height - player.height;
-        velocity = 0;
-        isJumping = false;
-      }
-
-      // Update obstacles
-      obstacles = obstacles.filter(obstacle => {
-        obstacle.x -= gameSpeed;
-        
-        // Collision detection
-        if (
-          player.x < obstacle.x + obstacle.width &&
-          player.x + player.width > obstacle.x &&
-          playerY < canvas.height - obstacle.height &&
-          playerY + player.height > canvas.height - obstacle.height
-        ) {
-          setGameOver(true);
-        }
-
-        return obstacle.x > -obstacle.width;
-      });
-
-      // Add new obstacles
-      if (obstacles.length === 0 || obstacles[obstacles.length - 1].x < canvas.width - 300) {
-        addObstacle();
-      }
-
-      setScore(prev => prev + 1);
-    };
-
-    const draw = () => {
-      // Clear canvas
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-      // Draw player
-      ctx.fillStyle = '#4CAF50';
-      ctx.fillRect(player.x, playerY, player.width, player.height);
-
-      // Draw obstacles
-      ctx.fillStyle = '#F44336';
-      obstacles.forEach(obstacle => {
-        ctx.fillRect(
-          obstacle.x,
-          canvas.height - obstacle.height,
-          obstacle.width,
-          obstacle.height
-        );
-      });
-
-      // Draw ground
-      ctx.fillStyle = '#795548';
-      ctx.fillRect(0, canvas.height - 2, canvas.width, 2);
-    };
-
-    const gameLoop = () => {
-      if (!gameOver) {
-        update();
-        draw();
-        animationFrameId = requestAnimationFrame(gameLoop);
-      }
-    };
-
-    // Event listeners
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.code === 'Space') {
-        handleJump();
+      if (gameOver || !currentPiece) return;
+
+      switch (e.key) {
+        case 'ArrowLeft':
+          if (isValidMove(currentPiece, -1, 0)) {
+            setCurrentPiece({
+              ...currentPiece,
+              x: currentPiece.x - 1
+            });
+          }
+          break;
+        case 'ArrowRight':
+          if (isValidMove(currentPiece, 1, 0)) {
+            setCurrentPiece({
+              ...currentPiece,
+              x: currentPiece.x + 1
+            });
+          }
+          break;
+        case 'ArrowDown':
+          moveDown();
+          break;
+        case 'ArrowUp':
+          rotatePiece();
+          break;
       }
     };
 
-    canvas.addEventListener('click', handleJump);
     window.addEventListener('keydown', handleKeyDown);
-    gameLoop();
+
+    const gameLoop = setInterval(() => {
+      if (!gameOver) {
+        moveDown();
+      }
+    }, 1000);
+
+    const renderLoop = () => {
+      drawBoard(ctx);
+      requestAnimationFrame(renderLoop);
+    };
+    renderLoop();
 
     return () => {
-      canvas.removeEventListener('click', handleJump);
       window.removeEventListener('keydown', handleKeyDown);
-      cancelAnimationFrame(animationFrameId);
+      clearInterval(gameLoop);
     };
-  }, [gameOver]);
-
-  const handleRestart = () => {
-    setGameOver(false);
-    setScore(0);
-  };
+  }, [currentPiece, board, gameOver]);
 
   return (
-    <div className="relative">
+    <div className="flex flex-col items-center gap-4">
+      <div className="text-white text-xl">Score: {score}</div>
       <canvas
         ref={canvasRef}
-        width={350}
-        height={500}
-        className="border border-gray-700 bg-gray-800"
+        className="border border-gray-600"
       />
       {gameOver && (
-        <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/80">
-          <p className="text-white text-2xl mb-4">Game Over! Score: {score}</p>
-          <button
-            onClick={handleRestart}
-            className="px-4 py-2 bg-purple-600 text-white rounded hover:bg-purple-700"
-          >
-            Play Again
-          </button>
-        </div>
+        <div className="text-red-500 text-xl">Game Over!</div>
       )}
-      <p className="text-white mt-2">Score: {score}</p>
-      <p className="text-gray-400 text-sm mt-2">
-        Press SPACE or click to jump
-      </p>
     </div>
   );
 };
