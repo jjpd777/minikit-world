@@ -1,11 +1,23 @@
-
 "use client";
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useEffect, useState } from 'react';
+
+const BOARD_WIDTH = 10;
+const BOARD_HEIGHT = 20;
+const BLOCK_SIZE = 30;
 
 const GameComponent = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [prayers, setPrayers] = useState<{text: string, timestamp: string}[]>([]);
   const [gameOver, setGameOver] = useState(false);
   const [score, setScore] = useState(0);
+
+  useEffect(() => {
+    // Get stored prayers on component mount
+    const storedPrayers = localStorage.getItem('prayers');
+    if (storedPrayers) {
+      setPrayers(JSON.parse(storedPrayers));
+    }
+  }, []);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -59,7 +71,7 @@ const GameComponent = () => {
       // Update obstacles
       obstacles = obstacles.filter(obstacle => {
         obstacle.x -= gameSpeed;
-        
+
         // Collision detection
         if (
           player.x < obstacle.x + obstacle.width &&
@@ -137,12 +149,12 @@ const GameComponent = () => {
   };
 
   return (
-    <div className="relative">
+    <div className="flex flex-col items-center gap-8">
       <canvas
         ref={canvasRef}
-        width={350}
-        height={500}
-        className="border border-gray-700 bg-gray-800"
+        width={BOARD_WIDTH * BLOCK_SIZE}
+        height={BOARD_HEIGHT * BLOCK_SIZE}
+        className="border border-purple-500"
       />
       {gameOver && (
         <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/80">
@@ -155,6 +167,20 @@ const GameComponent = () => {
           </button>
         </div>
       )}
+      <div className="w-full max-w-md space-y-4">
+        <h2 className="text-xl font-bold text-white text-center">Your Prayers</h2>
+        <div className="space-y-2">
+          {prayers.map((prayer, index) => (
+            <div
+              key={index}
+              className="p-4 rounded-lg bg-gray-800 text-white"
+            >
+              <p className="mb-2">{prayer.text}</p>
+              <p className="text-sm text-gray-400">{prayer.timestamp}</p>
+            </div>
+          ))}
+        </div>
+      </div>
       <p className="text-white mt-2">Score: {score}</p>
       <p className="text-gray-400 text-sm mt-2">
         Press SPACE or click to jump
