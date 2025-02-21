@@ -63,6 +63,10 @@ export const SignIn = () => {
     }
   };
 
+  const handlePlayGame = () => {
+    router.push('/game');
+  };
+
   return (
     <>
       <div className="relative">
@@ -78,6 +82,12 @@ export const SignIn = () => {
       </div>
 
       <div className="flex flex-col gap-4">
+        <button
+          onClick={handlePlayGame}
+          className="px-6 py-3 bg-green-600 text-white rounded-xl hover:bg-green-700 transition-colors duration-200"
+        >
+          Play Game
+        </button>
         {!walletAddress ? (
           <WalletAuth onAddressChange={handleAddressChange} />
         ) : (
