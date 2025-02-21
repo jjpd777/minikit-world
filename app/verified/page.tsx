@@ -161,6 +161,23 @@ export default function VerifiedPage() {
                       console.log('Audio uploaded successfully:', uploadData.gsPath);
                       setStoragePath(uploadData.gsPath);
                       setHasGeneratedAudio(true);
+                      
+                      // Track voice generation event
+                      const storedWalletAddress = localStorage.getItem('walletAddress') || '';
+                      await fetch("/api/track-prayer", {
+                        method: "POST",
+                        headers: {
+                          "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({
+                          walletAddress: storedWalletAddress,
+                          input_text: localStorage.getItem('lastIntentions') || '',
+                          religion: localStorage.getItem('lastReligion') || '',
+                          language: localStorage.getItem('lastLanguage') || '',
+                          llm_response: prayer,
+                          voice_generation: true
+                        }),
+                      });
                     } else {
                       throw new Error(uploadData.error || 'Upload failed');
                     }
