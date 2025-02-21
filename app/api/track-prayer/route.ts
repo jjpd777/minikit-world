@@ -18,7 +18,12 @@ export async function POST(request: NextRequest) {
       voice_generation: data.voice_generation || false
     };
 
-    const collection = data.source === 'whatsapp' ? 'prayer_events_whatsapp' : 'prayer_events';
+    let collection = 'prayer_events';
+    if (data.source === 'whatsapp') {
+      collection = 'prayer_events_whatsapp';
+    } else if (data.voice_generation) {
+      collection = 'prayer_events_voicegen';
+    }
     await db.collection(collection).add(eventData);
 
     return NextResponse.json({ success: true });
