@@ -117,27 +117,21 @@ export const ProfileButton = () => {
 
                   try {
                     const DEUS_ABI = [
-                      {
-                        inputs: [
-                          {
-                            internalType: "address",
-                            name: "requester",
-                            type: "address",
-                          },
-                        ],
-                        name: "sendTokens",
-                        outputs: [],
-                        stateMutability: "nonpayable",
-                        type: "function",
-                      },
-                    ];
+                        {
+                          inputs: [],
+                          name: "claimTokens",
+                          outputs: [],
+                          stateMutability: "nonpayable",
+                          type: "function",
+                        },
+                      ];
 
                     const { commandPayload, finalPayload } = await MiniKit.commandsAsync.sendTransaction({
                       transaction: [{
-                        address: "0xF10106a1C3dB402955e9E172E01685E2a19820e6",
-                        abi: DEUS_ABI,
-                        functionName: "sendTokens",
-                        args: [walletAddress]
+                        address: "0x0E384B20618D355552A005509eA2E814198CBBdE",
+                          abi: DEUS_ABI,
+                          functionName: "claimTokens",
+                          args: [] // empty array since c
                       }]
                     });
                     
