@@ -13,6 +13,10 @@ const nextConfig = {
       },
     });
     return config;
-  },};
+  },
+  poweredByHeader: false,
+  compress: true,
+  productionBrowserSourceMaps: false,
+};
 
 export default nextConfig;
