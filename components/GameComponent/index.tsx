@@ -231,12 +231,12 @@ const GameComponent = () => {
         height={BOARD_HEIGHT * BLOCK_SIZE}
         className="border border-purple-500"
       />
-      <div className="absolute top-4 right-4 text-white">
+      {/* <div className="absolute top-4 right-4 text-white">
         Score: {score}
-      </div>
-      <p className="text-gray-400 text-sm mt-2">
+      </div> */}
+      {/* <p className="text-gray-400 text-sm mt-2">
         Use SPACE to jump
-      </p>
+      </p> */}
       {bookmarkedFiles.length > 0 && (
         <div className="w-full max-w-md">
           <div className="max-h-80 overflow-y-auto bg-purple-900/20 p-4 rounded-lg">
