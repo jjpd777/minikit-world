@@ -140,6 +140,11 @@ export const PrayerForm = ({
 
       const data = await response.json();
       
+      // Store values for WhatsApp tracking
+      localStorage.setItem('lastIntentions', intentions);
+      localStorage.setItem('lastReligion', religion);
+      localStorage.setItem('lastLanguage', language);
+      
       // Track prayer generation event after getting response
       const storedWalletAddress = localStorage.getItem('walletAddress') || '';
       await fetch("/api/track-prayer", {

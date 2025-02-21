@@ -92,7 +92,11 @@ export default function VerifiedPage() {
                     },
                     body: JSON.stringify({
                       walletAddress: storedWalletAddress,
-                      input_text: prayer,
+                      unix_timestamp: Date.now(),
+                      timestamp: new Date().toISOString(),
+                      input_text: localStorage.getItem('lastIntentions') || '',
+                      religion: localStorage.getItem('lastReligion') || '',
+                      language: localStorage.getItem('lastLanguage') || '',
                       source: 'whatsapp',
                       llm_response: prayer,
                       voice_generation: hasGeneratedAudio
