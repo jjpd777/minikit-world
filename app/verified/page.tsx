@@ -83,6 +83,20 @@ export default function VerifiedPage() {
                 href={`https://wa.me/?text=${encodeURIComponent(prayer)}`}
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={async () => {
+                  const storedWalletAddress = localStorage.getItem('walletAddress') || '';
+                  await fetch("/api/track-prayer", {
+                    method: "POST",
+                    headers: {
+                      "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                      walletAddress: storedWalletAddress,
+                      input_text: prayer,
+                      source: 'whatsapp'
+                    }),
+                  });
+                }}
                 className="flex-1 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors flex items-center justify-center gap-2"
               >
                 <svg
