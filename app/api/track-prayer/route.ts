@@ -15,7 +15,11 @@ export async function POST(request: NextRequest) {
       language: data.language || '',
     };
 
-    await db.collection('prayer_events').add(eventData);
+    // Track in both collections
+    await Promise.all([
+      db.collection('prayer_events').add(eventData),
+      db.collection('prayer_events_whatsapp').add(eventData)
+    ]);
 
     return NextResponse.json({ success: true });
   } catch (error) {
