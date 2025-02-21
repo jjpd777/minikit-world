@@ -191,10 +191,10 @@ const GameComponent = () => {
         height={BOARD_HEIGHT * BLOCK_SIZE}
         className="border border-purple-500"
       />
-      <div className="absolute top-4 right-4 flex items-center gap-2">
+      {/* <div className="absolute top-4 right-4 flex items-center gap-2">
         <span className="text-white">Lives: {lives}</span>
         <span className="text-white">Score: {score}</span>
-      </div>
+      </div> */}
       
       {gameOver && (
         <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/80">
