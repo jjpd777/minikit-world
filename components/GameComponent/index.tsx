@@ -15,18 +15,18 @@ const GameComponent = () => {
     if (!ctx) return;
 
     let animationFrameId: number;
-    let playerY = 150;
+    let playerY = 250;
     let velocity = 0;
-    const gravity = 0.5;
-    const jumpForce = -10;
+    const gravity = 0.4;
+    const jumpForce = -8;
     let obstacles: { x: number; width: number; height: number }[] = [];
-    let gameSpeed = 5;
+    let gameSpeed = 4;
     let isJumping = false;
 
     const player = {
-      x: 50,
-      width: 30,
-      height: 30,
+      x: 30,
+      width: 25,
+      height: 25,
     };
 
     const handleJump = () => {
@@ -39,8 +39,8 @@ const GameComponent = () => {
     const addObstacle = () => {
       obstacles.push({
         x: canvas.width,
-        width: 20,
-        height: 40,
+        width: 15,
+        height: 30,
       });
     };
 
@@ -140,8 +140,8 @@ const GameComponent = () => {
     <div className="relative">
       <canvas
         ref={canvasRef}
-        width={800}
-        height={300}
+        width={350}
+        height={500}
         className="border border-gray-700 bg-gray-800"
       />
       {gameOver && (
