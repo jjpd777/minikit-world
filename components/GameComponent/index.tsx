@@ -12,6 +12,7 @@ const GameComponent = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const [gameOver, setGameOver] = useState(false);
   const [score, setScore] = useState(0);
+  const [lives, setLives] = useState(3);
   const filesPerPage = 5;
 
   useEffect(() => {
@@ -105,7 +106,15 @@ const GameComponent = () => {
           playerY < canvas.height - obstacle.height &&
           playerY + player.height > canvas.height - obstacle.height
         ) {
-          setGameOver(true);
+          if (lives > 1) {
+            setLives(prev => prev - 1);
+            // Reset player position and remove obstacle
+            playerY = 250;
+            velocity = 0;
+            obstacles = obstacles.filter(obs => obs !== obstacle);
+          } else {
+            setGameOver(true);
+          }
         }
 
         return obstacle.x > -obstacle.width;
@@ -182,12 +191,21 @@ const GameComponent = () => {
         height={BOARD_HEIGHT * BLOCK_SIZE}
         className="border border-purple-500"
       />
+      <div className="absolute top-4 right-4 flex items-center gap-2">
+        <span className="text-white">Lives: {lives}</span>
+        <span className="text-white">Score: {score}</span>
+      </div>
+      
       {gameOver && (
         <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/80">
           <h2 className="text-3xl font-bold text-white mb-4">Game Over!</h2>
-          <p className="text-xl text-white mb-4">Score: {score}</p>
+          <p className="text-xl text-white mb-4">Final Score: {score}</p>
           <button
-            onClick={() => window.location.reload()}
+            onClick={() => {
+              setGameOver(false);
+              setScore(0);
+              setLives(3);
+            }}
             className="px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600"
           >
             Play Again
