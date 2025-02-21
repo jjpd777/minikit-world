@@ -64,7 +64,7 @@ export const SignIn = () => {
   };
 
   const handlePlayGame = () => {
-    router.push('/game');
+    router.push('/gameplay');
   };
 
   return (
