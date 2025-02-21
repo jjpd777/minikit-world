@@ -65,28 +65,23 @@ export const SignIn = () => {
 
   const handlePlayGame = async () => {
     const walletAddress = localStorage.getItem('walletAddress') || '';
-    const hasTracked = localStorage.getItem('hasTrackedGameplay');
-    const currentTime = Date.now();
-    
-    if (!hasTracked || currentTime - parseInt(hasTracked) > 1000) {
-      try {
-        await fetch('/api/track-gameplay', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            walletAddress,
-            timestamp: new Date().toISOString(),
-            unix_timestamp: currentTime,
-          }),
-        });
-        localStorage.setItem('hasTrackedGameplay', currentTime.toString());
-      } catch (error) {
-        console.error('Failed to track game start:', error);
-      }
+    try {
+      await fetch('/api/track-gameplay', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          walletAddress,
+          timestamp: new Date().toISOString(),
+          unix_timestamp: Date.now(),
+        }),
+      });
+      await router.push('/gameplay');
+    } catch (error) {
+      console.error('Failed to track game start:', error);
+      router.push('/gameplay');
     }
-    router.push('/gameplay');
   };
 
   return (
