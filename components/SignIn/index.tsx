@@ -107,20 +107,22 @@ export const SignIn = () => {
       </div>
 
       <div className="flex flex-col gap-4">
-        {!trackingComplete ? (
-          <button
-            onClick={handlePlayGame}
-            className="px-6 py-3 bg-green-600 text-white rounded-xl hover:bg-green-700 transition-colors duration-200"
-          >
-            Play Game!
-          </button>
-        ) : (
-          <button
-            onClick={handleStartGame}
-            className="px-6 py-3 bg-purple-600 text-white rounded-xl hover:bg-purple-700 transition-colors duration-200 animate-pulse"
-          >
-            Let's Go
-          </button>
+        {bookmarkedFiles.length > 0 && (
+          !trackingComplete ? (
+            <button
+              onClick={handlePlayGame}
+              className="px-6 py-3 bg-green-600 text-white rounded-xl hover:bg-green-700 transition-colors duration-200"
+            >
+              Play Game!
+            </button>
+          ) : (
+            <button
+              onClick={handleStartGame}
+              className="px-6 py-3 bg-purple-600 text-white rounded-xl hover:bg-purple-700 transition-colors duration-200 animate-pulse"
+            >
+              Let's Go
+            </button>
+          )
         )}
         {!walletAddress ? (
           <WalletAuth onAddressChange={handleAddressChange} />
