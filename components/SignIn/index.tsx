@@ -143,7 +143,7 @@ export const SignIn = () => {
               {isVerifying ? "Verifying..." : "Verify with World ID"}
             </button>
 
-            {/* <button
+            <button
               onClick={() => {
                 localStorage.removeItem('walletAddress');
                 setWalletAddress('');
@@ -152,7 +152,7 @@ export const SignIn = () => {
               className="px-4 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 text-sm"
             >
               Clear Storage
-            </button> */}
+            </button>
 
             {bookmarkedFiles.length > 0 && (
               <div className="mt-4 w-full">

@@ -191,7 +191,7 @@ export default function VerifiedPage() {
                 disabled={isGeneratingAudio || hasGeneratedAudio}
                 className="flex-1 px-4 py-2 bg-white text-purple-600 border border-purple-600 rounded-lg hover:bg-purple-50 transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
               >
-                {isGeneratingAudio ? "✨" : hasGeneratedAudio ? "" : "✨"}
+                {isGeneratingAudio ? "✝️" : hasGeneratedAudio ? "" : "✨"}
               </button>}
             </div>
            
