@@ -13,13 +13,11 @@ export async function POST(request: NextRequest) {
       input_text: data.input_text || '',
       religion: data.religion || '',
       language: data.language || '',
+      source: data.source || 'prayer'
     };
 
-    // Track in both collections
-    await Promise.all([
-      db.collection('prayer_events').add(eventData),
-      db.collection('prayer_events_whatsapp').add(eventData)
-    ]);
+    const collection = data.source === 'whatsapp' ? 'prayer_events_whatsapp' : 'prayer_events';
+    await db.collection(collection).add(eventData);
 
     return NextResponse.json({ success: true });
   } catch (error) {
