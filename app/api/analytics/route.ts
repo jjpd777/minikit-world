@@ -6,7 +6,14 @@ export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
     const table = searchParams.get('table') || 'prayer_events';
-    const snapshot = await db.collection(table).get();
+    const religion = searchParams.get('religion');
+    
+    let query = db.collection(table);
+    if (religion && religion !== 'all') {
+      query = query.where('religion', '==', religion);
+    }
+    
+    const snapshot = await query.get();
     const addresses = new Map<string, number>();
 
     snapshot.forEach((doc) => {

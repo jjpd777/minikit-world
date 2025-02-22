@@ -18,12 +18,13 @@ export default function AnalyticsPage() {
   const [data, setData] = useState<AnalyticsData | null>(null);
   const [loading, setLoading] = useState(true);
   const [selectedTable, setSelectedTable] = useState(TABLES[0]);
+  const [selectedReligion, setSelectedReligion] = useState('all');
 
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const response = await fetch(`/api/analytics?table=${selectedTable}`);
+        const response = await fetch(`/api/analytics?table=${selectedTable}&religion=${selectedReligion}`);
         const result = await response.json();
         setData(result);
       } catch (error) {
@@ -59,6 +60,58 @@ export default function AnalyticsPage() {
               {table.replace(/_/g, ' ')}
             </button>
           ))}
+        </div>
+        <div className="flex justify-center gap-4 mb-4">
+          <button
+            onClick={() => setSelectedReligion('all')}
+            className={`px-4 py-2 rounded-lg transition-colors ${
+              selectedReligion === 'all'
+                ? 'bg-purple-600 text-white'
+                : 'bg-gray-800/50 text-gray-300 hover:bg-gray-700/50'
+            }`}
+          >
+            All
+          </button>
+          <button
+            onClick={() => setSelectedReligion('christian')}
+            className={`px-4 py-2 rounded-lg transition-colors ${
+              selectedReligion === 'christian'
+                ? 'bg-purple-600 text-white'
+                : 'bg-gray-800/50 text-gray-300 hover:bg-gray-700/50'
+            }`}
+          >
+            Christian ✝️
+          </button>
+          <button
+            onClick={() => setSelectedReligion('jewish')}
+            className={`px-4 py-2 rounded-lg transition-colors ${
+              selectedReligion === 'jewish'
+                ? 'bg-purple-600 text-white'
+                : 'bg-gray-800/50 text-gray-300 hover:bg-gray-700/50'
+            }`}
+          >
+            Jewish ✡️
+          </button>
+          <button
+            onClick={() => setSelectedReligion('islamic')}
+            className={`px-4 py-2 rounded-lg transition-colors ${
+              selectedReligion === 'islamic'
+                ? 'bg-purple-600 text-white'
+                : 'bg-gray-800/50 text-gray-300 hover:bg-gray-700/50'
+            }`}
+          >
+            Islamic ☪️
+          </button>
+          <button
+            onClick={() => setSelectedReligion('buddhist')}
+            className={`px-4 py-2 rounded-lg transition-colors ${
+              selectedReligion === 'buddhist'
+                ? 'bg-purple-600 text-white'
+                : 'bg-gray-800/50 text-gray-300 hover:bg-gray-700/50'
+            }`}
+          >
+            Buddhist ☸️
+          </button>
         </div>
         <div className="bg-gray-800/50 p-6 rounded-lg">
           <div className="flex justify-between items-center">
