@@ -2,9 +2,11 @@
 import { NextResponse } from 'next/server';
 import { db } from '../../../lib/firebase-admin';
 
-export async function GET() {
+export async function GET(request: Request) {
   try {
-    const snapshot = await db.collection('prayer_events_whatsapp').get();
+    const { searchParams } = new URL(request.url);
+    const table = searchParams.get('table') || 'prayer_events';
+    const snapshot = await db.collection(table).get();
     const addresses = new Map<string, number>();
 
     snapshot.forEach((doc) => {
