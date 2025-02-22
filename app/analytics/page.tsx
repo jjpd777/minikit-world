@@ -61,8 +61,16 @@ export default function AnalyticsPage() {
           ))}
         </div>
         <div className="bg-gray-800/50 p-6 rounded-lg">
-          <h2 className="text-xl mb-4">Total Unique Addresses</h2>
-          <p className="text-4xl font-bold text-purple-500">{data.totalUniqueAddresses}</p>
+          <div className="flex justify-between items-center">
+            <div>
+              <h2 className="text-xl mb-4">Total Unique Addresses</h2>
+              <p className="text-4xl font-bold text-purple-500">{data.totalUniqueAddresses}</p>
+            </div>
+            <div>
+              <h2 className="text-xl mb-4">Total Entries</h2>
+              <p className="text-4xl font-bold text-purple-500">{data.totalEntries}</p>
+            </div>
+          </div>
         </div>
 
         <div className="bg-gray-800/50 p-6 rounded-lg text-white">

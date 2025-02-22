@@ -21,6 +21,7 @@ export async function GET(request: Request) {
 
     return NextResponse.json({
       totalUniqueAddresses: addresses.size,
+      totalEntries: snapshot.size,
       addressCounts: Object.fromEntries(addresses)
     });
   } catch (error) {
