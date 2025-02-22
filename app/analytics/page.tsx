@@ -41,14 +41,16 @@ export default function AnalyticsPage() {
           <p className="text-4xl font-bold text-purple-500">{data.totalUniqueAddresses}</p>
         </div>
 
-        <div className="bg-gray-800/50 p-6 rounded-lg">
+        <div className="bg-gray-800/50 p-6 rounded-lg text-white">
           <h2 className="text-xl mb-4">Address Activity</h2>
           <div className="space-y-4">
-            {Object.entries(data.addressCounts).map(([address, count]) => (
-              <div key={address} className="flex justify-between items-center border-b border-gray-700 pb-2">
-                <span className="font-mono">{address}</span>
-                <span className="bg-purple-500/20 px-3 py-1 rounded-full">{count} prayers</span>
-              </div>
+            {Object.entries(data.addressCounts)
+              .sort(([,a], [,b]) => b - a)
+              .map(([address, count]) => (
+                <div key={address} className="flex justify-between items-center border-b border-gray-700 pb-2">
+                  <span className="font-mono">{address}</span>
+                  <span className="bg-purple-500/20 px-3 py-1 rounded-full">{count} prayers</span>
+                </div>
             ))}
           </div>
         </div>
