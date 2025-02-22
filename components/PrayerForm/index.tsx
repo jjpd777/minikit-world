@@ -14,6 +14,7 @@ export const PrayerForm = ({
 
   const religions = [
     { code: "christian", icon: "✝️", name: "Christianity" },
+    { code: "orthodox", icon: "☦️", name: "Orthodox Christianity" },
     { code: "jewish", icon: "✡️", name: "Judaism" },
     { code: "islamic", icon: "☪️", name: "Islam" },
     { code: "buddhist", icon: "☸️", name: "Buddhism" },
