@@ -34,7 +34,7 @@ export default function AnalyticsPage() {
     };
 
     fetchData();
-  }, []);
+  }, [selectedTable]);
 
   if (loading) return <div className="flex min-h-screen items-center justify-center">Loading...</div>;
 
