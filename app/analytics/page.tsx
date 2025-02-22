@@ -112,6 +112,46 @@ export default function AnalyticsPage() {
           >
             Buddhist ☸️
           </button>
+          <button
+            onClick={() => setSelectedReligion('orthodox')}
+            className={`px-4 py-2 rounded-lg transition-colors ${
+              selectedReligion === 'orthodox'
+                ? 'bg-purple-600 text-white'
+                : 'bg-gray-800/50 text-gray-300 hover:bg-gray-700/50'
+            }`}
+          >
+            Orthodox ☦️
+          </button>
+          <button
+            onClick={() => setSelectedReligion('sikh')}
+            className={`px-4 py-2 rounded-lg transition-colors ${
+              selectedReligion === 'sikh'
+                ? 'bg-purple-600 text-white'
+                : 'bg-gray-800/50 text-gray-300 hover:bg-gray-700/50'
+            }`}
+          >
+            Sikh 🪯
+          </button>
+          <button
+            onClick={() => setSelectedReligion('atheist')}
+            className={`px-4 py-2 rounded-lg transition-colors ${
+              selectedReligion === 'atheist'
+                ? 'bg-purple-600 text-white'
+                : 'bg-gray-800/50 text-gray-300 hover:bg-gray-700/50'
+            }`}
+          >
+            Atheist ⚛️
+          </button>
+          <button
+            onClick={() => setSelectedReligion('hindu')}
+            className={`px-4 py-2 rounded-lg transition-colors ${
+              selectedReligion === 'hindu'
+                ? 'bg-purple-600 text-white'
+                : 'bg-gray-800/50 text-gray-300 hover:bg-gray-700/50'
+            }`}
+          >
+            Hindu 🕉️
+          </button>
         </div>
         <div className="bg-gray-800/50 p-6 rounded-lg">
           <div className="flex justify-between items-center">
