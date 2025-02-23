@@ -121,7 +121,7 @@ const GameComponent = () => {
       platforms.forEach(platform => {
         platform.x -= 0.7;
       });
-      
+
       collectibles.forEach(collectible => {
         collectible.x -= 0.7;
       });
@@ -251,9 +251,75 @@ const GameComponent = () => {
       ctx.fillText(`✨: ${emojiCount}`, 10, 30);
     };
 
+    const checkCollisions = () => {
+      // Check ground collision
+      if (playerY + player.height > canvas.height - 2) {
+        console.log('[Game] Ground collision detected');
+        playerY = canvas.height - player.height - 2;
+        velocityY = 0;
+        isJumping = false;
+        consecutiveJumps = 0;
+      }
+
+      // Check platform collisions
+      platforms.forEach((platform, index) => {
+        if (
+          playerX < platform.x + platform.width &&
+          playerX + player.width > platform.x &&
+          playerY + player.height > platform.y &&
+          playerY < platform.y + platform.height
+        ) {
+          console.log(`[Game] Platform collision detected at index ${index}`);
+          playerY = platform.y - player.height;
+          velocityY = 0;
+          isJumping = false;
+          consecutiveJumps = 0;
+        }
+      });
+
+      // Check collectible collisions
+      collectibles.forEach((collectible, index) => {
+        if (
+          !collectible.collected &&
+          playerX < collectible.x + collectible.width &&
+          playerX + player.width > collectible.x &&
+          playerY + player.height > collectible.y &&
+          playerY < collectible.y + collectible.height
+        ) {
+          console.log(`[Game] Collectible collected at index ${index}`);
+          console.log('[Game] Current game state before reset:', {
+            playerX,
+            playerY,
+            platformCount: platforms.length,
+            emojiCount
+          });
+
+          collectible.collected = true;
+          setEmojiCount(prev => {
+            console.log('[Game] Updating emoji count from', prev, 'to', prev + 1);
+            return prev + 1;
+          });
+
+          // Reset position and clear platforms
+          playerX = 30;
+          playerY = 250;
+          platforms = [];
+
+          console.log('[Game] Game state after reset:', {
+            playerX,
+            playerY,
+            platformCount: platforms.length,
+            emojiCount: emojiCount + 1
+          });
+        }
+      });
+    };
+
+
     const gameLoop = () => {
       if (!gameOver) {
         update();
+        checkCollisions(); // Call the collision detection function
         draw();
         drawEmojiCount(); // Draw emoji count each frame
         animationFrameId = requestAnimationFrame(gameLoop);
