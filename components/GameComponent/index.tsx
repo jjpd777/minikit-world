@@ -101,7 +101,7 @@ const GameComponent = () => {
         width: 80,
         height: 15
       });
-      
+
       // Add emoji above platform
       emojis.push({
         x: canvas.width + 40,
@@ -114,7 +114,7 @@ const GameComponent = () => {
       // Update player
       velocityY += gravity;
       playerY += velocityY;
-      
+
       // Check emoji collisions
       emojis = emojis.filter(emoji => {
         if (!emoji.collected && 
@@ -255,7 +255,6 @@ const GameComponent = () => {
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
       canvas.removeEventListener('touchstart', handleTouch);
-      canvas.removeEventListener('click', collectEmoji);
       cancelAnimationFrame(animationFrameId);
     };
   }, [gameOver, emojiCount]);
