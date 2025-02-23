@@ -126,15 +126,13 @@ const GameComponent = () => {
         collectible.x -= 2;
       });
 
-      // Check collectible collisions
+      // Check collectible collisions without resetting position
       collectibles = collectibles.filter(collectible => {
-        const collision = !collectible.collected &&
+        if (!collectible.collected &&
             playerX < collectible.x + collectible.width &&
             playerX + player.width > collectible.x &&
             playerY < collectible.y + collectible.height &&
-            playerY + player.height > collectible.y;
-            
-        if (collision) {
+            playerY + player.height > collectible.y) {
           setEmojiCount(prev => Math.min(22, prev + 1));
           collectible.collected = true;
         }
