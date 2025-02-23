@@ -12,6 +12,7 @@ const GameComponent = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const [gameOver, setGameOver] = useState(false);
   const [score, setScore] = useState(0);
+  const [emojiCount, setEmojiCount] = useState(0); // Track collected emojis
   const filesPerPage = 5;
 
   useEffect(() => {
@@ -204,25 +205,63 @@ const GameComponent = () => {
       ctx.fillRect(0, canvas.height - 2, canvas.width, 2);
     };
 
+    const drawEmojiCount = () => {
+      ctx.font = '20px Arial';
+      ctx.fillStyle = 'white';
+      ctx.fillText(`✨: ${emojiCount}`, 10, 30);
+    };
+
     const gameLoop = () => {
       if (!gameOver) {
         update();
         draw();
+        drawEmojiCount(); // Draw emoji count each frame
         animationFrameId = requestAnimationFrame(gameLoop);
       }
     };
 
+    //Simulate collecting emojis - Replace with actual game logic
+    const collectEmoji = () => {
+        setEmojiCount(prevCount => Math.min(22, prevCount + 1));
+    }
+
     window.addEventListener('keydown', handleKeyDown);
     canvas.addEventListener('touchstart', handleTouch);
+    // Add event listener for emoji collection (replace with actual game logic)
+    canvas.addEventListener('click', collectEmoji);
 
     gameLoop();
 
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
       canvas.removeEventListener('touchstart', handleTouch);
+      canvas.removeEventListener('click', collectEmoji);
       cancelAnimationFrame(animationFrameId);
     };
-  }, [gameOver]);
+  }, [gameOver, emojiCount]);
+
+  const canClaimToken = emojiCount >= 22; // Condition to enable claim button
+
+  const claimChristianityToken = () => {
+    // Implement your token claiming logic here.  This is a placeholder.
+    // For example, you might make a fetch request to your backend.
+    fetch('/api/claim-token', {
+      method: 'POST',
+      body: JSON.stringify({ token: 'Christianity Token' }),
+    })
+      .then(response => {
+        if (response.ok) {
+          alert('Christianity Token claimed!');
+          setEmojiCount(0); // Reset emoji count after claiming
+        } else {
+          alert('Failed to claim token.');
+        }
+      })
+      .catch(error => {
+        console.error('Error claiming token:', error);
+        alert('Failed to claim token.');
+      });
+  };
 
   return (
     <div className="relative w-full max-w-lg mx-auto flex flex-col items-center">
@@ -281,6 +320,17 @@ const GameComponent = () => {
           </div>
         </div>
       )}
+      <div className="relative">
+        {canClaimToken && (
+          <button
+            onClick={claimChristianityToken}
+            className="absolute top-2 right-2 px-4 py-2 bg-purple-500 text-white rounded hover:bg-purple-600 transition-colors"
+          >
+            Claim Christianity Token
+          </button>
+        )}
+      </div>
+
     </div>
   );
 };
