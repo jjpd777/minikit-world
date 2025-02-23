@@ -113,7 +113,7 @@ export const SignIn = () => {
               onClick={handlePlayGame}
               className="px-6 py-3 bg-green-600 text-white rounded-xl hover:bg-green-700 transition-colors duration-200"
             >
-              Play Game!
+              Bookmarks
             </button>
           ) : (
             <button
@@ -200,7 +200,7 @@ export const SignIn = () => {
               Clear Storage
             </button> */}
 
-            {bookmarkedFiles.length > 0 && (
+            {/* {bookmarkedFiles.length > 0 && (
               <div className="mt-4 w-full">
                 <div className="max-h-80 overflow-y-auto bg-purple-900/20 p-4 rounded-lg">
                   {[...bookmarkedFiles]
@@ -247,7 +247,7 @@ export const SignIn = () => {
                   </button>
                 </div>
               </div>
-            )}
+            )} */}
 
             {audioUrl && (
               <audio
