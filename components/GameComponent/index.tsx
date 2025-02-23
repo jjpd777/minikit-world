@@ -59,9 +59,10 @@ const GameComponent = () => {
     let playerX = 30;
     let velocityY = 0;
     let velocityX = 0;
-    const gravity = 0.4;
-    const jumpForce = -15;
+    const gravity = 0.5;
+    const jumpForce = -12;
     let platforms: { x: number; y: number; width: number; height: number }[] = [];
+    let emojis: { x: number; y: number; collected: boolean }[] = [];
     let isJumping = false;
     let consecutiveJumps = 0;
     const maxConsecutiveJumps = 2;
@@ -100,12 +101,30 @@ const GameComponent = () => {
         width: 80,
         height: 15
       });
+      
+      // Add emoji above platform
+      emojis.push({
+        x: canvas.width + 40,
+        y: platformHeight - 30,
+        collected: false
+      });
     };
 
     const update = () => {
       // Update player
       velocityY += gravity;
       playerY += velocityY;
+      
+      // Check emoji collisions
+      emojis = emojis.filter(emoji => {
+        if (!emoji.collected && 
+            Math.abs((playerX + player.width/2) - (emoji.x)) < 20 &&
+            Math.abs((playerY + player.height/2) - emoji.y) < 20) {
+          setEmojiCount(prev => Math.min(22, prev + 1));
+          emoji.collected = true;
+        }
+        return emoji.x > -20 && !emoji.collected;
+      });
 
       // Keep player in bounds
       if (playerX < 0) playerX = 0;
@@ -200,6 +219,14 @@ const GameComponent = () => {
         );
       });
 
+      // Draw emojis
+      ctx.font = '20px Arial';
+      emojis.forEach(emoji => {
+        if (!emoji.collected) {
+          ctx.fillText('✨', emoji.x, emoji.y);
+        }
+      });
+
       // Draw ground
       ctx.fillStyle = '#795548';
       ctx.fillRect(0, canvas.height - 2, canvas.width, 2);
@@ -220,15 +247,8 @@ const GameComponent = () => {
       }
     };
 
-    //Simulate collecting emojis - Replace with actual game logic
-    const collectEmoji = () => {
-        setEmojiCount(prevCount => Math.min(22, prevCount + 1));
-    }
-
     window.addEventListener('keydown', handleKeyDown);
     canvas.addEventListener('touchstart', handleTouch);
-    // Add event listener for emoji collection (replace with actual game logic)
-    canvas.addEventListener('click', collectEmoji);
 
     gameLoop();
 
