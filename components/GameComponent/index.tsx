@@ -121,7 +121,7 @@ const GameComponent = () => {
       platforms.forEach(platform => {
         platform.x -= 0.7;
       });
-      
+
       collectibles.forEach(collectible => {
         collectible.x -= 0.7;
       });
@@ -138,6 +138,7 @@ const GameComponent = () => {
         }
         return !collectible.collected && collectible.x > -collectible.width;
       });
+
 
       // Keep player in bounds
       if (playerX < 0) playerX = 0;
@@ -156,17 +157,25 @@ const GameComponent = () => {
         platform.x -= 2;
 
         // Platform collision
+        let collision = false;
         if (playerX + player.width > platform.x &&
             playerX < platform.x + platform.width &&
             playerY + player.height > platform.y &&
             playerY < platform.y + platform.height) {
-
+          collision = true;
           // Landing on top of platform
           if (velocityY > 0 && playerY < platform.y) {
             playerY = platform.y - player.height;
             velocityY = 0;
             isJumping = false;
             consecutiveJumps = 0;
+          } else {
+            //Collision from the side, reset player position to the top
+            playerY = platform.y - player.height;
+            velocityY = 0;
+            isJumping = false;
+            consecutiveJumps = 0;
+
           }
         }
 
