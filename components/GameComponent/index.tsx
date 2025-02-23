@@ -117,17 +117,28 @@ const GameComponent = () => {
       velocityY += gravity;
       playerY += velocityY;
 
+      // Move platforms and collectibles
+      platforms.forEach(platform => {
+        platform.x -= 2;
+      });
+      
+      collectibles.forEach(collectible => {
+        collectible.x -= 2;
+      });
+
       // Check collectible collisions
       collectibles = collectibles.filter(collectible => {
-        if (!collectible.collected &&
+        const collision = !collectible.collected &&
             playerX < collectible.x + collectible.width &&
             playerX + player.width > collectible.x &&
             playerY < collectible.y + collectible.height &&
-            playerY + player.height > collectible.y) {
+            playerY + player.height > collectible.y;
+            
+        if (collision) {
           setEmojiCount(prev => Math.min(22, prev + 1));
           collectible.collected = true;
         }
-        return collectible.x > -collectible.width && !collectible.collected;
+        return !collectible.collected && collectible.x > -collectible.width;
       });
 
       // Keep player in bounds
