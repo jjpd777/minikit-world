@@ -117,13 +117,13 @@ const GameComponent = () => {
       velocityY += gravity;
       playerY += velocityY;
 
-      // Move platforms and collectibles
+      // Move platforms and collectibles at a slower speed
       platforms.forEach(platform => {
-        platform.x -= 2;
+        platform.x -= 0.7;
       });
       
       collectibles.forEach(collectible => {
-        collectible.x -= 2;
+        collectible.x -= 0.7;
       });
 
       // Check collectible collisions without resetting position
