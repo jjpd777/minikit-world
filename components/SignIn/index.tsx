@@ -92,6 +92,10 @@ export const SignIn = () => {
     router.push('/gameplay');
   };
 
+  const handleTestingTokens = () => {
+    router.push('/testing-tokens');
+  };
+
   return (
     <>
       <div className="relative">
@@ -190,6 +194,13 @@ export const SignIn = () => {
             >
               <Image src="/world_c.png" alt="World Coin" width={24} height={24} />
               {isVerifying ? "Verifying..." : "Verify with World ID"}
+            </button>
+
+            <button
+              onClick={handleTestingTokens}
+              className="px-6 py-3 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 transition-all duration-200 flex items-center justify-center gap-2"
+            >
+              Test Religious Tokens
             </button>
 
             {/* <button
