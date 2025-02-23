@@ -161,12 +161,15 @@ const GameComponent = () => {
             playerY + player.height > platform.y &&
             playerY < platform.y + platform.height) {
 
-          // Landing on top of platform
-          if (velocityY > 0 && playerY < platform.y) {
+          // Only handle vertical collision
+          if (velocityY > 0) {
             playerY = platform.y - player.height;
             velocityY = 0;
             isJumping = false;
             consecutiveJumps = 0;
+          } else {
+            // Side collision - just offset player
+            playerX = velocityX > 0 ? platform.x - player.width : platform.x + platform.width;
           }
         }
 
