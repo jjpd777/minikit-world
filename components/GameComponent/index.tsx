@@ -62,7 +62,7 @@ const GameComponent = () => {
     const gravity = 0.5;
     const jumpForce = -12;
     let platforms: { x: number; y: number; width: number; height: number }[] = [];
-    let emojis: { x: number; y: number; collected: boolean }[] = [];
+    let collectibles: { x: number; y: number; width: number; height: number; collected: boolean }[] = [];
     let isJumping = false;
     let consecutiveJumps = 0;
     const maxConsecutiveJumps = 2;
@@ -102,10 +102,12 @@ const GameComponent = () => {
         height: 15
       });
 
-      // Add emoji above platform
-      emojis.push({
-        x: canvas.width + 40,
-        y: platformHeight - 30,
+      // Add collectible above platform
+      collectibles.push({
+        x: canvas.width + 30,
+        y: platformHeight - 40,
+        width: 20,
+        height: 20,
         collected: false
       });
     };
@@ -115,15 +117,17 @@ const GameComponent = () => {
       velocityY += gravity;
       playerY += velocityY;
 
-      // Check emoji collisions
-      emojis = emojis.filter(emoji => {
-        if (!emoji.collected && 
-            Math.abs((playerX + player.width/2) - (emoji.x)) < 20 &&
-            Math.abs((playerY + player.height/2) - emoji.y) < 20) {
+      // Check collectible collisions
+      collectibles = collectibles.filter(collectible => {
+        if (!collectible.collected &&
+            playerX < collectible.x + collectible.width &&
+            playerX + player.width > collectible.x &&
+            playerY < collectible.y + collectible.height &&
+            playerY + player.height > collectible.y) {
           setEmojiCount(prev => Math.min(22, prev + 1));
-          emoji.collected = true;
+          collectible.collected = true;
         }
-        return emoji.x > -20 && !emoji.collected;
+        return collectible.x > -collectible.width && !collectible.collected;
       });
 
       // Keep player in bounds
@@ -219,11 +223,11 @@ const GameComponent = () => {
         );
       });
 
-      // Draw emojis
-      ctx.font = '20px Arial';
-      emojis.forEach(emoji => {
-        if (!emoji.collected) {
-          ctx.fillText('✨', emoji.x, emoji.y);
+      // Draw collectibles
+      ctx.fillStyle = '#9b4dca';
+      collectibles.forEach(collectible => {
+        if (!collectible.collected) {
+          ctx.fillRect(collectible.x, collectible.y, collectible.width, collectible.height);
         }
       });
 
