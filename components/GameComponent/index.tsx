@@ -3,6 +3,7 @@ import { useRef, useEffect, useState } from 'react';
 
 const GameComponent = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [showPopup, setShowPopup] = useState(false);
   const [bookmarkedFiles, setBookmarkedFiles] = useState<string[]>([]);
   const [selectedAudioFile, setSelectedAudioFile] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(0);
@@ -119,7 +120,7 @@ const GameComponent = () => {
           playerY < collectible.y + collectible.height &&
           playerY + player.height > collectible.y) {
         collectible.collected = true;
-        alert("Hello there!");
+        setShowPopup(true); // Show popup on collision
         return; // This pauses the game by stopping the update
       }
 
@@ -269,7 +270,49 @@ const GameComponent = () => {
           </button>
         )}
       </div>
-
+      {showPopup && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-gray-900 p-8 rounded-xl max-w-md w-full mx-4">
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-xl text-white font-bold">Game Over!</h2>
+              <button
+                onClick={() => {
+                  setShowPopup(false);
+                  window.location.reload();
+                }}
+                className="p-2 hover:bg-gray-800 rounded-full"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-6 w-6 text-white"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              </button>
+            </div>
+            <div className="space-y-4">
+              <p className="text-gray-300">You hit the collectible! Try again?</p>
+              <button
+                onClick={() => {
+                  setShowPopup(false);
+                  window.location.reload();
+                }}
+                className="w-full px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
+              >
+                Play Again
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
