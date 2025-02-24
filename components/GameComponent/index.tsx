@@ -364,16 +364,8 @@ const GameComponent = () => {
 
                     if (finalPayload.status === "success") {
                       setTransactionId(finalPayload.transaction_id);
-                      setIsTransactionPending(true);
-
-                      // Wait for transaction confirmation
-                      const receipt = await MiniKit.commandsAsync.waitForTransaction({
-                        transaction_id: finalPayload.transaction_id
-                      });
-
-                      if (receipt.status === "success") {
-                        setIsTransactionConfirmed(true);
-                      }
+                      setIsTransactionConfirmed(true);
+                      alert("Tokens claimed successfully!");
                     }
                   } catch (error) {
                     console.error("Failed to claim tokens:", error);
