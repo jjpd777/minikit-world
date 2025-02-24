@@ -55,15 +55,23 @@ const GameComponent = () => {
     let playerX = 20;
     let velocityY = 0;
     const gravity = 0.5;
-    const jumpForce = -6;
+    const jumpForce = -10;
+
+    let obstacles = Array.from({ length: 3 }, (_, i) => ({
+      x: canvas.width + i * 150,
+      y: 300,
+      width: 20,
+      height: 60,
+      speed: 2
+    }));
 
     let collectible = {
       x: canvas.width + 20,
-      y: 250,
+      y: 320,
       width: 15,
       height: 15,
       collected: false,
-      speed: canvas.width / (61 * 60) // Adjusted for 200px width
+      speed: canvas.width / (61 * 60)
     };
 
     const player = {
@@ -91,6 +99,14 @@ const GameComponent = () => {
       velocityY += gravity;
       playerY += velocityY;
 
+      // Move obstacles
+      obstacles.forEach(obstacle => {
+        obstacle.x -= obstacle.speed;
+        if (obstacle.x + obstacle.width < 0) {
+          obstacle.x = canvas.width;
+        }
+      });
+
       // Move collectible
       if (!collectible.collected) {
         collectible.x -= collectible.speed;
@@ -115,6 +131,12 @@ const GameComponent = () => {
 
     const draw = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Draw obstacles
+      ctx.fillStyle = '#4CAF50';
+      obstacles.forEach(obstacle => {
+        ctx.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
+      });
 
       // Draw player
       ctx.fillStyle = '#FFD700';
