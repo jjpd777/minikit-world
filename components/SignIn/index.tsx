@@ -11,13 +11,15 @@ export const SignIn = () => {
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
   const [bookmarkedFiles, setBookmarkedFiles] = useState<string[]>([]);
   const [currentPage, setCurrentPage] = useState(0);
-  const [selectedAudioFile, setSelectedAudioFile] = useState<string | null>(null);
+  const [selectedAudioFile, setSelectedAudioFile] = useState<string | null>(
+    null,
+  );
   const [walletAddress, setWalletAddress] = useState<string>("");
   const filesPerPage = 5;
   const router = useRouter();
 
   useEffect(() => {
-    const storedAddress = localStorage.getItem('walletAddress');
+    const storedAddress = localStorage.getItem("walletAddress");
     if (storedAddress) {
       setWalletAddress(storedAddress);
     }
@@ -25,53 +27,58 @@ export const SignIn = () => {
 
   useEffect(() => {
     const loadBookmarkedFiles = () => {
-      const bookmarked = JSON.parse(localStorage.getItem('bookmarkedAudios') || '[]');
+      const bookmarked = JSON.parse(
+        localStorage.getItem("bookmarkedAudios") || "[]",
+      );
       setBookmarkedFiles(bookmarked);
     };
 
     loadBookmarkedFiles();
-    window.addEventListener('storage', loadBookmarkedFiles);
-    return () => window.removeEventListener('storage', loadBookmarkedFiles);
+    window.addEventListener("storage", loadBookmarkedFiles);
+    return () => window.removeEventListener("storage", loadBookmarkedFiles);
   }, []);
 
   const handleAddressChange = (address: string) => {
     setWalletAddress(address);
     if (address) {
-      localStorage.setItem('walletAddress', address);
+      localStorage.setItem("walletAddress", address);
     } else {
-      localStorage.removeItem('walletAddress');
+      localStorage.removeItem("walletAddress");
     }
   };
 
   const playAudioFile = async (gsPath: string) => {
     try {
-      const filePath = gsPath.replace(/^gs:\/\/[^/]+\//, '');
-      const response = await fetch(`/api/upload-audio?file=${encodeURIComponent(filePath)}`, {
-        method: 'GET'
-      });
+      const filePath = gsPath.replace(/^gs:\/\/[^/]+\//, "");
+      const response = await fetch(
+        `/api/upload-audio?file=${encodeURIComponent(filePath)}`,
+        {
+          method: "GET",
+        },
+      );
 
       if (!response.ok) {
-        throw new Error('Failed to fetch audio file');
+        throw new Error("Failed to fetch audio file");
       }
 
       const blob = await response.blob();
       const url = URL.createObjectURL(blob);
       setSelectedAudioFile(url);
     } catch (error) {
-      console.error('Error playing audio file:', error);
-      alert('Failed to play audio file');
+      console.error("Error playing audio file:", error);
+      alert("Failed to play audio file");
     }
   };
 
   const [trackingComplete, setTrackingComplete] = useState(false);
 
   const handlePlayGame = async () => {
-    const walletAddress = localStorage.getItem('walletAddress') || '';
+    const walletAddress = localStorage.getItem("walletAddress") || "";
     try {
-      const response = await fetch('/api/track-gameplay', {
-        method: 'POST',
+      const response = await fetch("/api/track-gameplay", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           walletAddress,
@@ -84,16 +91,16 @@ export const SignIn = () => {
         setTrackingComplete(true);
       }
     } catch (error) {
-      console.error('Failed to track game start:', error);
+      console.error("Failed to track game start:", error);
     }
   };
 
   const handleStartGame = () => {
-    router.push('/gameplay');
+    router.push("/gameplay");
   };
 
   const handleTestingTokens = () => {
-    router.push('/testing-tokens');
+    router.push("/testing-tokens");
   };
 
   return (
@@ -111,13 +118,18 @@ export const SignIn = () => {
       </div>
 
       <div className="flex flex-col gap-4">
-        {bookmarkedFiles.length > 0 && (
-          !trackingComplete ? (
+        {bookmarkedFiles.length > 0 &&
+          (!trackingComplete ? (
             <button
               onClick={handlePlayGame}
               className="px-6 py-3 bg-white text-purple-600 border-2 border-purple-600 rounded-xl hover:bg-purple-50 transition-colors duration-200 flex items-center gap-2"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-5 w-5"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
                 <path d="M5 4a2 2 0 012-2h6a2 2 0 012 2v14l-5-2.5L5 18V4z" />
               </svg>
               Bookmarks
@@ -129,8 +141,7 @@ export const SignIn = () => {
             >
               Let's Go
             </button>
-          )
-        )}
+          ))}
         {!walletAddress ? (
           <WalletAuth onAddressChange={handleAddressChange} />
         ) : (
@@ -146,10 +157,11 @@ export const SignIn = () => {
                   const verifyPayload = {
                     action: process.env.NEXT_PUBLIC_ACTION_NAME as string,
                     signal: "user_verification",
-                    verification_level: VerificationLevel.Device
+                    verification_level: VerificationLevel.Device,
                   };
 
-                  const { finalPayload } = await MiniKit.commandsAsync.verify(verifyPayload);
+                  const { finalPayload } =
+                    await MiniKit.commandsAsync.verify(verifyPayload);
 
                   if (finalPayload.status === "success") {
                     const verifyResponse = await fetch("/api/verify", {
@@ -160,7 +172,7 @@ export const SignIn = () => {
                       body: JSON.stringify({
                         payload: finalPayload,
                         action: process.env.NEXT_PUBLIC_ACTION_NAME as string,
-                        signal: "user_verification"
+                        signal: "user_verification",
                       }),
                     });
 
@@ -175,11 +187,13 @@ export const SignIn = () => {
 
                     if (data.verifyRes?.success) {
                       console.log("Verification succeeded!");
-                      localStorage.setItem('worldcoin_verified', 'true');
+                      localStorage.setItem("worldcoin_verified", "true");
                       router.push("/verified");
                     } else {
                       console.log("Verification failed with data:", data);
-                      throw new Error(data.verifyRes?.error || "Verification failed");
+                      throw new Error(
+                        data.verifyRes?.error || "Verification failed",
+                      );
                     }
                   }
                 } catch (error) {
@@ -192,16 +206,21 @@ export const SignIn = () => {
               disabled={isVerifying}
               className="px-8 py-4 bg-purple-400/80 text-white rounded-xl hover:bg-purple-500 transition-all duration-200 transform hover:scale-105 font-medium text-lg shadow-lg flex items-center justify-center gap-2"
             >
-              <Image src="/world_c.png" alt="World Coin" width={24} height={24} />
+              <Image
+                src="/world_c.png"
+                alt="World Coin"
+                width={24}
+                height={24}
+              />
               {isVerifying ? "Verifying..." : "Verify with World ID"}
             </button>
 
-            <button
+            {/* <button
               onClick={handleTestingTokens}
               className="px-6 py-3 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 transition-all duration-200 flex items-center justify-center gap-2"
             >
               Test Religious Tokens
-            </button>
+            </button> */}
 
             {/* <button
               onClick={() => {
@@ -264,11 +283,7 @@ export const SignIn = () => {
             )} */}
 
             {audioUrl && (
-              <audio
-                controls
-                src={audioUrl}
-                className="mt-4 w-full"
-              />
+              <audio controls src={audioUrl} className="mt-4 w-full" />
             )}
           </>
         )}
