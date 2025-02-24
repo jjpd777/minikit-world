@@ -175,15 +175,15 @@ const GameComponent = () => {
           collectible.x + radius, collectible.y + radius, radius,
           collectible.x + radius, collectible.y + radius, radius * 2 * pulse
         );
-        gradient.addColorStop(0, '#800080');
-        gradient.addColorStop(1, 'rgba(128, 0, 128, 0)');
+        gradient.addColorStop(0, '#FFEB3B');
+        gradient.addColorStop(1, 'rgba(255, 235, 59, 0)');
         ctx.fillStyle = gradient;
         ctx.fill();
 
         // Inner circle
         ctx.beginPath();
         ctx.arc(collectible.x + radius, collectible.y + radius, radius, 0, Math.PI * 2);
-        ctx.fillStyle = '#800080';
+        ctx.fillStyle = '#FFFFFF';
         ctx.fill();
         ctx.restore();
       }
@@ -191,11 +191,6 @@ const GameComponent = () => {
       // Draw ground
       ctx.fillStyle = "#795548";
       ctx.fillRect(0, canvas.height - 2, canvas.width, 2);
-
-      // Draw emoji count
-      ctx.font = "20px Arial";
-      ctx.fillStyle = "white";
-      ctx.fillText(`✨: ${emojiCount}`, 10, 30);
     };
 
     const gameLoop = () => {
