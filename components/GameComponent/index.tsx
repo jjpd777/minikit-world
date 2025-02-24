@@ -164,13 +164,28 @@ const GameComponent = () => {
 
       // Draw collectible
       if (!collectible.collected) {
-        ctx.fillStyle = "#9b4dca";
-        ctx.fillRect(
-          collectible.x,
-          collectible.y,
-          collectible.width,
-          collectible.height,
+        ctx.save();
+        const radius = player.width;
+        const pulse = Math.sin(Date.now() * 0.005) * 0.2 + 1; // Pulsing effect
+
+        // Outer glow
+        ctx.beginPath();
+        ctx.arc(collectible.x + radius, collectible.y + radius, radius * 2 * pulse, 0, Math.PI * 2);
+        const gradient = ctx.createRadialGradient(
+          collectible.x + radius, collectible.y + radius, radius,
+          collectible.x + radius, collectible.y + radius, radius * 2 * pulse
         );
+        gradient.addColorStop(0, '#800080');
+        gradient.addColorStop(1, 'rgba(128, 0, 128, 0)');
+        ctx.fillStyle = gradient;
+        ctx.fill();
+
+        // Inner circle
+        ctx.beginPath();
+        ctx.arc(collectible.x + radius, collectible.y + radius, radius, 0, Math.PI * 2);
+        ctx.fillStyle = '#800080';
+        ctx.fill();
+        ctx.restore();
       }
 
       // Draw ground
