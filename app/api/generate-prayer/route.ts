@@ -38,7 +38,7 @@ export async function POST(request: NextRequest) {
       buddhist: 'Write a short Buddhist meditation or prayer (approximately 100 words) that begins with an emotionally impactful opening line reflecting the given intentions. The prayer should incorporate relevant Buddhist teachings or sutras naturally. The teaching should be seamlessly connected to the prayer\'s theme. The prayer should be warm and uplifting, respecting Buddhist traditions.'
     };
 
-    const prompt = `Generate a prayer in ${languageMap[language] || "English"} addressing the following intentions: ${intentions}.`;
+    const prompt = `Generate a prayer addressing the following intentions: ${intentions}. ${language === 'hi' ? 'The prayer MUST be written in Hindi (Devanagari script).' : language === 'ar' ? 'The prayer MUST be written in Arabic script.' : `The prayer should be in ${languageMap[language] || "English"}.`}`;
 
     const response = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
