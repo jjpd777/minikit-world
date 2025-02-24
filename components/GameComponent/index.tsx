@@ -45,25 +45,25 @@ const GameComponent = () => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    canvas.width = 500;
+    canvas.width = 200;
     canvas.height = 400;
 
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
     let playerY = 250;
-    let playerX = 30;
+    let playerX = 20;
     let velocityY = 0;
     const gravity = 0.5;
     const jumpForce = -6;
 
     let collectible = {
-      x: canvas.width + 30,
+      x: canvas.width + 20,
       y: 250,
-      width: 20,
-      height: 20,
+      width: 15,
+      height: 15,
       collected: false,
-      speed: canvas.width / (61 * 60)
+      speed: canvas.width / (61 * 60) // Adjusted for 200px width
     };
 
     const player = {
