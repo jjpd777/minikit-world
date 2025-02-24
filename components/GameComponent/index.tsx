@@ -1,55 +1,61 @@
 "use client";
-import { useRef, useEffect, useState } from 'react';
+import { useRef, useEffect, useState } from "react";
 
 const GameComponent = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [showPopup, setShowPopup] = useState(false);
   const [bookmarkedFiles, setBookmarkedFiles] = useState<string[]>([]);
-  const [selectedAudioFile, setSelectedAudioFile] = useState<string | null>(null);
+  const [selectedAudioFile, setSelectedAudioFile] = useState<string | null>(
+    null,
+  );
   const [currentPage, setCurrentPage] = useState(0);
   const [emojiCount, setEmojiCount] = useState(0);
   const filesPerPage = 5;
 
   useEffect(() => {
     const loadBookmarkedFiles = () => {
-      const bookmarked = JSON.parse(localStorage.getItem('bookmarkedAudios') || '[]');
+      const bookmarked = JSON.parse(
+        localStorage.getItem("bookmarkedAudios") || "[]",
+      );
       setBookmarkedFiles(bookmarked);
     };
 
     loadBookmarkedFiles();
-    window.addEventListener('storage', loadBookmarkedFiles);
-    return () => window.removeEventListener('storage', loadBookmarkedFiles);
+    window.addEventListener("storage", loadBookmarkedFiles);
+    return () => window.removeEventListener("storage", loadBookmarkedFiles);
   }, []);
 
   const playAudioFile = async (gsPath: string) => {
     try {
-      const filePath = gsPath.replace(/^gs:\/\/[^/]+\//, '');
-      const response = await fetch(`/api/upload-audio?file=${encodeURIComponent(filePath)}`, {
-        method: 'GET'
-      });
+      const filePath = gsPath.replace(/^gs:\/\/[^/]+\//, "");
+      const response = await fetch(
+        `/api/upload-audio?file=${encodeURIComponent(filePath)}`,
+        {
+          method: "GET",
+        },
+      );
 
       if (!response.ok) {
-        throw new Error('Failed to fetch audio file');
+        throw new Error("Failed to fetch audio file");
       }
 
       const blob = await response.blob();
       const url = URL.createObjectURL(blob);
       setSelectedAudioFile(url);
     } catch (error) {
-      console.error('Error playing audio file:', error);
-      alert('Failed to play audio file');
+      console.error("Error playing audio file:", error);
+      alert("Failed to play audio file");
     }
   };
-
 
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    canvas.width = 440;
+    canvas.width = 340;
     canvas.height = 400;
 
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
     let playerY = 250;
@@ -64,7 +70,7 @@ const GameComponent = () => {
       width: 15,
       height: 15,
       collected: false,
-      speed: canvas.width / (61 * 60)
+      speed: canvas.width / (61 * 60),
     };
 
     const player = {
@@ -79,7 +85,7 @@ const GameComponent = () => {
     };
 
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.code === 'Space') {
+      if (e.code === "Space") {
         handleJump();
       }
     };
@@ -98,11 +104,13 @@ const GameComponent = () => {
       }
 
       // Check collectible collision
-      if (!collectible.collected &&
-          playerX < collectible.x + collectible.width &&
-          playerX + player.width > collectible.x &&
-          playerY < collectible.y + collectible.height &&
-          playerY + player.height > collectible.y) {
+      if (
+        !collectible.collected &&
+        playerX < collectible.x + collectible.width &&
+        playerX + player.width > collectible.x &&
+        playerY < collectible.y + collectible.height &&
+        playerY + player.height > collectible.y
+      ) {
         collectible.collected = true;
         setShowPopup(true); // Show popup on collision
         return; // This pauses the game by stopping the update
@@ -119,30 +127,35 @@ const GameComponent = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       // Draw player
-      ctx.fillStyle = '#FFD700';
+      ctx.fillStyle = "#FFD700";
       ctx.beginPath();
       ctx.arc(
-        playerX + player.width/2,
-        playerY + player.height/2,
-        player.width/2,
+        playerX + player.width / 2,
+        playerY + player.height / 2,
+        player.width / 2,
         0,
-        Math.PI * 2
+        Math.PI * 2,
       );
       ctx.fill();
 
       // Draw collectible
       if (!collectible.collected) {
-        ctx.fillStyle = '#9b4dca';
-        ctx.fillRect(collectible.x, collectible.y, collectible.width, collectible.height);
+        ctx.fillStyle = "#9b4dca";
+        ctx.fillRect(
+          collectible.x,
+          collectible.y,
+          collectible.width,
+          collectible.height,
+        );
       }
 
       // Draw ground
-      ctx.fillStyle = '#795548';
+      ctx.fillStyle = "#795548";
       ctx.fillRect(0, canvas.height - 2, canvas.width, 2);
 
       // Draw emoji count
-      ctx.font = '20px Arial';
-      ctx.fillStyle = 'white';
+      ctx.font = "20px Arial";
+      ctx.fillStyle = "white";
       ctx.fillText(`✨: ${emojiCount}`, 10, 30);
     };
 
@@ -152,34 +165,34 @@ const GameComponent = () => {
       requestAnimationFrame(gameLoop);
     };
 
-    window.addEventListener('keydown', handleKeyDown);
-    canvas.addEventListener('touchstart', handleTouch);
+    window.addEventListener("keydown", handleKeyDown);
+    canvas.addEventListener("touchstart", handleTouch);
     gameLoop();
 
     return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-      canvas.removeEventListener('touchstart', handleTouch);
+      window.removeEventListener("keydown", handleKeyDown);
+      canvas.removeEventListener("touchstart", handleTouch);
     };
   }, []);
 
   const canClaimToken = emojiCount >= 22;
 
   const claimChristianityToken = () => {
-    fetch('/api/claim-token', {
-      method: 'POST',
-      body: JSON.stringify({ token: 'Christianity Token' }),
+    fetch("/api/claim-token", {
+      method: "POST",
+      body: JSON.stringify({ token: "Christianity Token" }),
     })
-      .then(response => {
+      .then((response) => {
         if (response.ok) {
-          alert('Christianity Token claimed!');
+          alert("Christianity Token claimed!");
           setEmojiCount(0);
         } else {
-          alert('Failed to claim token.');
+          alert("Failed to claim token.");
         }
       })
-      .catch(error => {
-        console.error('Error claiming token:', error);
-        alert('Failed to claim token.');
+      .catch((error) => {
+        console.error("Error claiming token:", error);
+        alert("Failed to claim token.");
       });
   };
 
@@ -188,16 +201,20 @@ const GameComponent = () => {
       <canvas
         ref={canvasRef}
         className="border border-gray-600 rounded-lg"
-        style={{ backgroundColor: '#2D2D2D' }}
+        style={{ backgroundColor: "#2D2D2D" }}
       />
       {bookmarkedFiles.length > 0 && (
         <div className="w-full max-w-md">
           <div className="max-h-80 overflow-y-auto bg-purple-900/20 p-4 rounded-lg">
             {[...bookmarkedFiles]
               .reverse()
-              .slice(currentPage * filesPerPage, (currentPage + 1) * filesPerPage)
+              .slice(
+                currentPage * filesPerPage,
+                (currentPage + 1) * filesPerPage,
+              )
               .map((file, index) => {
-                const globalIndex = bookmarkedFiles.length - (currentPage * filesPerPage + index);
+                const globalIndex =
+                  bookmarkedFiles.length - (currentPage * filesPerPage + index);
                 return (
                   <div
                     key={index}
@@ -219,18 +236,29 @@ const GameComponent = () => {
           )}
           <div className="flex justify-between mt-4">
             <button
-              onClick={() => setCurrentPage(prev => Math.max(0, prev - 1))}
+              onClick={() => setCurrentPage((prev) => Math.max(0, prev - 1))}
               disabled={currentPage === 0}
               className="px-4 py-2 bg-purple-400/80 text-white rounded-lg disabled:opacity-50"
             >
               Previous
             </button>
             <span className="text-white">
-              Page {currentPage + 1} of {Math.ceil(bookmarkedFiles.length / filesPerPage)}
+              Page {currentPage + 1} of{" "}
+              {Math.ceil(bookmarkedFiles.length / filesPerPage)}
             </span>
             <button
-              onClick={() => setCurrentPage(prev => Math.min(Math.ceil(bookmarkedFiles.length / filesPerPage) - 1, prev + 1))}
-              disabled={currentPage >= Math.ceil(bookmarkedFiles.length / filesPerPage) - 1}
+              onClick={() =>
+                setCurrentPage((prev) =>
+                  Math.min(
+                    Math.ceil(bookmarkedFiles.length / filesPerPage) - 1,
+                    prev + 1,
+                  ),
+                )
+              }
+              disabled={
+                currentPage >=
+                Math.ceil(bookmarkedFiles.length / filesPerPage) - 1
+              }
               className="px-4 py-2 bg-purple-400/80 text-white rounded-lg disabled:opacity-50"
             >
               Next
@@ -277,7 +305,9 @@ const GameComponent = () => {
               </button>
             </div>
             <div className="space-y-4">
-              <p className="text-gray-300">You hit the collectible! Try again?</p>
+              <p className="text-gray-300">
+                You hit the collectible! Try again?
+              </p>
               <button
                 onClick={() => {
                   setShowPopup(false);
