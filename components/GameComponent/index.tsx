@@ -89,17 +89,17 @@ const GameComponent = () => {
     const jumpForce = -10;
 
     let collectible = {
-      x: canvas.width + 20,
+      x: canvas.width - 100,
       y: 320,
       width: 15,
       height: 15,
       collected: false,
-      speed: canvas.width / (61 * 60),
     };
 
     const player = {
       width: 25,
       height: 25,
+      speed: canvas.width / (61 * 60),
     };
 
     const handleJump = () => {
@@ -122,9 +122,9 @@ const GameComponent = () => {
       velocityY += gravity;
       playerY += velocityY;
 
-      // Move collectible
+      // Move player right
       if (!collectible.collected) {
-        collectible.x -= collectible.speed;
+        playerX += player.speed;
       }
 
       // Check collectible collision
