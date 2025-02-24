@@ -45,7 +45,7 @@ const GameComponent = () => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    canvas.width = 800;
+    canvas.width = 500;
     canvas.height = 400;
 
     const ctx = canvas.getContext('2d');
