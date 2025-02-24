@@ -282,22 +282,14 @@ const GameComponent = () => {
         }
       });
 
-      // Check collectible collisions
-      collectibles.forEach((collectible, index) => {
-        if (
-          !collectible.collected &&
+      // Check single collectible collision
+      if (!collectible.collected &&
           playerX < collectible.x + collectible.width &&
           playerX + player.width > collectible.x &&
           playerY + player.height > collectible.y &&
-          playerY < collectible.y + collectible.height
-        ) {
-          console.log(`[Game] Collectible collected at index ${index}`);
-          console.log('[Game] Current game state before reset:', {
-            playerX,
-            playerY,
-            platformCount: platforms.length,
-            emojiCount
-          });
+          playerY < collectible.y + collectible.height) {
+        collectible.collected = true;
+        showPopup = true;);
 
           collectible.collected = true;
           setEmojiCount(prev => {
