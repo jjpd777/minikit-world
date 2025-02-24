@@ -87,35 +87,19 @@ const GameComponent = () => {
     let velocityY = 0;
     const gravity = 0.5;
     const jumpForce = -10;
-    const [showPopup, setShowPopup] = useState(false);
-    const [selectedToken, setSelectedToken] = useState("");
-    const [isClaimingToken, setIsClaimingToken] = useState(false);
-    const [isTransactionConfirmed, setIsTransactionConfirmed] = useState(false);
-    const [transactionId, setTransactionId] = useState("");
-
-    const TOKENS = [
-      { address: "0x908BE4717360397348F35271b9461192B6c84522", name: "Christianity" },
-      { address: "0xC1b3a96113aC409fe3a40126962c74aEBccDda62", name: "Orthodox" },
-      { address: "0x848B9D2d07C601706ff86b7956579bDFB9Bc0635", name: "Judaism" },
-      { address: "0x723da9e13D5519a63a5cbC8342B4e4c3aE1eEb8A", name: "Islam" },
-      { address: "0x840934539c988fA438f005a4B94234E50f5D6c4a", name: "Sikhism" },
-      { address: "0x5b1b84197a2235C67c65E0Ec60f891A6975bcb95", name: "Hinduism" },
-      { address: "0x2AC26A1380B3eBbe4149fbcAf61e88D0304688d7", name: "Science" },
-      { address: "0xd01366ca8642a0396c4e909feb8c5E9Ec3A00F65", name: "Buddhism" }
-    ];
 
     let collectible = {
-      x: canvas.width - 100,
+      x: canvas.width + 20,
       y: 320,
       width: 15,
       height: 15,
       collected: false,
+      speed: canvas.width / (61 * 60),
     };
 
     const player = {
       width: 25,
       height: 25,
-      speed: canvas.width / (61 * 60),
     };
 
     const handleJump = () => {
@@ -138,9 +122,9 @@ const GameComponent = () => {
       velocityY += gravity;
       playerY += velocityY;
 
-      // Move player right
+      // Move collectible
       if (!collectible.collected) {
-        playerX += player.speed;
+        collectible.x -= collectible.speed;
       }
 
       // Check collectible collision
@@ -152,8 +136,8 @@ const GameComponent = () => {
         playerY + player.height > collectible.y
       ) {
         collectible.collected = true;
-        setShowPopup(true);
-        return;
+        setShowPopup(true); // Show popup on collision
+        return; // This pauses the game by stopping the update
       }
 
       // Keep player in bounds
