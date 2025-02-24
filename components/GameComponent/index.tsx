@@ -119,7 +119,8 @@ const GameComponent = () => {
           playerY < collectible.y + collectible.height &&
           playerY + player.height > collectible.y) {
         collectible.collected = true;
-        setEmojiCount(prev => prev + 1);
+        alert("Hello there!");
+        return; // This pauses the game by stopping the update
       }
 
       // Keep player in bounds
