@@ -60,9 +60,17 @@ const GameComponent = () => {
     let velocityY = 0;
     let velocityX = 0;
     const gravity = 0.5;
-    const jumpForce = -12;
+    const jumpForce = -6; // Reduced jump height
     let platforms: { x: number; y: number; width: number; height: number }[] = [];
-    let collectibles: { x: number; y: number; width: number; height: number; collected: boolean }[] = [];
+    let collectible = {
+      x: canvas.width + 30,
+      y: 250,
+      width: 20,
+      height: 20,
+      collected: false,
+      speed: canvas.width / (61 * 60) // Speed to cross screen in 61 seconds
+    };
+    let showPopup = false;
     let isJumping = false;
     let consecutiveJumps = 0;
     const maxConsecutiveJumps = 2;
@@ -91,8 +99,8 @@ const GameComponent = () => {
     };
 
     const addPlatform = () => {
-      const minHeight = canvas.height * 0.3;
-      const maxHeight = canvas.height * 0.7;
+      const minHeight = canvas.height * 0.2;
+      const maxHeight = canvas.height * 0.8;
       const platformHeight = Math.random() * (maxHeight - minHeight) + minHeight;
 
       platforms.push({
@@ -101,15 +109,6 @@ const GameComponent = () => {
         width: 80,
         height: 15
       });
-
-      // Add collectible above platform
-      collectibles.push({
-        x: canvas.width + 30,
-        y: platformHeight - 40,
-        width: 20,
-        height: 20,
-        collected: false
-      });
     };
 
     const update = () => {
@@ -117,27 +116,25 @@ const GameComponent = () => {
       velocityY += gravity;
       playerY += velocityY;
 
-      // Move platforms and collectibles at a slower speed
+      // Move platforms
       platforms.forEach(platform => {
         platform.x -= 0.7;
       });
 
-      collectibles.forEach(collectible => {
-        collectible.x -= 0.7;
-      });
+      // Move collectible
+      if (!collectible.collected) {
+        collectible.x -= collectible.speed;
+      }
 
-      // Check collectible collisions without resetting position
-      collectibles = collectibles.filter(collectible => {
-        if (!collectible.collected &&
-            playerX < collectible.x + collectible.width &&
-            playerX + player.width > collectible.x &&
-            playerY < collectible.y + collectible.height &&
-            playerY + player.height > collectible.y) {
-          setEmojiCount(prev => Math.min(22, prev + 1));
-          collectible.collected = true;
-        }
-        return !collectible.collected && collectible.x > -collectible.width;
-      });
+      // Check collectible collision
+      if (!collectible.collected &&
+          playerX < collectible.x + collectible.width &&
+          playerX + player.width > collectible.x &&
+          playerY < collectible.y + collectible.height &&
+          playerY + player.height > collectible.y) {
+        collectible.collected = true;
+        showPopup = true;
+      }
 
       // Keep player in bounds
       if (playerX < 0) playerX = 0;
@@ -232,13 +229,21 @@ const GameComponent = () => {
         );
       });
 
-      // Draw collectibles
-      ctx.fillStyle = '#9b4dca';
-      collectibles.forEach(collectible => {
-        if (!collectible.collected) {
-          ctx.fillRect(collectible.x, collectible.y, collectible.width, collectible.height);
-        }
-      });
+      // Draw collectible
+      if (!collectible.collected) {
+        ctx.fillStyle = '#9b4dca';
+        ctx.fillRect(collectible.x, collectible.y, collectible.width, collectible.height);
+      }
+
+      // Draw popup
+      if (showPopup) {
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+        ctx.fillRect(canvas.width/2 - 100, canvas.height/2 - 40, 200, 80);
+        ctx.fillStyle = 'white';
+        ctx.font = '24px Arial';
+        ctx.textAlign = 'center';
+        ctx.fillText('HELLO THERE', canvas.width/2, canvas.height/2);
+      }
 
       // Draw ground
       ctx.fillStyle = '#795548';
