@@ -74,6 +74,18 @@ export const PrayerForm = ({
       flag: "/colombia.svg",
       choices: ["Yo mismo", "Madre", "Padre", "Hermanos", "Salud", "Riqueza"],
     },
+    {
+      code: "hi",
+      name: "Hindi",
+      flag: "/india.svg",
+      choices: ["स्वयं", "माता", "पिता", "भाई-बहन", "स्वास्थ्य", "धन"],
+    },
+    {
+      code: "ar",
+      name: "Arabic",
+      flag: "/uae.svg",
+      choices: ["نفسي", "الأم", "الأب", "الإخوة", "الصحة", "الثروة"],
+    },
   ];
 
   const [audioData, setAudioData] = useState<string | null>(null);
