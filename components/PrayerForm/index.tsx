@@ -83,7 +83,7 @@ export const PrayerForm = ({
     {
       code: "ar",
       name: "Arabic",
-      flag: "/uae.svg",
+      flag: "/arab.svg",
       choices: ["نفسي", "الأم", "الأب", "الإخوة", "الصحة", "الثروة"],
     },
   ];
@@ -197,7 +197,7 @@ export const PrayerForm = ({
     <form onSubmit={handleSubmit} className="w-full max-w-md space-y-4">
       <div className="flex flex-col gap-2">
        
-        <div className="flex justify-center mb-4">
+        {/* <div className="flex justify-center mb-4">
           <Image
             src="/bendiga_logo.png"
             alt="Bendiga Logo"
@@ -207,7 +207,7 @@ export const PrayerForm = ({
             className="animate-glow"
             style={{ marginTop:'-60px', marginBottom: "-22px" }}
           />
-        </div>
+        </div> */}
         <div className="grid grid-cols-4 gap-2 mb-4">
           {religions.map((rel) => (
             <button
