@@ -32,7 +32,7 @@ interface DataType {
 export default function RecurringAnalytics() {
   const [data, setData] = useState<DataType | null>(null);
   const [selectedAddress, setSelectedAddress] = useState<string | null>(null);
-  const [timestamps, setTimestamps] = useState<string[]>([]);
+  const [events, setEvents] = useState<Array<{timestamp: string, religion: string, language: string}>>([]);
 
   useEffect(() => {
     fetch('/api/recurring')
@@ -44,7 +44,7 @@ export default function RecurringAnalytics() {
     if (selectedAddress) {
       fetch(`/api/recurring?address=${selectedAddress}`)
         .then(res => res.json())
-        .then(data => setTimestamps(data.timestamps || []));
+        .then(data => setEvents(data.events || []));
     }
   }, [selectedAddress]);
 
@@ -121,9 +121,11 @@ export default function RecurringAnalytics() {
           <div className="mt-4 p-4 bg-gray-700/50 rounded-lg">
             <h3 className="text-white font-semibold mb-2">Prayer Timestamps for {selectedAddress}</h3>
             <div className="max-h-40 overflow-y-auto">
-              {timestamps.map((timestamp, i) => (
-                <div key={i} className="text-gray-300 text-sm py-1">
-                  {new Date(timestamp).toLocaleString()}
+              {events.map((event, i) => (
+                <div key={i} className="text-gray-300 text-sm py-1 flex gap-4">
+                  <span>{new Date(event.timestamp).toLocaleString()}</span>
+                  <span>{event.religion}</span>
+                  <span>{event.language}</span>
                 </div>
               ))}
             </div>
