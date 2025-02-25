@@ -121,6 +121,23 @@ export default function RecurringAnalytics() {
           <ExportButton addresses={data.topAddresses.map(addr => addr.address)} />
         </div>
       </div>
+      
+      {selectedAddress && events.length > 0 && (
+        <div className="mt-8 w-full max-w-7xl bg-gray-800/50 p-6 rounded-lg">
+          <h2 className="text-xl font-bold mb-4 text-white">
+            Prayer History for {selectedAddress}
+          </h2>
+          <div className="space-y-2">
+            {events.map((event, index) => (
+              <div key={index} className="flex justify-between items-center p-2 bg-gray-700/50 rounded">
+                <span className="text-white">{new Date(event.timestamp).toLocaleString()}</span>
+                <span className="text-purple-400">{event.religion}</span>
+                <span className="text-blue-400">{event.language}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
