@@ -12,10 +12,11 @@ export async function GET(request: Request) {
         .where('walletAddress', '==', selectedAddress)
         .get();
       
-      const events = eventsSnapshot.docs
+      const timestamps = eventsSnapshot.docs
         .map(doc => doc.data())
-        .sort((a, b) => a.unix_timestamp - b.unix_timestamp);
-      return NextResponse.json({ events });
+        .sort((a, b) => a.unix_timestamp - b.unix_timestamp)
+        .map(data => data.timestamp);
+      return NextResponse.json({ timestamps });
     }
     
     const snapshot = await db.collection('prayer_events').get();

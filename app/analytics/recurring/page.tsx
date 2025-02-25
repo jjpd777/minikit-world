@@ -1,3 +1,4 @@
+
 "use client";
 import { useState, useEffect } from 'react';
 import { Bar } from 'react-chartjs-2';
@@ -30,9 +31,8 @@ interface DataType {
 
 export default function RecurringAnalytics() {
   const [data, setData] = useState<DataType | null>(null);
-  const [events, setEvents] = useState<any[]>([]);
-  const [selectedAddress, setSelectedAddress] = useState<string>("");
-  const [searchAddress, setSearchAddress] = useState<string>("");
+  const [selectedAddress, setSelectedAddress] = useState<string | null>(null);
+  const [timestamps, setTimestamps] = useState<string[]>([]);
 
   useEffect(() => {
     fetch('/api/recurring')
@@ -40,21 +40,11 @@ export default function RecurringAnalytics() {
       .then(setData);
   }, []);
 
-  const fetchEvents = async (address: string) => {
-    const response = await fetch(`/api/prayer_events?address=${address}`);
-    const data = await response.json();
-    setEvents(data || []);
-  };
-
-  useEffect(() => {
-    if (searchAddress) {
-      fetchEvents(searchAddress);
-    }
-  }, [searchAddress]);
-
   useEffect(() => {
     if (selectedAddress) {
-      fetchEvents(selectedAddress);
+      fetch(`/api/recurring?address=${selectedAddress}`)
+        .then(res => res.json())
+        .then(data => setTimestamps(data.timestamps || []));
     }
   }, [selectedAddress]);
 
@@ -127,31 +117,13 @@ export default function RecurringAnalytics() {
       <h1 className="text-2xl font-bold mb-8 text-white">Recurring Users Analytics</h1>
       <div className="w-full max-w-7xl bg-gray-800/50 p-6 rounded-lg">
         <Bar data={chartData} options={options} />
-        <div className="mt-4">
-          <input 
-            type="text" 
-            placeholder="Enter address to search" 
-            value={searchAddress} 
-            onChange={(e) => setSearchAddress(e.target.value)} 
-            className="p-2 border border-gray-600 rounded"
-          />
-        </div>
-        {events.length > 0 && (
+        {selectedAddress && (
           <div className="mt-4 p-4 bg-gray-700/50 rounded-lg">
-            <h3 className="text-white font-semibold mb-2">Prayer Events for {searchAddress}</h3>
+            <h3 className="text-white font-semibold mb-2">Prayer Timestamps for {selectedAddress}</h3>
             <div className="max-h-40 overflow-y-auto">
-              {events.map((event:any, i) => (
+              {timestamps.map((timestamp, i) => (
                 <div key={i} className="text-gray-300 text-sm py-1">
-                  <p>input_text: {event.input_text}</p>
-                  <p>language: {event.language}</p>
-                  <p>llm_response: {event.llm_response}</p>
-                  <p>religion: {event.religion}</p>
-                  <p>source: {event.source}</p>
-                  <p>timestamp: {event.timestamp}</p>
-                  <p>unix_timestamp: {event.unix_timestamp}</p>
-                  <p>voice_generation: {event.voice_generation}</p>
-                  <p>walletAddress: {event.walletAddress}</p>
-                  <hr/>
+                  {new Date(timestamp).toLocaleString()}
                 </div>
               ))}
             </div>
