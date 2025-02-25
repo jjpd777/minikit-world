@@ -1,4 +1,3 @@
-
 "use client";
 import { useState, useEffect } from 'react';
 import { Bar } from 'react-chartjs-2';
@@ -117,20 +116,9 @@ export default function RecurringAnalytics() {
       <h1 className="text-2xl font-bold mb-8 text-white">Recurring Users Analytics</h1>
       <div className="w-full max-w-7xl bg-gray-800/50 p-6 rounded-lg">
         <Bar data={chartData} options={options} />
-        {selectedAddress && (
-          <div className="mt-4 p-4 bg-gray-700/50 rounded-lg">
-            <h3 className="text-white font-semibold mb-2">Prayer Timestamps for {selectedAddress}</h3>
-            <div className="max-h-40 overflow-y-auto">
-              {events.map((event, i) => (
-                <div key={i} className="text-gray-300 text-sm py-1 flex gap-4">
-                  <span>{new Date(event.timestamp).toLocaleString()}</span>
-                  <span>{event.religion}</span>
-                  <span>{event.language}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
+        <div className="mt-4 flex justify-end">
+          <ExportButton addresses={data.topAddresses.map(addr => addr.address)} />
+        </div>
       </div>
     </div>
   );
