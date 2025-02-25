@@ -1,6 +1,8 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '../../../lib/firebase-admin';
+import { writeFile } from 'fs/promises';
+import path from 'path';
 
 export async function POST(request: NextRequest) {
   try {
@@ -10,30 +12,18 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Addresses must be an array' }, { status: 400 });
     }
 
-    const collections = ['prayer_events', 'prayer_events_whatsapp', 'prayer_events_voicegen'];
-    let allEvents = [];
+    // Get all prayer events
+    const snapshot = await db.collection('prayer_events').get();
+    const events = snapshot.docs
+      .map(doc => doc.data())
+      .filter(event => addresses.includes(event.walletAddress))
+      .sort((a, b) => a.unix_timestamp - b.unix_timestamp);
 
-    for (const collection of collections) {
-      const snapshot = await db.collection(collection)
-        .where('walletAddress', 'in', addresses)
-        .get();
-
-      const events = snapshot.docs.map(doc => ({
-        ...doc.data(),
-        source: collection
-      }));
-      
-      allEvents = allEvents.concat(events);
-    }
-
-    // Sort by timestamp
-    allEvents.sort((a, b) => a.unix_timestamp - b.unix_timestamp);
-
-    // Convert to CSV
-    const headers = ['walletAddress', 'timestamp', 'religion', 'language', 'input_text', 'source'];
+    // Create CSV content
+    const headers = ['walletAddress', 'timestamp', 'religion', 'language', 'input_text'];
     const csvRows = [headers.join(',')];
 
-    for (const event of allEvents) {
+    for (const event of events) {
       const row = headers.map(header => {
         const value = event[header]?.toString().replace(/"/g, '""') || '';
         return `"${value}"`;
@@ -43,10 +33,18 @@ export async function POST(request: NextRequest) {
 
     const csv = csvRows.join('\n');
     
-    return new NextResponse(csv, {
+    // Write to temporary file
+    const fileName = `prayer_events_${Date.now()}.csv`;
+    const filePath = path.join('/tmp', fileName);
+    await writeFile(filePath, csv);
+    
+    // Read and return file
+    const fileBuffer = Buffer.from(csv);
+    
+    return new NextResponse(fileBuffer, {
       headers: {
         'Content-Type': 'text/csv',
-        'Content-Disposition': 'attachment; filename=prayer_events.csv'
+        'Content-Disposition': `attachment; filename=${fileName}`
       }
     });
 
