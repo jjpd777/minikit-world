@@ -121,12 +121,9 @@ export default function RecurringAnalytics() {
           <div className="mt-4 p-4 bg-gray-700/50 rounded-lg">
             <h3 className="text-white font-semibold mb-2">Prayer Timestamps for {selectedAddress}</h3>
             <div className="max-h-40 overflow-y-auto">
-              {timestamps.map((event, i) => (
-                <div key={i} className="text-gray-300 text-sm py-1 flex justify-between">
-                  <span>{new Date(event.timestamp).toLocaleString()}</span>
-                  <span className="text-purple-400">
-                    {event.religion} | {event.language}
-                  </span>
+              {timestamps.map((timestamp, i) => (
+                <div key={i} className="text-gray-300 text-sm py-1">
+                  {new Date(timestamp).toLocaleString()}
                 </div>
               ))}
             </div>
