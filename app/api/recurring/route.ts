@@ -12,7 +12,10 @@ export async function GET(request: Request) {
         .where('walletAddress', '==', selectedAddress)
         .get();
       
-      const timestamps = eventsSnapshot.docs.map(doc => doc.data().timestamp);
+      const timestamps = eventsSnapshot.docs
+        .map(doc => doc.data())
+        .sort((a, b) => a.unix_timestamp - b.unix_timestamp)
+        .map(data => data.timestamp);
       return NextResponse.json({ timestamps });
     }
     

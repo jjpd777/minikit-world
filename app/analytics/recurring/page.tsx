@@ -24,6 +24,7 @@ interface RecurringData {
   topAddresses: Array<{
     address: string;
     count: number;
+    timestamps?: string[]; // Added timestamps to topAddresses
   }>;
   totalUniqueAddresses: number;
 }
@@ -41,11 +42,14 @@ export default function RecurringAnalytics() {
 
   useEffect(() => {
     if (selectedAddress) {
-      fetch(`/api/recurring?address=${selectedAddress}`)
-        .then(res => res.json())
-        .then(data => setTimestamps(data.timestamps));
+      const addressData = data?.topAddresses.find(a => a.address === selectedAddress);
+      if(addressData && addressData.timestamps){
+        setTimestamps(addressData.timestamps);
+      } else {
+        setTimestamps([]);
+      }
     }
-  }, [selectedAddress]);
+  }, [selectedAddress, data]);
 
   if (!data) return <div>Loading...</div>;
 
@@ -83,7 +87,10 @@ export default function RecurringAnalytics() {
             <div className="max-h-40 overflow-y-auto">
               {timestamps.map((timestamp, i) => (
                 <div key={i} className="text-gray-300 text-sm py-1">
-                  {new Date(timestamp).toLocaleString()}
+                  {new Date(parseInt(timestamp, 10) * 1000).toLocaleString('en-US', {
+                    dateStyle: 'medium',
+                    timeStyle: 'medium'
+                  })}
                 </div>
               ))}
             </div>
