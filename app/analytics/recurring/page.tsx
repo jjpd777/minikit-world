@@ -26,7 +26,6 @@ interface RecurringData {
   topAddresses: Array<{
     address: string;
     count: number;
-    timestamps: string[];
   }>;
   totalUniqueAddresses: number;
 }
@@ -111,36 +110,11 @@ export default function RecurringAnalytics() {
     }
   };
 
-  const [selectedAddress, setSelectedAddress] = useState<string | null>(null);
-
-  const options = {
-    ...chartOptions,
-    onClick: (event: any, elements: any) => {
-      if (elements.length > 0) {
-        const index = elements[0].index;
-        const address = data.topAddresses[index].address;
-        setSelectedAddress(address === selectedAddress ? null : address);
-      }
-    }
-  };
-
   return (
     <div className="flex min-h-screen flex-col items-center p-24">
       <h1 className="text-2xl font-bold mb-8 text-white">Recurring Users Analytics</h1>
       <div className="w-full max-w-7xl bg-gray-800/50 p-6 rounded-lg">
         <Bar data={chartData} options={options} />
-        {selectedAddress && (
-          <div className="mt-4 p-4 bg-gray-700/50 rounded-lg">
-            <h3 className="text-white font-semibold mb-2">Prayer Timestamps for {selectedAddress}</h3>
-            <div className="max-h-40 overflow-y-auto">
-              {data.topAddresses.find(a => a.address === selectedAddress)?.timestamps.map((timestamp, i) => (
-                <div key={i} className="text-gray-300 text-sm py-1">
-                  {new Date(timestamp).toLocaleString()}
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
       </div>
     </div>
   );
