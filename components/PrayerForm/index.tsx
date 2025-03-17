@@ -221,7 +221,7 @@ export const PrayerForm = ({
             ))}
           </select>
         </div>
-        <div className="mt-4 flex justify-center min-w-[300px] ml-[-90px]">
+        <div className="mt-4 flex justify-center min-w-[300px] ml-[-90px] -mt-20"> {/* Adjusted this line */}
           {/* <div className="grid grid-cols-3 gap-x-10 gap-y-4 px-4">
             {languages
               .find((lang) => lang.code === language)

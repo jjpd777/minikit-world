@@ -22,7 +22,7 @@ export const AudioPlayer = () => {
   };
 
   return (
-    <div className="fixed top-4 right-4 z-50">
+    <div className="fixed top-4 right-4 z-40">
       <button
         onClick={togglePlay}
         className="bg-transparent text-white p-2 rounded-full hover:bg-transparent transition-colors"

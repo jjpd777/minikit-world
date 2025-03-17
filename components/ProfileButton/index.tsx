@@ -21,7 +21,7 @@ export function ProfileButton() {
   return (
     <button
       onClick={() => router.push("/wallet")}
-      className="fixed top-4 right-4 p-2 rounded-full bg-purple-500/30 hover:bg-purple-500/50 transition-all"
+      className="fixed top-4 left-4 p-2 rounded-full bg-purple-500/30 hover:bg-purple-500/50 transition-all"
       aria-label="Profile"
     >
       {session?.user ? (
