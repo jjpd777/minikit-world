@@ -1,8 +1,10 @@
 "use client";
 import { PrayerForm } from "@/components/PrayerForm";
 import { ClaimTokens } from "@/components/ClaimTokens";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
+import ReactConfetti from "react-confetti";
+
 // AWESOME PROGRESS
 
 export default function VerifiedPage() {
@@ -14,9 +16,34 @@ export default function VerifiedPage() {
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
   const [isUploading, setIsUploading] = useState(false);
   const [storagePath, setStoragePath] = useState<string | null>(null);
+  const [showConfetti, setShowConfetti] = useState(false);
+  const confettiRef = useRef<HTMLDivElement>(null);
+
+
+  const handleBookmark = async () => {
+    const bookmarked = JSON.parse(localStorage.getItem('bookmarkedAudios') || '[]');
+    if (!bookmarked.includes(storagePath)) {
+      const newBookmarked = [...bookmarked, storagePath];
+      localStorage.setItem('bookmarkedAudios', JSON.stringify(newBookmarked));
+      console.log('Audio bookmarked:', storagePath);
+      alert('Audio bookmarked successfully!');
+      setShowConfetti(true);
+      setTimeout(() => setShowConfetti(false), 3000);
+    } else {
+      alert('This audio is already bookmarked!');
+    }
+  };
 
   return (
     <div className="flex min-h-screen flex-col items-center p-24">
+      {showConfetti && (
+        <ReactConfetti
+          width={window.innerWidth}
+          height={window.innerHeight}
+          recycle={false}
+          numberOfPieces={200}
+        />
+      )}
       {!showPrayer ? (
         <PrayerForm
           onPrayerGenerated={(newPrayer) => {
@@ -61,23 +88,12 @@ export default function VerifiedPage() {
               </button>
               {storagePath && (
                 <button
-                  onClick={() => {
-                    const bookmarked = JSON.parse(localStorage.getItem('bookmarkedAudios') || '[]');
-                    if (!bookmarked.includes(storagePath)) {
-                      const newBookmarked = [...bookmarked, storagePath];
-                      localStorage.setItem('bookmarkedAudios', JSON.stringify(newBookmarked));
-                      console.log('Audio bookmarked:', storagePath);
-                      alert('Audio bookmarked successfully!');
-                    } else {
-                      alert('This audio is already bookmarked!');
-                    }
-                  }}
+                  onClick={handleBookmark}
                   className="w-full px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors flex items-center justify-center gap-2"
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                     <path d="M5 4a2 2 0 012-2h6a2 2 0 012 2v14l-5-2.5L5 18V4z" />
                   </svg>
-                 
                 </button>
               )}
               <a
@@ -143,7 +159,7 @@ export default function VerifiedPage() {
                     for (let i = 0; i < binaryStr.length; i++) {
                       bytes[i] = binaryStr.charCodeAt(i);
                     }
-                    
+
                     const audioBlob = new Blob([bytes], { type: 'audio/mpeg' });
                     const formData = new FormData();
                     formData.append('file', audioBlob, `prayer-${Date.now()}.mp3`);
@@ -162,7 +178,7 @@ export default function VerifiedPage() {
                       console.log('Audio uploaded successfully:', uploadData.gsPath);
                       setStoragePath(uploadData.gsPath);
                       setHasGeneratedAudio(true);
-                      
+
                       // Track voice generation event
                       const storedWalletAddress = localStorage.getItem('walletAddress') || '';
                       await fetch("/api/track-prayer", {
@@ -195,7 +211,7 @@ export default function VerifiedPage() {
                 {isGeneratingAudio ? "✨" : hasGeneratedAudio ? "" : "✨"}
               </button>}
             </div>
-           
+
             {audioUrl && (
                 <audio 
                   src={audioUrl}
@@ -204,7 +220,7 @@ export default function VerifiedPage() {
                   className="mt-4 w-full" 
                 />
               )}
-                
+
           </div>
         </div>
       )}
