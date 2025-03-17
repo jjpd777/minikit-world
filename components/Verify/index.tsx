@@ -59,7 +59,7 @@ export const VerifyBlock = () => {
         {({ open }) => (
           <button
             onClick={open}
-            className="px-6 py-3 rounded-lg font-medium bg-blue-500/80 hover:bg-blue-600 text-white transition-all duration-200 shadow-md"
+            className="px-6 py-3 rounded-lg font-medium bg-purple-200 text-purple-900 border-2 border-purple-600 hover:bg-purple-300 transition-all duration-200 shadow-md"
           >
             Verify with World ID
           </button>
