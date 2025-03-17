@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import { IntentionButtons } from "./IntentionButtons";
 
 export const PrayerForm = ({
   onPrayerGenerated,
@@ -246,12 +247,17 @@ export const PrayerForm = ({
         <label htmlFor="intentions" className="text-white">
           Prayer Intentions
         </label>
+        <IntentionButtons 
+          onSelect={(intention) => setIntentions(prev => 
+            prev ? `${prev}, ${intention}` : intention
+          )} 
+        />
         <textarea
           id="intentions"
           value={intentions}
           onChange={(e) => setIntentions(e.target.value)}
           placeholder="Enter your prayer intentions..."
-          className="p-2 rounded-lg bg-gray-800 text-white border border-gray-700 h-32"
+          className="p-2 rounded-lg bg-gray-800 text-white border border-gray-700 h-32 w-full"
         />
       </div>
 
