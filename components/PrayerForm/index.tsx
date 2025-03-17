@@ -208,44 +208,30 @@ export const PrayerForm = ({
             style={{ marginTop:'-60px', marginBottom: "-22px" }}
           />
         </div> */}
-        <div className="grid grid-cols-4 gap-2 mb-4">
-          {religions.map((rel) => (
-            <button
-              key={rel.code}
-              type="button"
-              onClick={() => setReligion(rel.code)}
-              className={`p-2 rounded-lg border text-2xl ${
-                religion === rel.code
-                  ? "border-purple-500 bg-purple-500/20"
-                  : "border-transparent bg-transparent"
-              } flex flex-col items-center gap-2 hover:border-purple-500/50 transition-colors`}
-              title={rel.name}
-            >
-              {rel.icon}
-            </button>
-          ))}
-        </div>
-        <div className="grid grid-cols-3 gap-2">
-          {languages.map((lang) => (
-            <button
-              key={lang.code}
-              type="button"
-              onClick={() => setLanguage(lang.code)}
-              className={`p-2 rounded-lg border ${
-                language === lang.code
-                  ? "border-purple-500 bg-purple-500/20"
-                  : "border-transparent bg-transparent"
-              } flex flex-col items-center gap-2 hover:border-purple-500/50 transition-colors`}
-            >
-              <Image
-                src={lang.flag}
-                alt={lang.name}
-                width={24}
-                height={24}
-                className="rounded-sm"
-              />
-            </button>
-          ))}
+        <div className="flex flex-col gap-4 mb-4">
+          <select
+            value={religion}
+            onChange={(e) => setReligion(e.target.value)}
+            className="p-3 rounded-lg border border-gray-700 bg-gray-800 text-white hover:border-purple-500/50 transition-colors"
+          >
+            {religions.map((rel) => (
+              <option key={rel.code} value={rel.code}>
+                {rel.icon} {rel.name}
+              </option>
+            ))}
+          </select>
+          
+          <select
+            value={language}
+            onChange={(e) => setLanguage(e.target.value)}
+            className="p-3 rounded-lg border border-gray-700 bg-gray-800 text-white hover:border-purple-500/50 transition-colors"
+          >
+            {languages.map((lang) => (
+              <option key={lang.code} value={lang.code}>
+                {lang.flag} {lang.name}
+              </option>
+            ))}
+          </select>
         </div>
         <div className="mt-4 flex justify-center min-w-[300px] ml-[-90px]">
           <div className="grid grid-cols-3 gap-x-10 gap-y-4 px-4">
