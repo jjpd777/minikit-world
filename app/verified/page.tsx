@@ -168,6 +168,22 @@ export default function VerifiedPage() {
                 <button
                   onClick={async () => {
                     setIsGeneratingAudio(true);
+                    const startTime = Date.now();
+
+                    // Track audio generation start
+                    trackEvent('Audio Prayer Generation Started', {
+                      timestamp: new Date().toISOString(),
+                      wallet_address: localStorage.getItem("walletAddress") || 'anonymous',
+                      prayer_length: prayer.length,
+                      prayer_text: prayer,
+                      language: localStorage.getItem("lastLanguage") || "",
+                      religion: localStorage.getItem("lastReligion") || "",
+                      intentions: localStorage.getItem("lastIntentions") || "",
+                      user_agent: navigator.userAgent,
+                      platform: navigator.platform,
+                      screen_resolution: `${window.screen.width}x${window.screen.height}`
+                    });
+
                     try {
                       const response = await fetch("/api/generate-audio", {
                         method: "POST",
@@ -226,6 +242,22 @@ export default function VerifiedPage() {
                         );
                         setStoragePath(uploadData.gsPath);
                         setHasGeneratedAudio(true);
+
+                        // Track successful audio generation
+                        trackEvent('Audio Prayer Generation Completed', {
+                          timestamp: new Date().toISOString(),
+                          wallet_address: localStorage.getItem("walletAddress") || 'anonymous',
+                          prayer_length: prayer.length,
+                          prayer_text: prayer,
+                          language: localStorage.getItem("lastLanguage") || "",
+                          religion: localStorage.getItem("lastReligion") || "",
+                          intentions: localStorage.getItem("lastIntentions") || "",
+                          generation_time_ms: Date.now() - startTime,
+                          storage_path: uploadData.gsPath,
+                          user_agent: navigator.userAgent,
+                          platform: navigator.platform,
+                          screen_resolution: `${window.screen.width}x${window.screen.height}`
+                        });
 
                         // Track voice generation event
                         const storedWalletAddress =
