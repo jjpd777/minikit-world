@@ -19,11 +19,6 @@ const intentions = {
 export const IntentionButtons: React.FC<IntentionButtonsProps> = ({ onSelect, language }) => {
   const currentIntentions = intentions[language as keyof typeof intentions] || intentions.en;
 
-  const handleIntentionClick = (intention: string) => {
-    onSelect(intention);
-    return false;
-  };
-
   return (
     <div className="w-full max-w-2xl mx-auto mb-4">
       <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
