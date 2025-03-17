@@ -4,6 +4,7 @@ import { ClaimTokens } from "@/components/ClaimTokens";
 import { useState } from "react";
 import Image from "next/image";
 // AWESOME PROGRESS
+import Confetti from "react-confetti"; // Added import for confetti
 
 export default function VerifiedPage() {
   const [prayer, setPrayer] = useState("");
@@ -14,9 +15,11 @@ export default function VerifiedPage() {
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
   const [isUploading, setIsUploading] = useState(false);
   const [storagePath, setStoragePath] = useState<string | null>(null);
+  const [showConfetti, setShowConfetti] = useState(false); // Added confetti state
 
   return (
     <div className="flex min-h-screen flex-col items-center p-24">
+      {showConfetti && <Confetti />} {/* Added confetti component */}
       {!showPrayer ? (
         <PrayerForm
           onPrayerGenerated={(newPrayer) => {
@@ -61,7 +64,8 @@ export default function VerifiedPage() {
               </button>
               {storagePath && (
                 <button
-                  onClick={() => {
+                  onClick={async () => {
+                    setShowConfetti(true); // Trigger confetti
                     const bookmarked = JSON.parse(localStorage.getItem('bookmarkedAudios') || '[]');
                     if (!bookmarked.includes(storagePath)) {
                       const newBookmarked = [...bookmarked, storagePath];
@@ -77,7 +81,7 @@ export default function VerifiedPage() {
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                     <path d="M5 4a2 2 0 012-2h6a2 2 0 012 2v14l-5-2.5L5 18V4z" />
                   </svg>
-                 
+
                 </button>
               )}
               <a
@@ -143,7 +147,7 @@ export default function VerifiedPage() {
                     for (let i = 0; i < binaryStr.length; i++) {
                       bytes[i] = binaryStr.charCodeAt(i);
                     }
-                    
+
                     const audioBlob = new Blob([bytes], { type: 'audio/mpeg' });
                     const formData = new FormData();
                     formData.append('file', audioBlob, `prayer-${Date.now()}.mp3`);
@@ -162,7 +166,7 @@ export default function VerifiedPage() {
                       console.log('Audio uploaded successfully:', uploadData.gsPath);
                       setStoragePath(uploadData.gsPath);
                       setHasGeneratedAudio(true);
-                      
+
                       // Track voice generation event
                       const storedWalletAddress = localStorage.getItem('walletAddress') || '';
                       await fetch("/api/track-prayer", {
@@ -195,7 +199,7 @@ export default function VerifiedPage() {
                 {isGeneratingAudio ? "✨" : hasGeneratedAudio ? "" : "✨"}
               </button>}
             </div>
-           
+
             {audioUrl && (
                 <audio 
                   src={audioUrl}
@@ -204,7 +208,7 @@ export default function VerifiedPage() {
                   className="mt-4 w-full" 
                 />
               )}
-                
+
           </div>
         </div>
       )}
