@@ -204,7 +204,7 @@ export const SignIn = () => {
                 }
               }}
               disabled={isVerifying}
-              className="px-8 py-4 bg-purple-400/80 text-white rounded-xl hover:bg-purple-500 transition-all duration-200 transform hover:scale-105 font-medium text-lg shadow-lg flex items-center justify-center gap-2"
+              className="px-8 py-4 bg-blue-500/80 text-white rounded-xl hover:bg-blue-600 transition-all duration-200 transform hover:scale-105 font-medium text-lg shadow-lg flex items-center justify-center gap-2"
             >
               <Image
                 src="/world_c.png"

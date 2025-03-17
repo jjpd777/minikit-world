@@ -46,8 +46,8 @@ export const VerifyBlock = () => {
   };
 
   return (
-    <div className="flex flex-col items-center gap-4 p-4 border rounded-lg bg-white/10 shadow-sm">
-      <h2 className="text-xl font-semibold text-white">World ID Verification</h2>
+    <div className="flex flex-col items-center gap-4 p-4 border rounded-lg bg-blue-100/50 shadow-lg border-blue-200">
+      <h2 className="text-xl font-semibold text-gray-700">World ID Verification</h2>
 
       <IDKitWidget
         app_id={process.env.NEXT_PUBLIC_APP_ID as `app_${string}`}
@@ -59,7 +59,7 @@ export const VerifyBlock = () => {
         {({ open }) => (
           <button
             onClick={open}
-            className="px-6 py-3 rounded-lg font-medium bg-purple-500/80 hover:bg-purple-600 text-white transition-all duration-200"
+            className="px-6 py-3 rounded-lg font-medium bg-blue-500/80 hover:bg-blue-600 text-white transition-all duration-200 shadow-md"
           >
             Verify with World ID
           </button>
