@@ -1,6 +1,5 @@
 "use client";
 import { useState } from "react";
-import Image from "next/image";
 
 export const PrayerForm = ({
   onPrayerGenerated,
@@ -27,25 +26,25 @@ export const PrayerForm = ({
     {
       code: "en",
       name: "English",
-      flag: "/usa.svg",
+      flag: "🇺🇸",
       choices: ["Myself", "Mother", "Father", "Siblings", "Health", "Wealth"],
     },
     {
       code: "he",
       name: "Hebrew",
-      flag: "/israel.svg",
+      flag: "🇮🇱",
       choices: ["עצמי", "אמא", "אבא", "אחים ואחיות", "בריאות", "עושר"],
     },
     {
       code: "pt",
       name: "Portuguese",
-      flag: "/brazil.svg",
+      flag: "🇧🇷",
       choices: ["Eu mesmo", "Mãe", "Pai", "Irmãos", "Saúde", "Riqueza"],
     },
     {
       code: "fr",
       name: "French",
-      flag: "/france.svg",
+      flag: "🇫🇷",
       choices: [
         "Moi-même",
         "Mère",
@@ -58,7 +57,7 @@ export const PrayerForm = ({
     {
       code: "de",
       name: "German",
-      flag: "/deutschland.svg",
+      flag: "🇩🇪",
       choices: [
         "Ich selbst",
         "Mutter",
@@ -71,19 +70,19 @@ export const PrayerForm = ({
     {
       code: "es",
       name: "Spanish",
-      flag: "/colombia.svg",
+      flag: "🇨🇴",
       choices: ["Yo mismo", "Madre", "Padre", "Hermanos", "Salud", "Riqueza"],
     },
     {
       code: "hi",
       name: "Hindi",
-      flag: "/india.svg",
+      flag: "🇮🇳",
       choices: ["स्वयं", "माता", "पिता", "भाई-बहन", "स्वास्थ्य", "धन"],
     },
     {
       code: "ar",
       name: "Arabic",
-      flag: "/arab.svg",
+      flag: "🇦🇪",
       choices: ["نفسي", "الأم", "الأب", "الإخوة", "الصحة", "الثروة"],
     },
   ];
@@ -105,10 +104,10 @@ export const PrayerForm = ({
         byteArray[i] = binaryString.charCodeAt(i);
       }
       const blob = new Blob([byteArray], { type: 'audio/mpeg' });
-      
+
       const timestamp = Math.floor(Date.now() / 1000);
       const fileName = `0x333${timestamp}.mp3`;
-      
+
       const formData = new FormData();
       formData.append('file', blob, fileName);
 
@@ -155,12 +154,12 @@ export const PrayerForm = ({
       });
 
       const data = await response.json();
-      
+
       // Store values for WhatsApp tracking
       localStorage.setItem('lastIntentions', intentions);
       localStorage.setItem('lastReligion', religion);
       localStorage.setItem('lastLanguage', language);
-      
+
       // Track prayer generation event after getting response
       const storedWalletAddress = localStorage.getItem('walletAddress') || '';
       await fetch("/api/track-prayer", {
@@ -196,18 +195,6 @@ export const PrayerForm = ({
   return (
     <form onSubmit={handleSubmit} className="w-full max-w-md space-y-4">
       <div className="flex flex-col gap-2">
-       
-        {/* <div className="flex justify-center mb-4">
-          <Image
-            src="/bendiga_logo.png"
-            alt="Bendiga Logo"
-            width={150}
-            height={150}
-            priority
-            className="animate-glow"
-            style={{ marginTop:'-60px', marginBottom: "-22px" }}
-          />
-        </div> */}
         <div className="flex flex-col gap-4 mb-4">
           <select
             value={religion}
@@ -220,7 +207,7 @@ export const PrayerForm = ({
               </option>
             ))}
           </select>
-          
+
           <select
             value={language}
             onChange={(e) => setLanguage(e.target.value)}
@@ -228,7 +215,7 @@ export const PrayerForm = ({
           >
             {languages.map((lang) => (
               <option key={lang.code} value={lang.code}>
-                {lang.flag} {lang.name}
+                <span className="text-xl">{lang.flag}</span> {lang.name}
               </option>
             ))}
           </select>
