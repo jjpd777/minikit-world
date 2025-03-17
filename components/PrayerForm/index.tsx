@@ -243,7 +243,19 @@ export const PrayerForm = ({
   return (
     <form onSubmit={handleSubmit} className="w-full max-w-md space-y-4">
       <div className="flex flex-col gap-2">
-        <div className="flex flex-col gap-4 mb-4">
+        <div className="flex flex-col md:flex-row gap-4 justify-center">
+          <select
+            value={language}
+            onChange={(e) => setLanguage(e.target.value)}
+            className="p-3 rounded-lg border border-blue-200 bg-blue-50 text-gray-700 hover:border-blue-300 focus:border-blue-400 focus:ring-2 focus:ring-blue-200 focus:outline-none transition-colors text-lg"
+          >
+            {languages.map((lang) => (
+              <option key={lang.code} value={lang.code}>
+                {lang.flag}
+              </option>
+            ))}
+          </select>
+
           <select
             value={religion}
             onChange={(e) => setReligion(e.target.value)}
@@ -252,18 +264,6 @@ export const PrayerForm = ({
             {religions.map((rel) => (
               <option key={rel.code} value={rel.code}>
                 {rel.icon} {rel.name}
-              </option>
-            ))}
-          </select>
-
-          <select
-            value={language}
-            onChange={(e) => setLanguage(e.target.value)}
-            className="p-3 rounded-lg border border-blue-200 bg-blue-50 text-gray-700 hover:border-blue-300 focus:border-blue-400 focus:ring-2 focus:ring-blue-200 focus:outline-none transition-colors text-lg"
-          >
-            {languages.map((lang) => (
-              <option key={lang.code} value={lang.code}>
-                <span className="text-xl">{lang.flag}</span> {lang.name}
               </option>
             ))}
           </select>
