@@ -23,7 +23,8 @@ export const PrayerForm = ({
     es: "Generar Oración",
     hi: "प्रार्थना बनाएं",
     ar: "توليد الصلاة",
-    id: "Buat Doa"
+    id: "Buat Doa",
+    tr: "Dua Oluştur"
   };
 
   const handleLanguageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {

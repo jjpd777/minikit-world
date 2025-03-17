@@ -44,6 +44,7 @@ export async function POST(request: NextRequest) {
       language === 'hi' ? 'The prayer MUST be written in Hindi (Devanagari script).' :
       language === 'ar' ? 'The prayer MUST be written in Arabic script.' :
       language === 'id' ? 'The prayer MUST be written in Indonesian (Bahasa Indonesia).' :
+      language === 'tr' ? 'The prayer MUST be written in Turkish.' :
       `The prayer should be in ${languageMap[language] || "English"}.`
     }`;
 
