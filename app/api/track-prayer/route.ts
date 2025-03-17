@@ -2,6 +2,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '../../../lib/firebase-admin';
 
+import mixpanel from '@/lib/mixpanel';
+
 export async function POST(request: NextRequest) {
   try {
     const data = await request.json();
@@ -17,6 +19,12 @@ export async function POST(request: NextRequest) {
       llm_response: data.llm_response || '',
       voice_generation: data.voice_generation || false
     };
+
+    // Track in Mixpanel
+    mixpanel.track('Prayer Generated', {
+      ...eventData,
+      distinct_id: data.walletAddress || 'anonymous'
+    });
 
     let collection = 'prayer_events';
     if (data.source === 'whatsapp') {
