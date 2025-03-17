@@ -274,7 +274,7 @@ export const PrayerForm = ({
           >
             {languages.map((lang) => (
               <option key={lang.code} value={lang.code}>
-                {lang.flag} {lang.name}
+                {lang.flag}
               </option>
             ))}
           </select>
