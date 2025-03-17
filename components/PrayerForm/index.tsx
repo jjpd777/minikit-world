@@ -24,8 +24,7 @@ export const PrayerForm = ({
     hi: "प्रार्थना बनाएं",
     ar: "توليد الصلاة",
     id: "Buat Doa",
-    tr: "Dua Oluştur",
-    zh: "生成祈祷文"
+    tr: "Dua Oluştur"
   };
 
   const handleLanguageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -68,7 +67,7 @@ export const PrayerForm = ({
       code: "tr",
       name: "Turkish",
       flag: "🇹🇷",
-      choices: ["Kendim", "Annem", "Babam", "Ailem", "Sağlık", "Bereket"],
+      choices: ["Kendim", "Anne", "Baba", "Kardeşler", "Sağlık", "Zenginlik"],
     },
     {
       code: "he",
@@ -113,12 +112,6 @@ export const PrayerForm = ({
       name: "Spanish", 
       flag: "🇲🇽",
       choices: ["Yo mismo", "Madre", "Padre", "Hermanos", "Salud", "Riqueza"],
-    },
-    {
-      code: "zh",
-      name: "Chinese",
-      flag: "🇨🇳",
-      choices: ["为自己", "为母亲", "为父亲", "为家人", "为健康", "为福气"],
     },
     {
       code: "hi",
