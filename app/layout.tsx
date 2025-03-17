@@ -30,7 +30,7 @@ export default function RootLayout({
             <AudioPlayer />
           </MiniKitProvider>
         </NextAuthProvider>
-      </body>rel
+      </body>
     </html>
   );
 }
