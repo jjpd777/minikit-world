@@ -109,8 +109,8 @@ export const PrayerForm = ({
     },
     {
       code: "es",
-      name: "Spanish",
-      flag: "🇨🇴",
+      name: "Spanish", 
+      flag: "🇲🇽",
       choices: ["Yo mismo", "Madre", "Padre", "Hermanos", "Salud", "Riqueza"],
     },
     {
