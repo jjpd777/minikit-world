@@ -12,6 +12,7 @@ export const PrayerForm = ({
   const [intentions, setIntentions] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [audioData, setAudioData] = useState<string | null>(null);
+  const [showPrayer, setShowPrayer] = useState(true); // Added state variable
 
   const buttonText = {
     en: "Generate Prayer",
@@ -263,6 +264,41 @@ export const PrayerForm = ({
     }
   };
 
+  const claimBlessd = async () => {
+    if (!MiniKit.isInstalled()) {
+      alert("Please install World App to claim tokens");
+      return;
+    }
+
+    try {
+      const network = await MiniKit.commandsAsync.getNetwork();
+      if (network.chainId !== "0x2330" && network.chainId !== "9008") {
+        alert("Please switch to WorldChain mainnet");
+        return;
+      }
+
+      const userAddress = await MiniKit.commandsAsync.getAddress();
+      const result = await MiniKit.commandsAsync.sendTransaction({
+        transaction: [{
+          address: "0xF10106a1C3dB402955e9E172E01685E2a19820e6",
+          abi: DEUS_ABI,
+          functionName: 'sendTokens',
+          args: [userAddress.toString()]
+        }]
+      });
+
+      if (result?.finalPayload?.status === "success") {
+        alert("Tokens claimed successfully!");
+        setShowPrayer(false); //Added to show another prayer generation
+      } else {
+        throw new Error("Transaction failed");
+      }
+    } catch (error: any) {
+      console.error("Error claiming tokens:", error);
+      alert("Failed to claim tokens: " + error.message);
+    }
+  };
+
   return (
     <form onSubmit={handleSubmit} className="w-full max-w-md space-y-4">
       <div className="flex flex-col gap-2">
@@ -352,6 +388,13 @@ export const PrayerForm = ({
           Upload Audio
         </button>
       )}
+
+      <button
+        onClick={claimBlessd}
+        className="w-full mt-4 px-4 py-2 bg-white text-purple-600 border border-purple-600 rounded-lg hover:bg-purple-50 transition-colors"
+      >
+        Claim BLESSD
+      </button>
     </form>
   );
 };
