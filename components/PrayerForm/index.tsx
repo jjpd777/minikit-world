@@ -250,6 +250,8 @@ export const PrayerForm = ({
         <IntentionButtons
           onSelect={(intention) => {
             setIntentions(prev => prev ? `${prev}, ${intention}` : intention);
+            // Prevent form submission
+            return false;
           }}
           language={language}
         />
