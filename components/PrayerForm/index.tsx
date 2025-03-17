@@ -11,6 +11,18 @@ export const PrayerForm = ({
   const [religion, setReligion] = useState(() => localStorage.getItem("lastReligion") || "christian");
   const [intentions, setIntentions] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [audioData, setAudioData] = useState<string | null>(null);
+
+  const buttonText = {
+    en: "Generate Prayer",
+    he: "צור תפילה",
+    pt: "Gerar Oração",
+    fr: "Générer une Prière",
+    de: "Gebet Generieren",
+    es: "Generar Oración",
+    hi: "प्रार्थना बनाएं",
+    ar: "توليد الصلاة"
+  };
 
   const handleLanguageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const newLanguage = e.target.value;
@@ -100,54 +112,6 @@ export const PrayerForm = ({
     },
   ];
 
-  const [audioData, setAudioData] = useState<string | null>(null);
-
-  const uploadAudio = async () => {
-    if (!audioData) {
-      alert("No audio data available to upload");
-      return;
-    }
-
-    try {
-      // Convert base64 to blob
-      const base64Data = audioData.split(",")[1];
-      const binaryString = atob(base64Data);
-      const byteArray = new Uint8Array(binaryString.length);
-      for (let i = 0; i < binaryString.length; i++) {
-        byteArray[i] = binaryString.charCodeAt(i);
-      }
-      const blob = new Blob([byteArray], { type: "audio/mpeg" });
-
-      const timestamp = Math.floor(Date.now() / 1000);
-      const fileName = `0x333${timestamp}.mp3`;
-
-      const formData = new FormData();
-      formData.append("file", blob, fileName);
-
-      const uploadResponse = await fetch("/api/upload-test", {
-        method: "POST",
-        body: formData,
-      });
-
-      if (!uploadResponse.ok) {
-        const errorText = await uploadResponse.text();
-        console.error("Upload failed:", errorText);
-        throw new Error(`Upload failed: ${uploadResponse.status}`);
-      }
-
-      const data = await uploadResponse.json();
-      console.log("Upload response:", data);
-
-      if (data.success) {
-        alert(`Upload successful!\nStorage path: ${data.gsPath}`);
-      } else {
-        throw new Error(data.error || "Upload failed");
-      }
-    } catch (error) {
-      console.error("Upload error:", error);
-      alert("Failed to upload audio");
-    }
-  };
 
   const RELIGION_TO_TOKEN = {
     "christian": "0x908BE4717360397348F35271b9461192B6c84522",
@@ -252,6 +216,53 @@ export const PrayerForm = ({
     }
   };
 
+  const uploadAudio = async () => {
+    if (!audioData) {
+      alert("No audio data available to upload");
+      return;
+    }
+
+    try {
+      // Convert base64 to blob
+      const base64Data = audioData.split(",")[1];
+      const binaryString = atob(base64Data);
+      const byteArray = new Uint8Array(binaryString.length);
+      for (let i = 0; i < binaryString.length; i++) {
+        byteArray[i] = binaryString.charCodeAt(i);
+      }
+      const blob = new Blob([byteArray], { type: "audio/mpeg" });
+
+      const timestamp = Math.floor(Date.now() / 1000);
+      const fileName = `0x333${timestamp}.mp3`;
+
+      const formData = new FormData();
+      formData.append("file", blob, fileName);
+
+      const uploadResponse = await fetch("/api/upload-test", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!uploadResponse.ok) {
+        const errorText = await uploadResponse.text();
+        console.error("Upload failed:", errorText);
+        throw new Error(`Upload failed: ${uploadResponse.status}`);
+      }
+
+      const data = await uploadResponse.json();
+      console.log("Upload response:", data);
+
+      if (data.success) {
+        alert(`Upload successful!\nStorage path: ${data.gsPath}`);
+      } else {
+        throw new Error(data.error || "Upload failed");
+      }
+    } catch (error) {
+      console.error("Upload error:", error);
+      alert("Failed to upload audio");
+    }
+  };
+
   return (
     <form onSubmit={handleSubmit} className="w-full max-w-md space-y-4">
       <div className="flex flex-col gap-2">
@@ -263,7 +274,7 @@ export const PrayerForm = ({
           >
             {languages.map((lang) => (
               <option key={lang.code} value={lang.code}>
-                {lang.flag}
+                {lang.flag} {lang.name}
               </option>
             ))}
           </select>
@@ -280,7 +291,7 @@ export const PrayerForm = ({
             ))}
           </select>
         </div>
-        <div className="mt-4 flex justify-center min-w-[300px] ml-[-90px] -mt-20"> {/* Adjusted this line */}
+        <div className="mt-4 flex justify-center min-w-[300px] ml-[-90px] -mt-20">
           {/* <div className="grid grid-cols-3 gap-x-10 gap-y-4 px-4">
             {languages
               .find((lang) => lang.code === language)
@@ -307,15 +318,15 @@ export const PrayerForm = ({
           Prayer Intentions
         </label>
         <IntentionButtons
-            onSelect={(intention) => {
-              setIntentions((prev) => {
-                const newValue = prev ? `${prev}, ${intention}` : intention;
-                console.log('Setting intentions to:', newValue);
-                return newValue;
-              });
-            }}
-            language={language}
-          />
+          onSelect={(intention) => {
+            setIntentions((prev) => {
+              const newValue = prev ? `${prev}, ${intention}` : intention;
+              console.log('Setting intentions to:', newValue);
+              return newValue;
+            });
+          }}
+          language={language}
+        />
         <textarea
           id="intentions"
           value={intentions}
@@ -324,17 +335,6 @@ export const PrayerForm = ({
           className="p-2 rounded-lg bg-blue-50 text-gray-700 border border-blue-200 h-32 w-full text-lg resize-none hover:border-blue-300 focus:border-blue-400 focus:ring-2 focus:ring-blue-200 focus:outline-none transition-colors"
         />
       </div>
-
-      const buttonText = {
-        en: "Generate Prayer",
-        he: "צור תפילה",
-        pt: "Gerar Oração",
-        fr: "Générer une Prière",
-        de: "Gebet Generieren",
-        es: "Generar Oración",
-        hi: "प्रार्थना बनाएं",
-        ar: "توليد الصلاة"
-      };
 
       <button
         type="submit"
@@ -349,7 +349,7 @@ export const PrayerForm = ({
           onClick={uploadAudio}
           className="w-full mt-4 px-4 py-2 bg-blue-500/80 text-white rounded-lg hover:bg-blue-600 transition-colors"
         >
-          Up
+          Upload Audio
         </button>
       )}
     </form>
