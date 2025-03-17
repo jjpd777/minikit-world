@@ -166,6 +166,7 @@ export const PrayerForm = ({
     setIsLoading(true);
 
     try {
+      const startTime = Date.now();
       // Track prayer generation attempt
       trackEvent('Prayer Generation Started', {
         timestamp: new Date().toISOString(),
