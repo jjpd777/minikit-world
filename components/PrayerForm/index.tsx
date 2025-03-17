@@ -89,6 +89,27 @@ export const PrayerForm = ({
 
   const [audioData, setAudioData] = useState<string | null>(null);
 
+  const intentionOptions = {
+    en: ["Myself", "Mother", "Father", "Siblings", "Health", "Wealth"],
+    he: ["עצמי", "אמא", "אבא", "אחים ואחיות", "בריאות", "עושר"],
+    pt: ["Eu mesmo", "Mãe", "Pai", "Irmãos", "Saúde", "Riqueza"],
+    fr: ["Moi-même", "Mère", "Père", "Frères et Sœurs", "Santé", "Richesse"],
+    de: ["Ich selbst", "Mutter", "Vater", "Geschwister", "Gesundheit", "Reichtum"],
+    es: ["Yo mismo", "Madre", "Padre", "Hermanos", "Salud", "Riqueza"],
+    hi: ["स्वयं", "माता", "पिता", "भाई-बहन", "स्वास्थ्य", "धन"],
+    ar: ["نفسي", "الأم", "الأب", "الإخوة", "الصحة", "الثروة"],
+  };
+
+  const handleIntentionSelect = (selectedIntention: string) => {
+    setIntentions(prevIntentions => {
+      if (prevIntentions.trim() === "") {
+        return selectedIntention;
+      } else {
+        return `${prevIntentions}, ${selectedIntention}`;
+      }
+    });
+  };
+
   const uploadAudio = async () => {
     if (!audioData) {
       alert('No audio data available to upload');
@@ -247,27 +268,19 @@ export const PrayerForm = ({
           Prayer Intentions
         </label>
         <div className="flex flex-col gap-2">
-          <div className="flex flex-wrap gap-2 mb-2">
-            {[
-              "For health and healing",
-              "For guidance in life decisions",
-              "For family and loved ones",
-              "For peace and harmony",
-              "For strength in difficult times",
-              "For gratitude and blessings",
-              "For forgiveness",
-              "For financial stability",
-            ].map((intention) => (
-              <button
-                key={intention}
-                type="button"
-                onClick={() => setIntentions(intention)}
-                className="px-3 py-1 text-sm bg-gray-800 text-white rounded-full hover:bg-purple-500/30 border border-gray-700 transition-colors"
-              >
-                {intention}
-              </button>
+          <select
+            onChange={(e) => handleIntentionSelect(e.target.value)}
+            className="p-2 rounded-lg bg-gray-800 text-white border border-gray-700"
+            value=""
+          >
+            <option value="">Select an intention...</option>
+            {intentionOptions[language as keyof typeof intentionOptions]?.map((option) => (
+              <option key={option} value={option}>
+                {option}
+              </option>
             ))}
-          </div>
+          </select>
+
           <textarea
             id="intentions"
             value={intentions}
@@ -291,7 +304,7 @@ export const PrayerForm = ({
           onClick={uploadAudio}
           className="w-full mt-4 px-4 py-2 bg-blue-500/80 text-white rounded-lg hover:bg-blue-600 transition-colors"
         >
-          Up
+          Upload Audio
         </button>
       )}
     </form>
