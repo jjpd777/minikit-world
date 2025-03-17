@@ -7,10 +7,22 @@ export const PrayerForm = ({
 }: {
   onPrayerGenerated: (prayer: string) => void;
 }) => {
-  const [language, setLanguage] = useState("en");
-  const [religion, setReligion] = useState("christian");
+  const [language, setLanguage] = useState(() => localStorage.getItem("lastLanguage") || "en");
+  const [religion, setReligion] = useState(() => localStorage.getItem("lastReligion") || "christian");
   const [intentions, setIntentions] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+
+  const handleLanguageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const newLanguage = e.target.value;
+    setLanguage(newLanguage);
+    localStorage.setItem("lastLanguage", newLanguage);
+  };
+
+  const handleReligionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const newReligion = e.target.value;
+    setReligion(newReligion);
+    localStorage.setItem("lastReligion", newReligion);
+  };
 
   const religions = [
     { code: "christian", icon: "✝️", name: "Christianity" },
@@ -246,7 +258,7 @@ export const PrayerForm = ({
         <div className="flex flex-row gap-2 justify-center items-center">
           <select
             value={language}
-            onChange={(e) => setLanguage(e.target.value)}
+            onChange={handleLanguageChange}
             className="w-20 p-3 rounded-lg border border-blue-200 bg-blue-50 text-gray-700 hover:border-blue-300 focus:border-blue-400 focus:ring-2 focus:ring-blue-200 focus:outline-none transition-colors text-lg"
           >
             {languages.map((lang) => (
@@ -258,7 +270,7 @@ export const PrayerForm = ({
 
           <select
             value={religion}
-            onChange={(e) => setReligion(e.target.value)}
+            onChange={handleReligionChange}
             className="p-3 rounded-lg border border-blue-200 bg-blue-50 text-gray-700 hover:border-blue-300 focus:border-blue-400 focus:ring-2 focus:ring-blue-200 focus:outline-none transition-colors text-lg"
           >
             {religions.map((rel) => (
