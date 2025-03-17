@@ -92,48 +92,48 @@ export const PrayerForm = ({
 
   const uploadAudio = async () => {
     if (!audioData) {
-      alert('No audio data available to upload');
+      alert("No audio data available to upload");
       return;
     }
 
     try {
       // Convert base64 to blob
-      const base64Data = audioData.split(',')[1];
+      const base64Data = audioData.split(",")[1];
       const binaryString = atob(base64Data);
       const byteArray = new Uint8Array(binaryString.length);
       for (let i = 0; i < binaryString.length; i++) {
         byteArray[i] = binaryString.charCodeAt(i);
       }
-      const blob = new Blob([byteArray], { type: 'audio/mpeg' });
+      const blob = new Blob([byteArray], { type: "audio/mpeg" });
 
       const timestamp = Math.floor(Date.now() / 1000);
       const fileName = `0x333${timestamp}.mp3`;
 
       const formData = new FormData();
-      formData.append('file', blob, fileName);
+      formData.append("file", blob, fileName);
 
-      const uploadResponse = await fetch('/api/upload-test', {
-        method: 'POST',
+      const uploadResponse = await fetch("/api/upload-test", {
+        method: "POST",
         body: formData,
       });
 
       if (!uploadResponse.ok) {
         const errorText = await uploadResponse.text();
-        console.error('Upload failed:', errorText);
+        console.error("Upload failed:", errorText);
         throw new Error(`Upload failed: ${uploadResponse.status}`);
       }
 
       const data = await uploadResponse.json();
-      console.log('Upload response:', data);
+      console.log("Upload response:", data);
 
       if (data.success) {
         alert(`Upload successful!\nStorage path: ${data.gsPath}`);
       } else {
-        throw new Error(data.error || 'Upload failed');
+        throw new Error(data.error || "Upload failed");
       }
     } catch (error) {
-      console.error('Upload error:', error);
-      alert('Failed to upload audio');
+      console.error("Upload error:", error);
+      alert("Failed to upload audio");
     }
   };
 
@@ -157,12 +157,12 @@ export const PrayerForm = ({
       const data = await response.json();
 
       // Store values for WhatsApp tracking
-      localStorage.setItem('lastIntentions', intentions);
-      localStorage.setItem('lastReligion', religion);
-      localStorage.setItem('lastLanguage', language);
+      localStorage.setItem("lastIntentions", intentions);
+      localStorage.setItem("lastReligion", religion);
+      localStorage.setItem("lastLanguage", language);
 
       // Track prayer generation event after getting response
-      const storedWalletAddress = localStorage.getItem('walletAddress') || '';
+      const storedWalletAddress = localStorage.getItem("walletAddress") || "";
       await fetch("/api/track-prayer", {
         method: "POST",
         headers: {
@@ -174,7 +174,7 @@ export const PrayerForm = ({
           religion,
           language,
           llm_response: data.prayer,
-          voice_generation: false
+          voice_generation: false,
         }),
       });
 
@@ -222,7 +222,7 @@ export const PrayerForm = ({
           </select>
         </div>
         <div className="mt-4 flex justify-center min-w-[300px] ml-[-90px]">
-          <div className="grid grid-cols-3 gap-x-10 gap-y-4 px-4">
+          {/* <div className="grid grid-cols-3 gap-x-10 gap-y-4 px-4">
             {languages
               .find((lang) => lang.code === language)
               ?.choices.map((choice, index) => (
@@ -239,7 +239,7 @@ export const PrayerForm = ({
                   {choice}
                 </button>
               ))}
-          </div>
+          </div> */}
         </div>
       </div>
 
@@ -247,10 +247,12 @@ export const PrayerForm = ({
         <label htmlFor="intentions" className="text-white">
           Prayer Intentions
         </label>
-        <IntentionButtons 
-          onSelect={(intention) => setIntentions(prev => 
-            prev ? `${prev}, ${intention}` : intention
-          )}
+        <IntentionButtons
+          onSelect={(intention) =>
+            setIntentions((prev) =>
+              prev ? `${prev}, ${intention}` : intention,
+            )
+          }
           language={language}
         />
         <textarea
