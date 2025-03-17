@@ -30,6 +30,23 @@ export default function VerifiedPage() {
     if (!bookmarked.includes(storagePath)) {
       const newBookmarked = [...bookmarked, storagePath];
       localStorage.setItem("bookmarkedAudios", JSON.stringify(newBookmarked));
+      
+      // Track bookmark event in Mixpanel
+      trackEvent('Prayer Bookmarked', {
+        timestamp: new Date().toISOString(),
+        wallet_address: localStorage.getItem("walletAddress") || 'anonymous',
+        prayer_length: prayer.length,
+        prayer_text: prayer,
+        language: localStorage.getItem("lastLanguage") || "",
+        religion: localStorage.getItem("lastReligion") || "",
+        intentions: localStorage.getItem("lastIntentions") || "",
+        has_audio: hasGeneratedAudio,
+        storage_path: storagePath,
+        user_agent: navigator.userAgent,
+        platform: navigator.platform,
+        screen_resolution: `${window.screen.width}x${window.screen.height}`
+      });
+
       console.log("Audio bookmarked:", storagePath);
       alert("Audio bookmarked successfully!");
       setIsBookmarked(true);
