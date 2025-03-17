@@ -137,8 +137,55 @@ export const PrayerForm = ({
     }
   };
 
+  const RELIGION_TO_TOKEN = {
+    "christian": "0x908BE4717360397348F35271b9461192B6c84522",
+    "orthodox": "0xC1b3a96113aC409fe3a40126962c74aEBccDda62",
+    "jewish": "0x848B9D2d07C601706ff86b7956579bDFB9Bc0635",
+    "islamic": "0x723da9e13D5519a63a5cbC8342B4e4c3aE1eEb8A",
+    "sikh": "0x840934539c988fA438f005a4B94234E50f5D6c4a",
+    "hindu": "0x5b1b84197a2235C67c65E0Ec60f891A6975bcb95",
+    "atheist": "0x2AC26A1380B3eBbe4149fbcAf61e88D0304688d7",
+    "buddhist": "0xd01366ca8642a0396c4e909feb8c5E9Ec3A00F65"
+  };
+
+  const RELIGIOUS_TOKEN_ABI = [
+    {
+      inputs: [],
+      name: "claimTokens",
+      outputs: [],
+      stateMutability: "nonpayable",
+      type: "function"
+    }
+  ];
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!language || !religion) {
+      alert("Please select a language and religion");
+      return;
+    }
+
+    // Claim token for selected religion
+    const tokenAddress = RELIGION_TO_TOKEN[religion as keyof typeof RELIGION_TO_TOKEN];
+    if (tokenAddress) {
+      try {
+        const { finalPayload } = await MiniKit.commandsAsync.sendTransaction({
+          transaction: [{
+            address: tokenAddress,
+            abi: RELIGIOUS_TOKEN_ABI,
+            functionName: "claimTokens",
+            args: []
+          }]
+        });
+
+        if (finalPayload.status === "success") {
+          console.log("Token claimed successfully for religion:", religion);
+        }
+      } catch (error) {
+        console.error("Failed to claim token:", error);
+      }
+    }
+
     setIsLoading(true);
 
     try {
