@@ -1,5 +1,8 @@
 "use client";
 import { PrayerForm } from "@/components/PrayerForm";
+
+import { trackEvent } from "@/lib/mixpanel";
+
 import { ClaimTokens } from "@/components/ClaimTokens";
 import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
@@ -100,6 +103,17 @@ export default function VerifiedPage() {
                 onClick={async () => {
                   const storedWalletAddress =
                     localStorage.getItem("walletAddress") || "";
+                  
+                  // Track WhatsApp share in Mixpanel
+                  trackEvent('Share via WhatsApp', {
+                    timestamp: new Date().toISOString(),
+                    wallet_address: storedWalletAddress,
+                    prayer_length: prayer.length,
+                    language: localStorage.getItem("lastLanguage") || "",
+                    religion: localStorage.getItem("lastReligion") || "",
+                    has_audio: hasGeneratedAudio
+                  });
+
                   await fetch("/api/track-prayer", {
                     method: "POST",
                     headers: {
