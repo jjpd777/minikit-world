@@ -248,11 +248,9 @@ export const PrayerForm = ({
           Prayer Intentions
         </label>
         <IntentionButtons
-          onSelect={(intention) =>
-            setIntentions((prev) =>
-              prev ? `${prev}, ${intention}` : intention,
-            )
-          }
+          onSelect={(intention) => {
+            setIntentions(prev => prev ? `${prev}, ${intention}` : intention);
+          }}
           language={language}
         />
         <textarea
