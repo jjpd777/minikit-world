@@ -38,7 +38,7 @@ export default function VerifiedPage() {
   };
 
   return (
-    <div className="flex min-h-screen flex-col items-center p-24">
+    <div className="flex min-h-screen flex-col items-center p-24 bg-gradient-to-b from-blue-50 to-yellow-50">
       {showConfetti && (
         <ReactConfetti
           width={window.innerWidth}
@@ -55,26 +55,15 @@ export default function VerifiedPage() {
           }}
         />
       ) : (
-        <div className="flex flex-col items-center gap-4 w-full max-w-[500px]">
-          <div className="flex justify-center mb-4">
-            <Image
-              src="/bendiga_logo.png"
-              alt="Bendiga Logo"
-              width={150}
-              height={150}
-              priority
-              className="animate-glow"
-              style={{ marginBottom: "-22px" }}
-            />
-          </div>
-          <div className="w-full min-w-[300px] max-h-[300px] overflow-y-auto p-4 rounded-lg bg-gray-800/50">
-            <p className="text-white text-lg">{prayer}</p>
+        <div className="flex flex-col items-center gap-4 w-full max-w-[800px]">
+          <div className="w-full min-w-[300px] h-[500px] overflow-y-auto p-8 rounded-xl bg-blue-100/50 shadow-lg border border-blue-200">
+            <p className="text-gray-700 text-xl leading-relaxed">{prayer}</p>
           </div>
           <div className="space-y-4 w-full ml-[-20px]">
             <div className="flex gap-4 justify-between w-full">
               <button
                 onClick={() => setShowPrayer(false)}
-                className="flex-1 px-4 py-2 bg-purple-500/80 text-white rounded-lg hover:bg-purple-600 transition-colors flex items-center justify-center gap-2"
+                className="flex-1 px-4 py-2 bg-blue-500/80 text-white rounded-lg hover:bg-blue-600 transition-colors flex items-center justify-center gap-2 shadow-md"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
