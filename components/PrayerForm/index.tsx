@@ -200,7 +200,7 @@ export const PrayerForm = ({
           <select
             value={religion}
             onChange={(e) => setReligion(e.target.value)}
-            className="p-3 rounded-lg border border-gray-700 bg-gray-800 text-white hover:border-purple-500/50 transition-colors"
+            className="p-3 rounded-lg border border-blue-200 bg-blue-50 text-gray-700 hover:border-blue-300 focus:border-blue-400 focus:ring-2 focus:ring-blue-200 focus:outline-none transition-colors text-lg"
           >
             {religions.map((rel) => (
               <option key={rel.code} value={rel.code}>
@@ -212,7 +212,7 @@ export const PrayerForm = ({
           <select
             value={language}
             onChange={(e) => setLanguage(e.target.value)}
-            className="p-3 rounded-lg border border-gray-700 bg-gray-800 text-white hover:border-purple-500/50 transition-colors"
+            className="p-3 rounded-lg border border-blue-200 bg-blue-50 text-gray-700 hover:border-blue-300 focus:border-blue-400 focus:ring-2 focus:ring-blue-200 focus:outline-none transition-colors text-lg"
           >
             {languages.map((lang) => (
               <option key={lang.code} value={lang.code}>
@@ -262,7 +262,7 @@ export const PrayerForm = ({
           value={intentions}
           onChange={(e) => setIntentions(e.target.value)}
           placeholder="Enter your prayer intentions..."
-          className="p-2 rounded-lg bg-gray-800 text-white border border-gray-700 h-32 w-full"
+          className="p-2 rounded-lg bg-blue-50 text-gray-700 border border-blue-200 h-32 w-full text-lg resize-none hover:border-blue-300 focus:border-blue-400 focus:ring-2 focus:ring-blue-200 focus:outline-none transition-colors"
         />
       </div>
 
