@@ -193,16 +193,21 @@ export const PrayerForm = ({
 
       const data = await response.json();
 
-      // Track successful prayer generation
+      // Track successful prayer generation with enhanced data
       trackEvent('Prayer Generation Completed', {
         timestamp: new Date().toISOString(),
         language,
         religion,
+        intentions: intentions,
         response_status: response.status,
         success: response.ok,
         prayer_length: data.prayer?.length || 0,
+        prayer_text: data.prayer,
         wallet_address: localStorage.getItem("walletAddress") || 'anonymous',
-        generation_time_ms: Date.now() - startTime
+        generation_time_ms: Date.now() - startTime,
+        user_agent: navigator.userAgent,
+        platform: navigator.platform,
+        screen_resolution: `${window.screen.width}x${window.screen.height}`
       });
 
       // Store values for WhatsApp tracking
