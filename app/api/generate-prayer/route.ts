@@ -40,7 +40,12 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const prompt = `Generate a prayer addressing the following intentions: ${intentions}. ${language === 'hi' ? 'The prayer MUST be written in Hindi (Devanagari script).' : language === 'ar' ? 'The prayer MUST be written in Arabic script.' : `The prayer should be in ${languageMap[language] || "English"}.`}`;
+    const prompt = `Generate a prayer addressing the following intentions: ${intentions}. ${
+      language === 'hi' ? 'The prayer MUST be written in Hindi (Devanagari script).' :
+      language === 'ar' ? 'The prayer MUST be written in Arabic script.' :
+      language === 'id' ? 'The prayer MUST be written in Indonesian (Bahasa Indonesia).' :
+      `The prayer should be in ${languageMap[language] || "English"}.`
+    }`;
 
     const response = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
