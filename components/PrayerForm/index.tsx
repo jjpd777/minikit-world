@@ -246,13 +246,36 @@ export const PrayerForm = ({
         <label htmlFor="intentions" className="text-white">
           Prayer Intentions
         </label>
-        <textarea
-          id="intentions"
-          value={intentions}
-          onChange={(e) => setIntentions(e.target.value)}
-          placeholder="Enter your prayer intentions..."
-          className="p-2 rounded-lg bg-gray-800 text-white border border-gray-700 h-32"
-        />
+        <div className="flex flex-col gap-2">
+          <div className="flex flex-wrap gap-2 mb-2">
+            {[
+              "For health and healing",
+              "For guidance in life decisions",
+              "For family and loved ones",
+              "For peace and harmony",
+              "For strength in difficult times",
+              "For gratitude and blessings",
+              "For forgiveness",
+              "For financial stability",
+            ].map((intention) => (
+              <button
+                key={intention}
+                type="button"
+                onClick={() => setIntentions(intention)}
+                className="px-3 py-1 text-sm bg-gray-800 text-white rounded-full hover:bg-purple-500/30 border border-gray-700 transition-colors"
+              >
+                {intention}
+              </button>
+            ))}
+          </div>
+          <textarea
+            id="intentions"
+            value={intentions}
+            onChange={(e) => setIntentions(e.target.value)}
+            placeholder="Enter your prayer intentions..."
+            className="p-2 rounded-lg bg-gray-800 text-white border border-gray-700 h-32"
+          />
+        </div>
       </div>
 
       <button
