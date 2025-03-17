@@ -206,6 +206,10 @@ export const PrayerForm = ({
       });
 
       const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to generate prayer');
+      }
 
       // Track successful prayer generation with enhanced data
       trackEvent('Prayer Generation Completed', {

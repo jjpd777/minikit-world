@@ -77,7 +77,11 @@ export default function VerifiedPage() {
       ) : (
         <div className="flex flex-col items-center gap-4 w-full max-w-[800px]">
           <div className="w-full min-w-[300px] h-[500px] overflow-y-auto p-8 rounded-xl bg-blue-100/50 shadow-lg border border-blue-200">
-            <p className="text-gray-700 text-xl leading-relaxed">{prayer}</p>
+            {prayer ? (
+              <p className="text-gray-700 text-xl leading-relaxed">{prayer}</p>
+            ) : (
+              <p className="text-red-600 text-xl text-center">Failed to generate prayer. Please try again.</p>
+            )}
           </div>
           <div className="space-y-4 w-full ml-[-20px]">
             <div className="flex gap-4 justify-between w-full">
