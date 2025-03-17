@@ -104,14 +104,19 @@ export default function VerifiedPage() {
                   const storedWalletAddress =
                     localStorage.getItem("walletAddress") || "";
                   
-                  // Track WhatsApp share in Mixpanel
+                  // Track WhatsApp share in Mixpanel with enhanced data
                   trackEvent('Share via WhatsApp', {
                     timestamp: new Date().toISOString(),
                     wallet_address: storedWalletAddress,
                     prayer_length: prayer.length,
+                    prayer_text: prayer,
                     language: localStorage.getItem("lastLanguage") || "",
                     religion: localStorage.getItem("lastReligion") || "",
-                    has_audio: hasGeneratedAudio
+                    intentions: localStorage.getItem("lastIntentions") || "",
+                    has_audio: hasGeneratedAudio,
+                    user_agent: navigator.userAgent,
+                    platform: navigator.platform,
+                    screen_resolution: `${window.screen.width}x${window.screen.height}`
                   });
 
                   await fetch("/api/track-prayer", {
