@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import { trackEvent } from '@/lib/mixpanel';
 import { IntentionButtons } from "./IntentionButtons";
 
 export const PrayerForm = ({
@@ -165,6 +166,18 @@ export const PrayerForm = ({
     setIsLoading(true);
 
     try {
+      // Track prayer generation attempt
+      trackEvent('Prayer Generation Started', {
+        timestamp: new Date().toISOString(),
+        language,
+        religion,
+        intentions_length: intentions.length,
+        wallet_address: localStorage.getItem("walletAddress") || 'anonymous',
+        user_agent: navigator.userAgent,
+        platform: navigator.platform,
+        screen_resolution: `${window.screen.width}x${window.screen.height}`
+      });
+
       const response = await fetch("/api/generate-prayer", {
         method: "POST",
         headers: {
@@ -178,6 +191,18 @@ export const PrayerForm = ({
       });
 
       const data = await response.json();
+
+      // Track successful prayer generation
+      trackEvent('Prayer Generation Completed', {
+        timestamp: new Date().toISOString(),
+        language,
+        religion,
+        response_status: response.status,
+        success: response.ok,
+        prayer_length: data.prayer?.length || 0,
+        wallet_address: localStorage.getItem("walletAddress") || 'anonymous',
+        generation_time_ms: Date.now() - startTime
+      });
 
       // Store values for WhatsApp tracking
       localStorage.setItem("lastIntentions", intentions);

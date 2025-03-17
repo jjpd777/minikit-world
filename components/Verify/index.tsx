@@ -1,6 +1,7 @@
 
 "use client";
 import { IDKitWidget } from "@worldcoin/idkit";
+import { trackEvent } from '@/lib/mixpanel';
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
@@ -52,9 +53,28 @@ export const VerifyBlock = () => {
       <IDKitWidget
         app_id={process.env.NEXT_PUBLIC_APP_ID as `app_${string}`}
         action={process.env.NEXT_PUBLIC_ACTION_NAME as string}
-        onSuccess={handleVerify}
+        onSuccess={(proof) => {
+          // Track verification attempt in Mixpanel
+          trackEvent('World ID Verification Attempt', {
+            timestamp: new Date().toISOString(),
+            verification_level: proof.merkle_root ? 'orb' : 'device',
+            action: process.env.NEXT_PUBLIC_ACTION_NAME,
+            success: true,
+            nullifier_hash: proof.nullifier_hash
+          });
+          handleVerify(proof);
+        }}
         handleVerify={handleVerify}
         signal="user_verification"
+        onError={(error) => {
+          // Track verification errors
+          trackEvent('World ID Verification Error', {
+            timestamp: new Date().toISOString(),
+            error_message: error.message,
+            error_code: error.code,
+            action: process.env.NEXT_PUBLIC_ACTION_NAME
+          });
+        }}
       >
         {({ open }) => (
           <button
