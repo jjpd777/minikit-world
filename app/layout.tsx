@@ -22,10 +22,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <ErudaProvider /> 
-        <ProfileButton />
+        <ErudaProvider />
         <NextAuthProvider>
           <MiniKitProvider>
+            <ProfileButton />
             {children}
             <AudioPlayer />
           </MiniKitProvider>
