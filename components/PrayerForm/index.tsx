@@ -64,6 +64,12 @@ export const PrayerForm = ({
       choices: ["Diri Sendiri", "Ibu", "Ayah", "Saudara", "Kesehatan", "Kekayaan"],
     },
     {
+      code: "tr",
+      name: "Turkish",
+      flag: "🇹🇷",
+      choices: ["Kendim", "Anne", "Baba", "Kardeşler", "Sağlık", "Zenginlik"],
+    },
+    {
       code: "he",
       name: "Hebrew",
       flag: "🇮🇱",
