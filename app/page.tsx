@@ -3,7 +3,7 @@ import { WalletAuth } from "@/components/WalletAuth";
 
 export default function Home() {
   return (
-    <main className="min-h-screen flex flex-col items-center justify-center p-8 bg-gradient-to-b from-gray-900 to-gray-800">
+    <main className="min-h-screen flex flex-col items-center justify-center p-8 bg-gradient-to-b from-blue-50 to-yellow-50">
       <div className="w-full max-w-md flex flex-col items-center">
         <SignIn />
       </div>
