@@ -68,7 +68,7 @@ export const PrayerForm = ({
       code: "tr",
       name: "Turkish",
       flag: "🇹🇷",
-      choices: ["Kendim", "Anne", "Baba", "Kardeşler", "Sağlık", "Zenginlik"],
+      choices: ["Kendim için", "Annem için", "Babam için", "Kardeşlerim için", "Sağlık için", "Zenginlik için"],
     },
     {
       code: "he",
@@ -118,7 +118,7 @@ export const PrayerForm = ({
       code: "zh",
       name: "Chinese",
       flag: "🇨🇳",
-      choices: ["自己", "母亲", "父亲", "兄弟姐妹", "健康", "财富"],
+      choices: ["为自己", "为母亲", "为父亲", "为家人", "健康", "财富"],
     },
     {
       code: "hi",
