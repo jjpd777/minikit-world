@@ -325,12 +325,23 @@ export const PrayerForm = ({
         />
       </div>
 
+      const buttonText = {
+        en: "Generate Prayer",
+        he: "צור תפילה",
+        pt: "Gerar Oração",
+        fr: "Générer une Prière",
+        de: "Gebet Generieren",
+        es: "Generar Oración",
+        hi: "प्रार्थना बनाएं",
+        ar: "توليد الصلاة"
+      };
+
       <button
         type="submit"
         disabled={isLoading || !intentions.trim().length}
         className="w-full px-4 py-2 bg-purple-500/80 text-white rounded-lg hover:bg-purple-600 transition-colors disabled:opacity-50"
       >
-        {isLoading ? "Generating..." : "Generate Prayer"}
+        {isLoading ? "Generating..." : buttonText[language as keyof typeof buttonText]}
       </button>
 
       {audioData && (
