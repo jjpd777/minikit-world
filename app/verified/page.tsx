@@ -101,7 +101,6 @@ export default function VerifiedPage() {
                     clipRule="evenodd"
                   />
                 </svg>
-                Start Over
               </button>
               {storagePath && (
                 <button
