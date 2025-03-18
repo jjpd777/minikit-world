@@ -33,6 +33,7 @@ const commonIntentions = {
 
 export const IntentionButtons: React.FC<IntentionButtonsProps> = ({ onSelect, language }) => {
   const [selectedIntentions, setSelectedIntentions] = useState<string[]>([]);
+  const [showIntentions, setShowIntentions] = useState(false);
   const currentIntentions = intentions[language as keyof typeof intentions] || intentions.en;
   const currentCommonIntentions = commonIntentions[language as keyof typeof commonIntentions] || commonIntentions.en;
 
@@ -48,7 +49,7 @@ export const IntentionButtons: React.FC<IntentionButtonsProps> = ({ onSelect, la
   return (
     <div className="w-full max-w-2xl mx-auto mb-4 space-y-6">
       <div>
-        <h2 className="text-base text-gray-700 mb-3">
+        <button onClick={() => setShowIntentions(!showIntentions)} className="text-base text-gray-700 mb-3 flex items-center gap-2">
           {({
             en: "Prayer For",
             es: "Oración Para",
@@ -61,8 +62,11 @@ export const IntentionButtons: React.FC<IntentionButtonsProps> = ({ onSelect, la
             de: "Gebet Für",
             id: "Doa Untuk"
           })[language] || "Prayer For"}
-        </h2>
-        <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
+          <svg className={`w-4 h-4 transform transition-transform ${showIntentions ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+          </svg>
+        </button>
+        <div className={`grid grid-cols-3 sm:grid-cols-5 gap-2 transition-all duration-300 ${showIntentions ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0 overflow-hidden'}`}>
           {currentIntentions.map((intention, index) => (
             <button
               key={index}
@@ -84,21 +88,32 @@ export const IntentionButtons: React.FC<IntentionButtonsProps> = ({ onSelect, la
       </div>
 
       <div>
-        <h2 className="text-base text-gray-700 mb-3">
+        <button 
+          onClick={() => setShowIntentions(!showIntentions)}
+          className="text-base text-gray-700 mb-3 flex items-center gap-2"
+        >
           {({
-            en: "Prayer Intentions",
-            es: "Intenciones de Oración",
-            tr: "Dua Niyetleri",
-            he: "כוונות תפילה",
-            pt: "Intenções de Oração",
-            hi: "प्रार्थना के इरादे",
-            ar: "نوايا الصلاة",
-            fr: "Intentions de Prière",
-            de: "Gebetsanliegen",
-            id: "Niat Doa"
-          })[language] || "Prayer Intentions"}
-        </h2>
-        <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
+            en: "Common Prayer Intentions",
+            es: "Intenciones Comunes de Oración",
+            tr: "Yaygın Dua Niyetleri",
+            he: "כוונות תפילה נפוצות",
+            pt: "Intenções Comuns de Oração",
+            hi: "सामान्य प्रार्थना इरादे",
+            ar: "نوايا الصلاة الشائعة",
+            fr: "Intentions de Prière Communes",
+            de: "Häufige Gebetsanliegen",
+            id: "Niat Doa Umum"
+          })[language] || "Common Prayer Intentions"}
+          <svg 
+            className={`w-4 h-4 transform transition-transform ${showIntentions ? 'rotate-180' : ''}`} 
+            fill="none" 
+            stroke="currentColor" 
+            viewBox="0 0 24 24"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+          </svg>
+        </button>
+        <div className={`grid grid-cols-3 sm:grid-cols-5 gap-2 transition-all duration-300 ${showIntentions ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0 overflow-hidden'}`}>
           {currentCommonIntentions.map((intention, index) => (
             <button
               key={index}
