@@ -48,7 +48,20 @@ export const IntentionButtons: React.FC<IntentionButtonsProps> = ({ onSelect, la
   return (
     <div className="w-full max-w-2xl mx-auto mb-4 space-y-6">
       <div>
-        <h2 className="text-base text-gray-700 mb-3">Prayer For</h2>
+        <h2 className="text-base text-gray-700 mb-3">
+          {({
+            en: "Prayer For",
+            es: "Oración Para",
+            tr: "Dua İçin",
+            he: "תפילה עבור",
+            pt: "Oração Para",
+            hi: "प्रार्थना के लिए",
+            ar: "الصلاة من أجل",
+            fr: "Prière Pour",
+            de: "Gebet Für",
+            id: "Doa Untuk"
+          })[language] || "Prayer For"}
+        </h2>
         <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
           {currentIntentions.map((intention, index) => (
             <button
@@ -71,7 +84,20 @@ export const IntentionButtons: React.FC<IntentionButtonsProps> = ({ onSelect, la
       </div>
       
       <div>
-        <h2 className="text-base text-gray-700 mb-3">Prayer Intentions</h2>
+        <h2 className="text-base text-gray-700 mb-3">
+          {({
+            en: "Prayer Intentions",
+            es: "Intenciones de Oración",
+            tr: "Dua Niyetleri",
+            he: "כוונות תפילה",
+            pt: "Intenções de Oração",
+            hi: "प्रार्थना के इरादे",
+            ar: "نوايا الصلاة",
+            fr: "Intentions de Prière",
+            de: "Gebetsanliegen",
+            id: "Niat Doa"
+          })[language] || "Prayer Intentions"}
+        </h2>
         <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
           {currentCommonIntentions.map((intention, index) => (
             <button
