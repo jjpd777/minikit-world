@@ -17,9 +17,6 @@ export const IntentionButtons: React.FC<IntentionButtonsProps> = ({ onSelect, la
       : [...selectedIntentions, intention];
     setSelectedIntentions(newIntentions);
     onSelect(intention);
-    setSelectedIntentions(newIntentions);
-    onSelect(intention);
-    localStorage.setItem("selectedIntentions", JSON.stringify(newIntentions));
   };
 
   return (
