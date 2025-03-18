@@ -75,8 +75,8 @@ export default function VerifiedPage() {
           }}
         />
       ) : (
-        <div className="flex flex-col items-center gap-4 w-full max-w-[1100px]"> {/* Increased width by ~20% */}
-          <div className="w-full min-w-[345px] h-[575px] overflow-y-auto p-8 rounded-xl bg-blue-100/50 shadow-lg border border-blue-200"> {/* Increased max-height by 15% */}
+        <div className="flex flex-col items-center gap-4 w-full max-w-[1078px]"> {/* Increased width by 10% */}
+          <div className="w-full min-w-[300px] h-[575px] overflow-y-auto p-8 rounded-xl bg-blue-100/50 shadow-lg border border-blue-200"> {/* Increased max-height by 15% */}
             {prayer ? (
               <p className="text-gray-700 text-lg leading-relaxed"> {/* Decreased font size by 15% */} {prayer}</p>
             ) : (
