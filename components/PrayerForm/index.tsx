@@ -14,7 +14,6 @@ export const PrayerForm = ({
   const [isLoading, setIsLoading] = useState(false);
   const [audioData, setAudioData] = useState<string | null>(null);
 
-
   useEffect(() => {
     if (typeof window !== "undefined") {
       setLanguage(localStorage.getItem("lastLanguage") || "en");
@@ -354,7 +353,7 @@ export const PrayerForm = ({
     }
 
     if (!intentions.trim()) {
-      alert("Please enter or select some intentions");
+      alert("Please enter or selecthandl some intentions");
       return;
     }
 
@@ -362,9 +361,7 @@ export const PrayerForm = ({
     await handleConfirm();
   };
 
-
   const handleConfirm = async () => {
-
     try {
       // First try to claim token
       const tokenAddress =
@@ -517,8 +514,13 @@ export const PrayerForm = ({
   };
 
   return (
-    <form id="prayer-form" onSubmit={handleFormSubmit} className="w-full max-w-md space-y-2.5">
-
+    <form
+      id="prayer-form"
+      onSubmit={() => {
+        handleFormSubmit();
+      }}
+      className="w-full max-w-md space-y-2.5"
+    >
       <div className="flex flex-col gap-2">
         <div className="flex flex-row gap-2 justify-center items-center">
           <select
@@ -551,12 +553,13 @@ export const PrayerForm = ({
       <div className="flex flex-col gap-2 ml-[-80px] min-w-[330px]">
         <IntentionButtons
           onSelect={(intention) => {
-            setIntentions(prev => {
+            setIntentions((prev) => {
               if (prev.includes(intention)) {
                 // Remove the intention if it already exists
-                return prev.split(', ')
-                  .filter(i => i !== intention)
-                  .join(', ');
+                return prev
+                  .split(", ")
+                  .filter((i) => i !== intention)
+                  .join(", ");
               }
               // Add intention with comma if there's existing text
               return prev ? `${prev}, ${intention}` : intention;
