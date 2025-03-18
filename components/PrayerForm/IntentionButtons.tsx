@@ -6,15 +6,15 @@ interface IntentionButtonsProps {
 }
 
 const intentions = {
-  en: ["Myself", "Mother", "Father", "Sister", "Brother", "Family", "Friend", "Partner"],
-  he: ["עצמי", "אמא", "אבא", "אחות", "אח", "משפחה", "חבר", "שותף"],
-  pt: ["Eu mesmo", "Mãe", "Pai", "Irmã", "Irmão", "Família", "Amigo", "Parceiro"],
-  fr: ["Moi-même", "Mère", "Père", "Sœur", "Frère", "Famille", "Ami", "Partenaire"],
-  de: ["Ich selbst", "Mutter", "Vater", "Schwester", "Bruder", "Familie", "Freund", "Partner"],
-  es: ["Yo mismo", "Madre", "Padre", "Hermana", "Hermano", "Familia", "Amigo", "Pareja"],
-  hi: ["स्वयं", "माता", "पिता", "बहन", "भाई", "परिवार", "मित्र", "साथी", "कार्य", "स्वास्थ्य", "शांति", "कृतज्ञता", "मार्गदर्शन", "शक्ति", "ज्ञान", "प्रेम", "क्षमा", "विश्वास", "आशा", "सफलता"],
-  ar: ["نفسي", "الأم", "الأب", "الأخت", "الأخ", "العائلة", "صديق", "شريك", "العمل", "الصحة", "السلام", "الامتنان", "التوجيه", "القوة", "الحكمة", "الحب", "المغفرة", "الإيمان", "الأمل", "النجاح"],
-  id: ["Diri", "Ibu", "Ayah", "Saudari", "Saudara", "Keluarga", "Teman", "Pasangan", "Pekerjaan", "Kesehatan", "Kedamaian", "Syukur", "Bimbingan", "Kekuatan", "Kebijaksanaan", "Cinta", "Pengampunan", "Iman", "Harapan", "Kesuksesan"],
+  en: ["Myself", "Mother", "Father", "Sister", "Brother", "Family", "Friend", "Partner", "Humanity", "The Poor", "The Suffering", "My Community"],
+  he: ["עצמי", "אמא", "אבא", "אחות", "אח", "משפחה", "חבר", "שותף", "האנושות", "העניים", "הסובלים", "הקהילה שלי"],
+  pt: ["Eu mesmo", "Mãe", "Pai", "Irmã", "Irmão", "Família", "Amigo", "Parceiro", "Humanidade", "Os Pobres", "Os Sofredores", "Minha Comunidade"],
+  fr: ["Moi-même", "Mère", "Père", "Sœur", "Frère", "Famille", "Ami", "Partenaire", "Humanité", "Les Pauvres", "Les Souffrants", "Ma Communauté"],
+  de: ["Ich selbst", "Mutter", "Vater", "Schwester", "Bruder", "Familie", "Freund", "Partner", "Menschheit", "Die Armen", "Die Leidenden", "Meine Gemeinschaft"],
+  es: ["Yo mismo", "Madre", "Padre", "Hermana", "Hermano", "Familia", "Amigo", "Pareja", "Humanidad", "Los Pobres", "Los Sufrientes", "Mi Comunidad"],
+  hi: ["स्वयं", "माता", "पिता", "बहन", "भाई", "परिवार", "मित्र", "साथी", "मानवता", "गरीब", "पीड़ित", "मेरा समुदाय"],
+  ar: ["نفسي", "الأم", "الأب", "الأخت", "الأخ", "العائلة", "صديق", "شريك", "الإنسانية", "الفقراء", "المعاناة", "مجتمعي"],
+  id: ["Diri", "Ibu", "Ayah", "Saudari", "Saudara", "Keluarga", "Teman", "Pasangan", "Kemanusiaan", "Orang Miskin", "Penderitaan", "Komunitas Saya"],
   tr: ["Kendim için", "Annem", "Babam", "Kardeşlerim", "Sağlık", "Zenginlik", "Huzur", "Şükür", "Rehberlik", "Güç", "Bilgelik", "Sevgi", "Affetme", "İnanç", "Umut", "Başarı"]
 };
 
