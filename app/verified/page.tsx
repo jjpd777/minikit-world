@@ -30,11 +30,11 @@ export default function VerifiedPage() {
     if (!bookmarked.includes(storagePath)) {
       const newBookmarked = [...bookmarked, storagePath];
       localStorage.setItem("bookmarkedAudios", JSON.stringify(newBookmarked));
-      
+
       // Track bookmark event in Mixpanel
-      trackEvent('Prayer Bookmarked', {
+      trackEvent("Prayer Bookmarked", {
         timestamp: new Date().toISOString(),
-        wallet_address: localStorage.getItem("walletAddress") || 'anonymous',
+        wallet_address: localStorage.getItem("walletAddress") || "anonymous",
         prayer_length: prayer.length,
         prayer_text: prayer,
         language: localStorage.getItem("lastLanguage") || "",
@@ -44,7 +44,7 @@ export default function VerifiedPage() {
         storage_path: storagePath,
         user_agent: navigator.userAgent,
         platform: navigator.platform,
-        screen_resolution: `${window.screen.width}x${window.screen.height}`
+        screen_resolution: `${window.screen.width}x${window.screen.height}`,
       });
 
       console.log("Audio bookmarked:", storagePath);
@@ -80,7 +80,9 @@ export default function VerifiedPage() {
             {prayer ? (
               <p className="text-gray-700 text-xl leading-relaxed">{prayer}</p>
             ) : (
-              <p className="text-red-600 text-xl text-center">Failed to generate prayer. Please try again.</p>
+              <p className="text-red-600 text-xl text-center">
+                Failed to generate prayer. Please try again.
+              </p>
             )}
           </div>
           <div className="space-y-4 w-full ml-[-20px]">
@@ -118,17 +120,15 @@ export default function VerifiedPage() {
                 </button>
               )}
               <a
-                href={`https://wa.me/?text=${encodeURIComponent(prayer)}`}
+                href={`https://wa.me/?text=${encodeURIComponent(prayer + "\t bendiga.app")}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={async () => {
                   const storedWalletAddress =
                     localStorage.getItem("walletAddress") || "";
-                  
-                  const whatsappUrl = `https://bendiga.app${window.location.pathname}`;
-                  
+
                   // Track WhatsApp share in Mixpanel with enhanced data
-                  trackEvent('Share via WhatsApp', {
+                  trackEvent("Share via WhatsApp", {
                     timestamp: new Date().toISOString(),
                     wallet_address: storedWalletAddress,
                     prayer_length: prayer.length,
@@ -140,7 +140,6 @@ export default function VerifiedPage() {
                     user_agent: navigator.userAgent,
                     platform: navigator.platform,
                     screen_resolution: `${window.screen.width}x${window.screen.height}`,
-                    share_url: whatsappUrl
                   });
 
                   await fetch("/api/track-prayer", {
@@ -178,9 +177,10 @@ export default function VerifiedPage() {
                     const startTime = Date.now();
 
                     // Track audio generation start
-                    trackEvent('Audio Prayer Generation Started', {
+                    trackEvent("Audio Prayer Generation Started", {
                       timestamp: new Date().toISOString(),
-                      wallet_address: localStorage.getItem("walletAddress") || 'anonymous',
+                      wallet_address:
+                        localStorage.getItem("walletAddress") || "anonymous",
                       prayer_length: prayer.length,
                       prayer_text: prayer,
                       language: localStorage.getItem("lastLanguage") || "",
@@ -188,7 +188,7 @@ export default function VerifiedPage() {
                       intentions: localStorage.getItem("lastIntentions") || "",
                       user_agent: navigator.userAgent,
                       platform: navigator.platform,
-                      screen_resolution: `${window.screen.width}x${window.screen.height}`
+                      screen_resolution: `${window.screen.width}x${window.screen.height}`,
                     });
 
                     try {
@@ -251,19 +251,22 @@ export default function VerifiedPage() {
                         setHasGeneratedAudio(true);
 
                         // Track successful audio generation
-                        trackEvent('Audio Prayer Generation Completed', {
+                        trackEvent("Audio Prayer Generation Completed", {
                           timestamp: new Date().toISOString(),
-                          wallet_address: localStorage.getItem("walletAddress") || 'anonymous',
+                          wallet_address:
+                            localStorage.getItem("walletAddress") ||
+                            "anonymous",
                           prayer_length: prayer.length,
                           prayer_text: prayer,
                           language: localStorage.getItem("lastLanguage") || "",
                           religion: localStorage.getItem("lastReligion") || "",
-                          intentions: localStorage.getItem("lastIntentions") || "",
+                          intentions:
+                            localStorage.getItem("lastIntentions") || "",
                           generation_time_ms: Date.now() - startTime,
                           storage_path: uploadData.gsPath,
                           user_agent: navigator.userAgent,
                           platform: navigator.platform,
-                          screen_resolution: `${window.screen.width}x${window.screen.height}`
+                          screen_resolution: `${window.screen.width}x${window.screen.height}`,
                         });
 
                         // Track voice generation event
