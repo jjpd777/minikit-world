@@ -274,13 +274,15 @@ const buttonText = {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const selectedIntentions = localStorage.getItem("selectedIntentions");
     if (!language || !religion) {
       alert("Please select a language and religion");
       return;
     }
-    const storedIntentions = JSON.parse(localStorage.getItem("selectedIntentions") || "[]");
-    if (!intentions.trim() && (!storedIntentions || storedIntentions.length === 0)) {
+    const storedIntentions = localStorage.getItem("selectedIntentions");
+    const hasSelectedButtons = storedIntentions && JSON.parse(storedIntentions).length > 0;
+    const hasTextInput = intentions.trim().length > 0;
+
+    if (!hasSelectedButtons && !hasTextInput) {
       alert("Please select intentions or enter text");
       return;
     }
