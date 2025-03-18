@@ -13,13 +13,11 @@ export const IntentionButtons: React.FC<IntentionButtonsProps> = ({ onSelect, la
   const currentIntentions = intentions[language as keyof typeof intentions] || intentions.en;
   const currentCommonIntentions = commonIntentions[language as keyof typeof commonIntentions] || commonIntentions.en;
 
-  const handleSelect = (intention: string, e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    e.stopPropagation();
+  const handleSelect = (intention: string) => {
+    // Simple toggle logic for intentions
     const newIntentions = selectedIntentions.includes(intention)
       ? selectedIntentions.filter(i => i !== intention)
       : [...selectedIntentions, intention];
-
     setSelectedIntentions(newIntentions);
     onSelect(intention);
     localStorage.setItem("selectedIntentions", JSON.stringify(newIntentions));
@@ -57,7 +55,7 @@ export const IntentionButtons: React.FC<IntentionButtonsProps> = ({ onSelect, la
           {currentIntentions.map((intention, index) => (
             <button
               key={index}
-              onClick={(e) => handleSelect(intention, e)}
+              onClick={() => handleSelect(intention)}
               className={`px-3 py-2 rounded-lg transition-colors text-sm text-white border
                 ${selectedIntentions.includes(intention)
                   ? 'bg-purple-700/65 border-purple-700/50'
@@ -100,7 +98,7 @@ export const IntentionButtons: React.FC<IntentionButtonsProps> = ({ onSelect, la
           {currentCommonIntentions.map((intention, index) => (
             <button
               key={index}
-              onClick={(e) => handleSelect(intention, e)}
+              onClick={() => handleSelect(intention)}
               className={`px-3 py-2 rounded-lg transition-colors text-sm text-white border
                 ${selectedIntentions.includes(intention)
                   ? 'bg-purple-700/65 border-purple-700/50'

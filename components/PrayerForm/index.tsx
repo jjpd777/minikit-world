@@ -517,7 +517,7 @@ export const PrayerForm = ({
   };
 
   return (
-    <form onSubmit={handleFormSubmit} className="w-full max-w-md space-y-2.5">
+    <form id="prayer-form" onSubmit={handleFormSubmit} className="w-full max-w-md space-y-2.5">
 
       <div className="flex flex-col gap-2">
         <div className="flex flex-row gap-2 justify-center items-center">
