@@ -39,14 +39,12 @@ export const IntentionButtons: React.FC<IntentionButtonsProps> = ({ onSelect, la
 
   const handleSelect = (intention: string) => {
     setSelectedIntentions(prev => {
-      const isSelected = prev.includes(intention);
-      const newSelected = isSelected 
-        ? prev.filter(i => i !== intention)
-        : [...prev, intention];
-      if (!isSelected) {
+      if (prev.includes(intention)) {
+        return prev.filter(i => i !== intention);
+      } else {
         onSelect(intention);
+        return [...prev, intention];
       }
-      return newSelected;
     });
   };
 
