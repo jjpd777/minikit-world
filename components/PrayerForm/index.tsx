@@ -475,7 +475,7 @@ const buttonText = {
             ))}
           </select>
         </div>
-        <div className="mt-4 flex items-center justify-center min-w-[300px] -mt-20">
+        <div className="mt-4 flex justify-center min-w-[300px] ml-[-90px] -mt-20">
           {/* <div className="grid grid-cols-3 gap-x-10 gap-y-4 px-4">
             {languages
               .find((lang) => lang.code === language)
@@ -497,7 +497,7 @@ const buttonText = {
         </div>
       </div>
 
-      <div className="flex flex-col gap-2 items-center justify-center w-full max-w-[330px] mx-auto">
+      <div className="flex flex-col gap-2 ml-[-80px] min-w-[330px]">
         <IntentionButtons
           onSelect={(intention) => {
             setIntentions((prev) => {
