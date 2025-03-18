@@ -363,7 +363,7 @@ export const PrayerForm = ({
       </div>
 
       <div className="flex flex-col gap-2 ml-[-80px] min-w-[330px]">
-        <label htmlFor="intentions" className="text-white">
+        <label htmlFor="intentions" className="text-black">
           Prayer Intentions
         </label>
         <IntentionButtons
