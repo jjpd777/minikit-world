@@ -279,7 +279,8 @@ const buttonText = {
       alert("Please select a language and religion");
       return;
     }
-    if (!intentions && !selectedIntentions) {
+    const storedIntentions = localStorage.getItem("selectedIntentions");
+    if (!intentions && !storedIntentions) {
       alert("Please select intentions or enter text");
       return;
     }
