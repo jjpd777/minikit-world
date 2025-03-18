@@ -10,7 +10,7 @@ export const PrayerForm = ({
 }) => {
   const [language, setLanguage] = useState("en");
   const [religion, setReligion] = useState("christian");
-  
+
   useEffect(() => {
     if (typeof window !== 'undefined') {
       setLanguage(localStorage.getItem("lastLanguage") || "en");
@@ -334,7 +334,7 @@ const buttonText = {
       });
 
       const data = await response.json();
-      
+
       if (!response.ok) {
         throw new Error(data.error || 'Failed to generate prayer');
       }
@@ -512,7 +512,7 @@ const buttonText = {
 
       <button
         type="submit"
-        disabled={isLoading || !intentions.trim().length}
+        disabled={isLoading || !(intentions.trim().length || localStorage.getItem("selectedIntentions"))}
         className="w-full px-4 py-2 bg-purple-500/80 text-white rounded-lg hover:bg-purple-600 transition-colors disabled:opacity-50"
       >
         {isLoading ? "Generating..." : buttonText[language as keyof typeof buttonText]}
