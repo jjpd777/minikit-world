@@ -49,13 +49,7 @@ export const IntentionButtons: React.FC<IntentionButtonsProps> = ({ onSelect, la
   return (
     <div className="w-full max-w-2xl mx-auto mb-4 space-y-6">
       <div>
-        <button 
-          className={`intention-button mb-3 ${selectedIntentions.includes('Prayer For') ? 'selected' : ''}`}
-          onClick={(e) => {
-            e.preventDefault();
-            handleSelect('Prayer For');
-          }}
-        >
+        <h2 className="text-base text-gray-700 mb-3">
           {({
             en: "Prayer For",
             es: "Oración Para",
@@ -68,7 +62,7 @@ export const IntentionButtons: React.FC<IntentionButtonsProps> = ({ onSelect, la
             de: "Gebet Für",
             id: "Doa Untuk"
           })[language] || "Prayer For"}
-        </button>
+        </h2>
         <div className="intention-buttons-grid">
           {currentIntentions.map((intention, index) => (
             <button
@@ -87,13 +81,7 @@ export const IntentionButtons: React.FC<IntentionButtonsProps> = ({ onSelect, la
       </div>
 
       <div>
-        <button 
-          className={`intention-button mb-3 ${selectedIntentions.includes('Prayer Intentions') ? 'selected' : ''}`}
-          onClick={(e) => {
-            e.preventDefault();
-            handleSelect('Prayer Intentions');
-          }}
-        >
+        <h2 className="text-base text-gray-700 mb-3">
           {({
             en: "Prayer Intentions",
             es: "Intenciones de Oración",
@@ -105,8 +93,6 @@ export const IntentionButtons: React.FC<IntentionButtonsProps> = ({ onSelect, la
             fr: "Intentions de Prière",
             de: "Gebetsanliegen",
             id: "Niat Doa"
-          })[language] || "Prayer Intentions"}
-        </button> "Niat Doa"
           })[language] || "Prayer Intentions"}
         </h2>
         <div className="intention-buttons-grid">
