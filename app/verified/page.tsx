@@ -30,7 +30,7 @@ export default function VerifiedPage() {
     if (!bookmarked.includes(storagePath)) {
       const newBookmarked = [...bookmarked, storagePath];
       localStorage.setItem("bookmarkedAudios", JSON.stringify(newBookmarked));
-      
+
       // Track bookmark event in Mixpanel
       trackEvent('Prayer Bookmarked', {
         timestamp: new Date().toISOString(),
@@ -75,10 +75,10 @@ export default function VerifiedPage() {
           }}
         />
       ) : (
-        <div className="flex flex-col items-center gap-4 w-full max-w-[800px]">
+        <div className="flex flex-col items-center gap-4 w-full max-w-[920px]"> {/* Increased width by 15% */}
           <div className="w-full min-w-[300px] h-[500px] overflow-y-auto p-8 rounded-xl bg-blue-100/50 shadow-lg border border-blue-200">
             {prayer ? (
-              <p className="text-gray-700 text-xl leading-relaxed">{prayer}</p>
+              <p className="text-gray-700 text-lg leading-relaxed"> {/* Decreased font size by 15% */} {prayer}</p>
             ) : (
               <p className="text-red-600 text-xl text-center">Failed to generate prayer. Please try again.</p>
             )}
@@ -124,7 +124,7 @@ export default function VerifiedPage() {
                 onClick={async () => {
                   const storedWalletAddress =
                     localStorage.getItem("walletAddress") || "";
-                  
+
                   // Track WhatsApp share in Mixpanel with enhanced data
                   trackEvent('Share via WhatsApp', {
                     timestamp: new Date().toISOString(),
@@ -298,7 +298,19 @@ export default function VerifiedPage() {
                   disabled={isGeneratingAudio || hasGeneratedAudio}
                   className="flex-1 px-4 py-2 bg-white text-purple-600 border border-purple-600 rounded-lg hover:bg-purple-Li50 transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
                 >
-                  {isGeneratingAudio ? "✨" : hasGeneratedAudio ? "" : "✨"}
+                  {isGeneratingAudio ? (
+                    <svg xmlns="http://www.w3.org/2000/svg" className="animate-spin h-5 w-5 mr-2 text-purple-600" fill="none" viewBox="0 0 24 24">
+                      <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2"/>
+                    </svg>
+                  ) : hasGeneratedAudio ? (
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 10l4 4H9"/>
+                    </svg>
+                  ) : (
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 text-purple-600" viewBox="0 0 20 20" fill="currentColor">
+                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clipRule="evenodd" />
+                    </svg>
+                  )}
                 </button>
               )}
             </div>
