@@ -125,6 +125,8 @@ export default function VerifiedPage() {
                   const storedWalletAddress =
                     localStorage.getItem("walletAddress") || "";
                   
+                  const whatsappUrl = `https://bendiga.app${window.location.pathname}`;
+                  
                   // Track WhatsApp share in Mixpanel with enhanced data
                   trackEvent('Share via WhatsApp', {
                     timestamp: new Date().toISOString(),
@@ -137,7 +139,8 @@ export default function VerifiedPage() {
                     has_audio: hasGeneratedAudio,
                     user_agent: navigator.userAgent,
                     platform: navigator.platform,
-                    screen_resolution: `${window.screen.width}x${window.screen.height}`
+                    screen_resolution: `${window.screen.width}x${window.screen.height}`,
+                    share_url: whatsappUrl
                   });
 
                   await fetch("/api/track-prayer", {
