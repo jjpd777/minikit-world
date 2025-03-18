@@ -552,8 +552,12 @@ export const PrayerForm = ({
         <IntentionButtons
           onSelect={(intention) => {
             setIntentions(prev => {
-              // If intention already exists, don't add it again
-              if (prev.includes(intention)) return prev;
+              if (prev.includes(intention)) {
+                // Remove the intention if it already exists
+                return prev.split(', ')
+                  .filter(i => i !== intention)
+                  .join(', ');
+              }
               // Add intention with comma if there's existing text
               return prev ? `${prev}, ${intention}` : intention;
             });
