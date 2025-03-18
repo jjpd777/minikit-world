@@ -274,8 +274,13 @@ const buttonText = {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    const selectedIntentions = localStorage.getItem("selectedIntentions");
     if (!language || !religion) {
       alert("Please select a language and religion");
+      return;
+    }
+    if (!intentions && !selectedIntentions) {
+      alert("Please select intentions or enter text");
       return;
     }
 
