@@ -488,7 +488,7 @@ const buttonText = {
                       prev ? `${prev}, ${choice}` : choice,
                     )
                   }
-                  className="p-2 min-w-[90px] w-full rounded-lg border border-gray-700 bg-gray-800 text-white hover:border-purple-500/50 transition-colors text-sm"
+                  className="p-2 min-w-[90px] w-full rounded-lg border border-gray-700 bg-gray-800 text-white hover:border-purple-400/50 transition-colors text-sm"
                 >
                   {choice}
                 </button>

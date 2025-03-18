@@ -73,8 +73,8 @@ export const IntentionButtons: React.FC<IntentionButtonsProps> = ({ onSelect, la
               }}
               className={`px-3 py-2 rounded-lg transition-colors text-sm text-white border
                 ${selectedIntentions.includes(intention)
-                  ? 'bg-purple-600/65 border-purple-600/50'
-                  : 'bg-purple-500/40 border-purple-500/30 hover:bg-purple-500/50 hover:border-purple-500/50'
+                  ? 'bg-purple-700/65 border-purple-700/50'
+                  : 'bg-purple-500/35 border-purple-500/30 hover:bg-purple-500/50 hover:border-purple-500/50'
                 }`}
             >
               {intention}
@@ -109,8 +109,8 @@ export const IntentionButtons: React.FC<IntentionButtonsProps> = ({ onSelect, la
               }}
               className={`px-3 py-2 rounded-lg transition-colors text-sm text-white border
                 ${selectedIntentions.includes(intention)
-                  ? 'bg-purple-600/65 border-purple-600/50'
-                  : 'bg-purple-500/40 border-purple-500/30 hover:bg-purple-500/50 hover:border-purple-500/50'
+                  ? 'bg-purple-700/65 border-purple-700/50'
+                  : 'bg-purple-500/35 border-purple-500/30 hover:bg-purple-500/50 hover:border-purple-500/50'
                 }`}
             >
               {intention}
