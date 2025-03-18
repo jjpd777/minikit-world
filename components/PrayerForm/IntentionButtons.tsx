@@ -20,11 +20,14 @@ const intentions = {
 
 export const IntentionButtons: React.FC<IntentionButtonsProps> = ({ onSelect, language }) => {
   const currentIntentions = intentions[language as keyof typeof intentions] || intentions.en;
+  const commonIntentions = ["Work", "Health", "Peace", "Gratitude", "Guidance", "Strength", "Wisdom", "Love", "Forgiveness", "Faith", "Hope", "Success"];
 
   return (
-    <div className="w-full max-w-2xl mx-auto mb-4">
-      <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
-        {currentIntentions.map((intention, index) => (
+    <div className="w-full max-w-2xl mx-auto mb-4 space-y-6">
+      <div>
+        <h2 className="text-xl font-semibold text-black mb-3">Prayer For?</h2>
+        <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
+          {currentIntentions.map((intention, index) => (
           <button
             key={index}
             onClick={(e) => {
@@ -40,6 +43,24 @@ export const IntentionButtons: React.FC<IntentionButtonsProps> = ({ onSelect, la
             {intention}
           </button>
         ))}
+        </div>
+      </div>
+      <div>
+        <h2 className="text-xl font-semibold text-black mb-3">Prayer Intentions</h2>
+        <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
+          {commonIntentions.map((intention, index) => (
+            <button
+              key={`common-${index}`}
+              onClick={(e) => {
+                e.preventDefault();
+                onSelect(intention);
+              }}
+              className="p-2 rounded-lg border border-gray-300 bg-white text-gray-700 hover:border-purple-500/50 hover:bg-purple-50 transition-colors text-sm"
+            >
+              {intention}
+            </button>
+          ))}
+        </div>
       </div>
     </div>
   );
