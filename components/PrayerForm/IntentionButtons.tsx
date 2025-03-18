@@ -51,7 +51,7 @@ export const IntentionButtons: React.FC<IntentionButtonsProps> = ({ onSelect, la
   return (
     <div className="w-full max-w-2xl mx-auto mb-4 space-y-6">
       <div>
-        <h2 className="text-xl font-semibold text-black mb-3">{sectionTitles[language as keyof typeof sectionTitles]?.prayerFor || "Prayer For"}</h2>
+        <h2 className="text-xl font-semibold text-blue-400 mb-3">{sectionTitles[language as keyof typeof sectionTitles]?.prayerFor || "Prayer For"}</h2>
         <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
           {currentIntentions.map((intention, index) => (
           <button
@@ -71,7 +71,7 @@ export const IntentionButtons: React.FC<IntentionButtonsProps> = ({ onSelect, la
         </div>
       </div>
       <div>
-        <h2 className="text-xl font-semibold text-black mb-3">{sectionTitles[language as keyof typeof sectionTitles]?.prayerIntentions || "Prayer Intentions"}</h2>
+        <h2 className="text-xl font-semibold text-blue-400 mb-3">{sectionTitles[language as keyof typeof sectionTitles]?.prayerIntentions || "Prayer Intentions"}</h2>
         <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
           {currentCommonIntentions.map((intention, index) => (
             <button
