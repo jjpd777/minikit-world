@@ -362,32 +362,11 @@ export const PrayerForm = ({
         </div>
       </div>
 
-      <div className="flex flex-col gap-6 ml-[-80px] min-w-[330px]">
-        <div>
-          <h2 className="text-xl font-semibold text-black mb-3">Prayer For?</h2>
-          <div className="grid grid-cols-3 gap-3">
-            {languages
-              .find((lang) => lang.code === language)
-              ?.choices.slice(0, 6).map((choice, index) => (
-                <button
-                  key={index}
-                  type="button"
-                  onClick={() =>
-                    setIntentions((prev) =>
-                      prev ? `${prev}, ${choice}` : choice
-                    )
-                  }
-                  className="p-2 rounded-lg border border-gray-300 bg-white text-gray-700 hover:border-purple-500/50 hover:bg-purple-50 transition-colors text-sm"
-                >
-                  {choice}
-                </button>
-              ))}
-          </div>
-        </div>
-        
-        <div>
-          <h2 className="text-xl font-semibold text-black mb-3">Prayer Intentions</h2>
-          <IntentionButtons
+      <div className="flex flex-col gap-2 ml-[-80px] min-w-[330px]">
+        <label htmlFor="intentions" className="text-black">
+          Prayer Intentions
+        </label>
+        <IntentionButtons
           onSelect={(intention) => {
             setIntentions((prev) => {
               const newValue = prev ? `${prev}, ${intention}` : intention;
