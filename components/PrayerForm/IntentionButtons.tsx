@@ -6,15 +6,15 @@ interface IntentionButtonsProps {
 }
 
 const intentions = {
-  en: ["Myself", "Mother", "Father", "Sister", "Brother", "Family", "Friend", "Partner", "Humanity", "The Suffering", "Community"],
-  he: ["עצמי", "אמא", "אבא", "אחות", "אח", "משפחה", "חבר", "שותף", "האנושות", "הסובלים", "הקהילה"],
-  pt: ["Eu mesmo", "Mãe", "Pai", "Irmã", "Irmão", "Família", "Amigo", "Parceiro", "Humanidade", "Os Sofredores", "Comunidade"],
-  fr: ["Moi-même", "Mère", "Père", "Sœur", "Frère", "Famille", "Ami", "Partenaire", "Humanité", "Les Souffrants", "Communauté"],
-  de: ["Ich selbst", "Mutter", "Vater", "Schwester", "Bruder", "Familie", "Freund", "Partner", "Menschheit", "Die Leidenden", "Gemeinschaft"],
-  es: ["Yo mismo", "Madre", "Padre", "Hermana", "Hermano", "Familia", "Amigo", "Pareja", "Humanidad", "Los Sufrientes", "Comunidad"],
-  hi: ["स्वयं", "माता", "पिता", "बहन", "भाई", "परिवार", "मित्र", "साथी", "मानवता", "पीड़ित", "समुदाय"],
-  ar: ["نفسي", "الأم", "الأب", "الأخت", "الأخ", "العائلة", "صديق", "شريك", "الإنسانية", "المعاناة", "مجتمع"],
-  id: ["Diri", "Ibu", "Ayah", "Saudari", "Saudara", "Keluarga", "Teman", "Pasangan", "Kemanusiaan", "Penderitaan", "Komunitas"],
+  en: ["Myself", "Mother", "Father", "Sister", "Brother", "Family", "Friend", "Partner", "Humanity", "Enemies", "Community"],
+  he: ["עצמי", "אמא", "אבא", "אחות", "אח", "משפחה", "חבר", "שותף", "האנושות", "אויבים", "הקהילה"],
+  pt: ["Eu mesmo", "Mãe", "Pai", "Irmã", "Irmão", "Família", "Amigo", "Parceiro", "Humanidade", "Inimigos", "Comunidade"],
+  fr: ["Moi-même", "Mère", "Père", "Sœur", "Frère", "Famille", "Ami", "Partenaire", "Humanité", "Ennemis", "Communauté"],
+  de: ["Ich selbst", "Mutter", "Vater", "Schwester", "Bruder", "Familie", "Freund", "Partner", "Menschheit", "Feinde", "Gemeinschaft"],
+  es: ["Yo mismo", "Madre", "Padre", "Hermana", "Hermano", "Familia", "Amigo", "Pareja", "Humanidad", "Enemigos", "Comunidad"],
+  hi: ["स्वयं", "माता", "पिता", "बहन", "भाई", "परिवार", "मित्र", "साथी", "मानवता", "दुश्मन", "समुदाय"],
+  ar: ["نفسي", "الأم", "الأب", "الأخت", "الأخ", "العائلة", "صديق", "شريك", "الإنسانية", "الأعداء", "مجتمع"],
+  id: ["Diri", "Ibu", "Ayah", "Saudari", "Saudara", "Keluarga", "Teman", "Pasangan", "Kemanusiaan", "Musuh", "Komunitas"],
   tr: ["Kendim için", "Annem", "Babam", "Kardeşlerim", "Sağlık", "Zenginlik", "Huzur", "Şükür", "Rehberlik", "Güç", "Bilgelik", "Sevgi"]
 };
 
@@ -49,10 +49,9 @@ export const IntentionButtons: React.FC<IntentionButtonsProps> = ({ onSelect, la
               console.log('Button clicked:', intention);
               onSelect(intention);
             }}
-            className={`px-3 py-2 bg-purple-500/20 hover:bg-purple-500/30 
-                     rounded-lg transition-colors text-white
-                     border border-purple-500/30 hover:border-purple-500/50
-                     ${intention === "The Suffering" ? "text-[0.7rem]" : "text-sm"}`}
+            className="px-3 py-2 bg-purple-500/20 hover:bg-purple-500/30 
+                     rounded-lg transition-colors text-sm text-white
+                     border border-purple-500/30 hover:border-purple-500/50"
           >
             {intention}
           </button>
