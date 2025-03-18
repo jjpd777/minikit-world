@@ -8,14 +8,8 @@ export const PrayerForm = ({
 }: {
   onPrayerGenerated: (prayer: string) => void;
 }) => {
-  const [language, setLanguage] = useState("en");
-  const [religion, setReligion] = useState("christian");
-
-  useEffect(() => {
-    // Only access localStorage on the client side
-    setLanguage(localStorage.getItem("lastLanguage") || "en");
-    setReligion(localStorage.getItem("lastReligion") || "christian");
-  }, []);
+  const [language, setLanguage] = useState(() => localStorage.getItem("lastLanguage") || "en");
+  const [religion, setReligion] = useState(() => localStorage.getItem("lastReligion") || "christian");
   const [intentions, setIntentions] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [audioData, setAudioData] = useState<string | null>(null);
