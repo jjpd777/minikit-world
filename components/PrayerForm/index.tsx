@@ -441,10 +441,10 @@ export const PrayerForm = ({
 
       onPrayerGenerated(data.prayer);
       setIsLoading(false);
-    } catch (error) {or) {
-          console.error("Failed to claim token:", error);
-        }
-      }
+    } catch (error) {
+      console.error("Failed to claim token:", error);
+      setIsLoading(false);
+    }
 
       const startTime = Date.now();
       trackEvent("Prayer Generation Started", {
