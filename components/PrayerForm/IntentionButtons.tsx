@@ -1,39 +1,16 @@
+
 import React, { useState } from 'react';
+import { intentions, commonIntentions } from './intentions';
 
 interface IntentionButtonsProps {
   onSelect: (intention: string) => void;
   language: string;
 }
 
-const intentions = {
-  en: ["Myself", "Mother", "Father", "Sister", "Brother", "Family", "Friend", "Partner", "Humanity", "Enemies", "Community"],
-  he: ["עצמי", "אמא", "אבא", "אחות", "אח", "משפחה", "חבר", "שותף", "האנושות", "אויבים", "הקהילה"],
-  pt: ["Eu mesmo", "Mãe", "Pai", "Irmã", "Irmão", "Família", "Amigo", "Parceiro", "Humanidade", "Inimigos", "Comunidade"],
-  fr: ["Moi-même", "Mère", "Père", "Sœur", "Frère", "Famille", "Ami", "Partenaire", "Humanité", "Ennemis", "Communauté"],
-  de: ["Ich selbst", "Mutter", "Vater", "Schwester", "Bruder", "Familie", "Freund", "Partner", "Menschheit", "Feinde", "Gemeinschaft"],
-  es: ["Yo mismo", "Madre", "Padre", "Hermana", "Hermano", "Familia", "Amigo", "Pareja", "Humanidad", "Enemigos", "Comunidad"],
-  hi: ["स्वयं", "माता", "पिता", "बहन", "भाई", "परिवार", "मित्र", "साथी", "मानवता", "दुश्मन", "समुदाय"],
-  ar: ["نفسي", "الأم", "الأب", "الأخت", "الأخ", "العائلة", "صديق", "شريك", "الإنسانية", "الأعداء", "مجتمع"],
-  id: ["Diri", "Ibu", "Ayah", "Saudari", "Saudara", "Keluarga", "Teman", "Pasangan", "Kemanusiaan", "Musuh", "Komunitas"],
-  tr: ["Kendim için", "Annem", "Babam", "Kardeşlerim", "Sağlık", "Zenginlik", "Huzur", "Şükür", "Rehberlik", "Güç", "Bilgelik", "Sevgi"]
-};
-
-const commonIntentions = {
-  en: ["Work", "Health", "Peace", "Gratitude", "Guidance", "Strength", "Wisdom", "Love", "Forgiveness", "Faith", "Hope", "Success"],
-  he: ["עבודה", "בריאות", "שלום", "הכרת תודה", "הדרכה", "כוח", "חוכמה", "אהבה", "סליחה", "אמונה", "תקווה", "הצלחה"],
-  pt: ["Trabalho", "Saúde", "Paz", "Gratidão", "Orientação", "Força", "Sabedoria", "Amor", "Perdão", "Fé", "Esperança", "Sucesso"],
-  fr: ["Travail", "Santé", "Paix", "Gratitude", "Direction", "Force", "Sagesse", "Amour", "Pardon", "Foi", "Espoir", "Succès"],
-  de: ["Arbeit", "Gesundheit", "Frieden", "Dankbarkeit", "Führung", "Stärke", "Weisheit", "Liebe", "Vergebung", "Glaube", "Hoffnung", "Erfolg"],
-  es: ["Trabajo", "Salud", "Paz", "Gratitud", "Guía", "Fuerza", "Sabiduría", "Amor", "Perdón", "Fe", "Esperanza", "Éxito"],
-  hi: ["काम", "स्वास्थ्य", "शांति", "कृतज्ञता", "मार्गदर्शन", "शक्ति", "ज्ञान", "प्रेम", "क्षमा", "विश्वास", "आशा", "सफलता"],
-  ar: ["عمل", "صحة", "سلام", "امتنان", "توجيه", "قوة", "حكمة", "حب", "مغفرة", "إيمان", "أمل", "نجاح"],
-  id: ["Kerja", "Kesehatan", "Kedamaian", "Syukur", "Bimbingan", "Kekuatan", "Kebijaksanaan", "Cinta", "Pengampunan", "Iman", "Harapan", "Kesuksesan"],
-  tr: ["İş", "Sağlık", "Barış", "Şükran", "Rehberlik", "Güç", "Bilgelik", "Sevgi", "Affetme", "İnanç", "Umut", "Başarı"]
-};
-
 export const IntentionButtons: React.FC<IntentionButtonsProps> = ({ onSelect, language }) => {
   const [selectedIntentions, setSelectedIntentions] = useState<string[]>([]);
-  const [showIntentions, setShowIntentions] = useState(false);
+  const [showPrayerFor, setShowPrayerFor] = useState(false);
+  const [showCommonIntentions, setShowCommonIntentions] = useState(false);
   const currentIntentions = intentions[language as keyof typeof intentions] || intentions.en;
   const currentCommonIntentions = commonIntentions[language as keyof typeof commonIntentions] || commonIntentions.en;
 
@@ -43,13 +20,17 @@ export const IntentionButtons: React.FC<IntentionButtonsProps> = ({ onSelect, la
       : [...selectedIntentions, intention];
 
     setSelectedIntentions(newIntentions);
+    onSelect(intention);
     localStorage.setItem("selectedIntentions", JSON.stringify(newIntentions));
   };
 
   return (
     <div className="w-full max-w-2xl mx-auto mb-4 space-y-6">
       <div>
-        <button onClick={() => setShowIntentions(!showIntentions)} className="text-base text-gray-700 mb-3 flex items-center gap-2">
+        <button 
+          onClick={() => setShowPrayerFor(!showPrayerFor)} 
+          className="text-base text-gray-700 mb-3 flex items-center gap-2"
+        >
           {({
             en: "Prayer For",
             es: "Oración Para",
@@ -62,11 +43,16 @@ export const IntentionButtons: React.FC<IntentionButtonsProps> = ({ onSelect, la
             de: "Gebet Für",
             id: "Doa Untuk"
           })[language] || "Prayer For"}
-          <svg className={`w-4 h-4 transform transition-transform ${showIntentions ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg 
+            className={`w-4 h-4 transform transition-transform ${showPrayerFor ? 'rotate-180' : ''}`} 
+            fill="none" 
+            stroke="currentColor" 
+            viewBox="0 0 24 24"
+          >
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
           </svg>
         </button>
-        <div className={`grid grid-cols-3 sm:grid-cols-5 gap-2 transition-all duration-300 ${showIntentions ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0 overflow-hidden'}`}>
+        <div className={`grid grid-cols-3 sm:grid-cols-5 gap-2 transition-all duration-300 ${showPrayerFor ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0 overflow-hidden'}`}>
           {currentIntentions.map((intention, index) => (
             <button
               key={index}
@@ -89,7 +75,7 @@ export const IntentionButtons: React.FC<IntentionButtonsProps> = ({ onSelect, la
 
       <div>
         <button 
-          onClick={() => setShowIntentions(!showIntentions)}
+          onClick={() => setShowCommonIntentions(!showCommonIntentions)}
           className="text-base text-gray-700 mb-3 flex items-center gap-2"
         >
           {({
@@ -105,7 +91,7 @@ export const IntentionButtons: React.FC<IntentionButtonsProps> = ({ onSelect, la
             id: "Niat Doa Umum"
           })[language] || "Common Prayer Intentions"}
           <svg 
-            className={`w-4 h-4 transform transition-transform ${showIntentions ? 'rotate-180' : ''}`} 
+            className={`w-4 h-4 transform transition-transform ${showCommonIntentions ? 'rotate-180' : ''}`} 
             fill="none" 
             stroke="currentColor" 
             viewBox="0 0 24 24"
@@ -113,7 +99,7 @@ export const IntentionButtons: React.FC<IntentionButtonsProps> = ({ onSelect, la
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
           </svg>
         </button>
-        <div className={`grid grid-cols-3 sm:grid-cols-5 gap-2 transition-all duration-300 ${showIntentions ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0 overflow-hidden'}`}>
+        <div className={`grid grid-cols-3 sm:grid-cols-5 gap-2 transition-all duration-300 ${showCommonIntentions ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0 overflow-hidden'}`}>
           {currentCommonIntentions.map((intention, index) => (
             <button
               key={index}
