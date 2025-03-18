@@ -272,47 +272,45 @@ const buttonText = {
     }
   ];
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleGeneratePrayer = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Validate inputs
     if (!language || !religion) {
       alert("Please select a language and religion");
       return;
     }
-    const storedIntentions = localStorage.getItem("selectedIntentions");
-    const selectedButtonIntentions = storedIntentions ? JSON.parse(storedIntentions) : [];
-    const hasSelectedButtons = selectedButtonIntentions.length > 0;
-    const hasTextInput = intentions.trim().length > 0;
 
-    if (!hasSelectedButtons && !hasTextInput) {
-      alert("Please select intentions or enter text");
+    const hasTextInput = intentions.trim().length > 0;
+    if (!hasTextInput) {
+      alert("Please enter prayer intentions");
       return;
     }
 
-    // If buttons are selected, use those. Otherwise use text input
-    const finalIntentions = hasSelectedButtons ? selectedButtonIntentions.join(", ") : intentions;
-
-    // Claim token for selected religion
-    const tokenAddress = RELIGION_TO_TOKEN[religion as keyof typeof RELIGION_TO_TOKEN];
-    if (tokenAddress) {
-      try {
-        const { finalPayload } = await MiniKit.commandsAsync.sendTransaction({
-          transaction: [{
-            address: tokenAddress,
-            abi: RELIGIOUS_TOKEN_ABI,
-            functionName: "claimTokens",
-            args: []
-          }]
-        });
-
-        if (finalPayload.status === "success") {
-          console.log("Token claimed successfully for religion:", religion);
-        }
-      } catch (error) {
-        console.error("Failed to claim token:", error);
-      }
-    }
-
     setIsLoading(true);
+
+    try {
+      // First try to claim token
+      const tokenAddress = RELIGION_TO_TOKEN[religion as keyof typeof RELIGION_TO_TOKEN];
+      if (tokenAddress) {
+        try {
+          const { finalPayload } = await MiniKit.commandsAsync.sendTransaction({
+            transaction: [{
+              address: tokenAddress,
+              abi: RELIGIOUS_TOKEN_ABI,
+              functionName: "claimTokens",
+              args: []
+            }]
+          });
+
+          if (finalPayload.status === "success") {
+            console.log("Token claimed successfully for religion:", religion);
+          }
+        } catch (error) {
+          console.error("Failed to claim token:", error);
+          // Continue with prayer generation even if token claim fails
+        }
+      }
 
     try {
       const startTime = Date.now();
@@ -448,7 +446,7 @@ const buttonText = {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="w-full max-w-md space-y-2.5">
+    <form onSubmit={handleGeneratePrayer} className="w-full max-w-md space-y-2.5">
       <div className="flex flex-col gap-2">
         <div className="flex flex-row gap-2 justify-center items-center">
           <select
