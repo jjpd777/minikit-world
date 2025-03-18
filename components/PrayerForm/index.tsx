@@ -288,9 +288,8 @@ const buttonText = {
       return;
     }
 
-    const finalIntentions = hasSelectedButtons 
-      ? selectedButtonIntentions.join(", ") 
-      : intentions;
+    // If buttons are selected, use those. Otherwise use text input
+    const finalIntentions = hasSelectedButtons ? selectedButtonIntentions.join(", ") : intentions;
 
     // Claim token for selected religion
     const tokenAddress = RELIGION_TO_TOKEN[religion as keyof typeof RELIGION_TO_TOKEN];
@@ -498,11 +497,14 @@ const buttonText = {
         </div>
       </div>
 
-      <div className="flex flex-col gap-2 w-full max-w-md mx-auto px-4">
+      <div className="flex flex-col gap-2 ml-[-80px] min-w-[330px]">
         <IntentionButtons
           onSelect={(intention) => {
-            // No need to concatenate, we'll use the selected intentions array
-            console.log('Intention selected:', intention);
+            setIntentions((prev) => {
+              const newValue = prev ? `${prev}, ${intention}` : intention;
+              console.log('Setting intentions to:', newValue);
+              return newValue;
+            });
           }}
           language={language}
         />

@@ -58,7 +58,7 @@ export default function VerifiedPage() {
   };
 
   return (
-    <div className="flex min-h-screen flex-col items-center p-4 sm:p-24 bg-gradient-to-b from-blue-50 to-yellow-50">
+    <div className="flex min-h-screen flex-col items-center p-24 bg-gradient-to-b from-blue-50 to-yellow-50">
       {showConfetti && (
         <ReactConfetti
           width={window.innerWidth}
