@@ -497,7 +497,7 @@ const buttonText = {
         </div>
       </div>
 
-      <div className="flex flex-col gap-2 ml-[-80px] min-w-[330px]">
+      <div className="flex flex-col gap-2 items-center w-full max-w-[330px] mx-auto">
         <IntentionButtons
           onSelect={(intention) => {
             setIntentions((prev) => {
