@@ -22,7 +22,7 @@ export const PrayerForm = ({
   const [audioData, setAudioData] = useState<string | null>(null);
 
   const placeholderText = {
-  en: "Enter your prayer intentions . . .",
+  en: "Enter any additional intentions or information for this prayer here . . .",
   es: "Ingresa cualquier intención o información adicional para esta oración . . .",
   tr: "Bu dua için ek niyetleri veya bilgileri buraya girin . . .",
   he: "הזן כאן כל כוונה או מידע נוסף לתפילה זו . . .",
