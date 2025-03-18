@@ -49,9 +49,10 @@ export const IntentionButtons: React.FC<IntentionButtonsProps> = ({ onSelect, la
               console.log('Button clicked:', intention);
               onSelect(intention);
             }}
-            className="px-3 py-2 bg-purple-500/20 hover:bg-purple-500/30 
-                     rounded-lg transition-colors text-sm text-white
-                     border border-purple-500/30 hover:border-purple-500/50"
+            className={`px-3 py-2 bg-purple-500/20 hover:bg-purple-500/30 
+                     rounded-lg transition-colors text-white
+                     border border-purple-500/30 hover:border-purple-500/50
+                     ${intention.length > 10 ? 'text-xs' : 'text-sm'}`}
           >
             {intention}
           </button>
