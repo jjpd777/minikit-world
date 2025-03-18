@@ -37,11 +37,13 @@ export const IntentionButtons: React.FC<IntentionButtonsProps> = ({ onSelect, la
   const currentCommonIntentions = commonIntentions[language as keyof typeof commonIntentions] || commonIntentions.en;
 
   const handleSelect = (intention: string) => {
-    setSelectedIntentions(prev => 
-      prev.includes(intention) 
-        ? prev.filter(i => i !== intention)
-        : [...prev, intention]
-    );
+    const newIntentions = selectedIntentions.includes(intention)
+      ? selectedIntentions.filter(i => i !== intention)
+      : [...selectedIntentions, intention];
+    
+    setSelectedIntentions(newIntentions);
+    localStorage.setItem("selectedIntentions", JSON.stringify(newIntentions));
+    onSelect(intention);
   };
 
   return (

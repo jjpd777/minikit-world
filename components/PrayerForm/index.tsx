@@ -278,11 +278,16 @@ const buttonText = {
       alert("Please select a language and religion");
       return;
     }
-    const storedIntentions = localStorage.getItem("selectedIntentions");
-    const hasSelectedButtons = storedIntentions && JSON.parse(storedIntentions).length > 0;
-    const hasTextInput = intentions.trim().length > 0;
+    // Check either text input or selected intentions
+    const hasTextInput = intentions && intentions.trim().length > 0;
+    const selectedIntentionsStr = localStorage.getItem("selectedIntentions");
+    const selectedIntentions = selectedIntentionsStr ? JSON.parse(selectedIntentionsStr) : [];
+    const hasButtons = selectedIntentions && Array.isArray(selectedIntentions) && selectedIntentions.length > 0;
 
-    if (!hasSelectedButtons && !hasTextInput) {
+    // Allow form submission if either condition is met
+    if (hasTextInput || hasButtons) {
+      // Continue with form submission
+    } else {
       alert("Please select intentions or enter text");
       return;
     }
