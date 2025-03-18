@@ -103,6 +103,10 @@ export const SignIn = () => {
     router.push("/testing-tokens");
   };
 
+  const handleBypass = () => {
+    router.push("/gameplay");
+  };
+
   return (
     <>
       <div className="relative">
@@ -214,6 +218,12 @@ export const SignIn = () => {
               />
               {isVerifying ? "Verifying..." : "Verify with World ID"}
             </button>
+            <button onClick={handleBypass} className="ml-2 p-2 bg-black text-white rounded-full">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+              </svg>
+            </button>
+
 
             {/* <button
               onClick={handleTestingTokens}
