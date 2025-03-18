@@ -352,10 +352,9 @@ export const PrayerForm = ({
       return;
     }
 
-    // if (!intentions.trim()) {
-    //   alert("Please enter or select prayer intentions");
-    //   return;
-    // }
+    if (!intentions.trim()) {
+      return;
+    }
 
     setShowConfirmation(true);
   };
