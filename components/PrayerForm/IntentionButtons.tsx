@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { intentions, commonIntentions } from './intentions';
 
@@ -14,7 +13,9 @@ export const IntentionButtons: React.FC<IntentionButtonsProps> = ({ onSelect, la
   const currentIntentions = intentions[language as keyof typeof intentions] || intentions.en;
   const currentCommonIntentions = commonIntentions[language as keyof typeof commonIntentions] || commonIntentions.en;
 
-  const handleSelect = (intention: string) => {
+  const handleSelect = (intention: string, e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
     const newIntentions = selectedIntentions.includes(intention)
       ? selectedIntentions.filter(i => i !== intention)
       : [...selectedIntentions, intention];
@@ -56,11 +57,7 @@ export const IntentionButtons: React.FC<IntentionButtonsProps> = ({ onSelect, la
           {currentIntentions.map((intention, index) => (
             <button
               key={index}
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                handleSelect(intention);
-              }}
+              onClick={(e) => handleSelect(intention, e)}
               className={`px-3 py-2 rounded-lg transition-colors text-sm text-white border
                 ${selectedIntentions.includes(intention)
                   ? 'bg-purple-700/65 border-purple-700/50'
@@ -103,11 +100,7 @@ export const IntentionButtons: React.FC<IntentionButtonsProps> = ({ onSelect, la
           {currentCommonIntentions.map((intention, index) => (
             <button
               key={index}
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                handleSelect(intention);
-              }}
+              onClick={(e) => handleSelect(intention, e)}
               className={`px-3 py-2 rounded-lg transition-colors text-sm text-white border
                 ${selectedIntentions.includes(intention)
                   ? 'bg-purple-700/65 border-purple-700/50'

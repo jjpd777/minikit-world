@@ -281,9 +281,8 @@ export const PrayerForm = ({
       return;
     }
 
-    const hasTextInput = intentions.trim().length > 0;
-    if (!hasTextInput) {
-      alert("Please enter prayer intentions");
+    if (!intentions.trim()) {
+      alert("Please enter or select prayer intentions");
       return;
     }
 
