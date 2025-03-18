@@ -353,7 +353,7 @@ export const PrayerForm = ({
     }
 
     if (!intentions.trim()) {
-      alert("Please enter or selecthandl some intentions");
+      alert("Please enter or select some intentions");
       return;
     }
 
@@ -383,6 +383,65 @@ export const PrayerForm = ({
             console.log("Token claimed successfully for religion:", religion);
           }
         } catch (error) {
+          console.error("Failed to claim token:", error);
+        }
+      }
+
+      // Track prayer generation start
+      const startTime = Date.now();
+      trackEvent("Prayer Generation Started", {
+        timestamp: new Date().toISOString(),
+        language,
+        religion,
+        intentions: intentions.trim(),
+        intentions_length: intentions.length,
+        wallet_address: localStorage.getItem("walletAddress") || "anonymous",
+        user_agent: navigator.userAgent,
+        platform: navigator.platform,
+        screen_resolution: `${window.screen.width}x${window.screen.height}`,
+      });
+
+      // Generate prayer with current intentions
+      const response = await fetch("/api/generate-prayer", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          language,
+          religion,
+          intentions: intentions.trim(),
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to generate prayer");
+      }
+
+      // Store latest settings
+      localStorage.setItem("lastLanguage", language);
+      localStorage.setItem("lastReligion", religion);
+      localStorage.setItem("lastIntentions", intentions);
+
+      // Track successful generation
+      trackEvent("Prayer Generation Completed", {
+        timestamp: new Date().toISOString(),
+        language,
+        religion,
+        intentions: intentions.trim(),
+        response_status: response.status,
+        success: true,
+        prayer_length: data.prayer?.length || 0,
+        prayer_text: data.prayer,
+        wallet_address: localStorage.getItem("walletAddress") || "anonymous",
+        generation_time_ms: Date.now() - startTime,
+      });
+
+      onPrayerGenerated(data.prayer);
+      setIsLoading(false);
+    } catch (error) {or) {
           console.error("Failed to claim token:", error);
         }
       }
