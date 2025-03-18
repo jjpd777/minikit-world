@@ -71,7 +71,7 @@ export const IntentionButtons: React.FC<IntentionButtonsProps> = ({ onSelect, la
                 e.stopPropagation();
                 handleSelect(intention);
               }}
-              className="intention-button border border-gray-700 bg-gray-800 text-white hover:border-purple-400/50"
+              className={`intention-button ${selectedIntentions.includes(intention) ? 'selected' : ''}`}
             >
               {intention}
             </button>
@@ -103,7 +103,7 @@ export const IntentionButtons: React.FC<IntentionButtonsProps> = ({ onSelect, la
                 e.stopPropagation();
                 handleSelect(intention);
               }}
-              className="intention-button border border-gray-700 bg-gray-800 text-white hover:border-purple-400/50"
+              className={`intention-button ${selectedIntentions.includes(intention) ? 'selected' : ''}`}
             >
               {intention}
             </button>
