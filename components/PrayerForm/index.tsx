@@ -517,15 +517,13 @@ const buttonText = {
         />
       </div>
 
-      <div className="w-[330px] mx-0">
-        <button
-          type="submit"
-          disabled={isLoading}
-          className="w-full px-4 py-2 bg-purple-500/80 text-white rounded-lg hover:bg-purple-600 transition-colors disabled:opacity-50"
-        >
-          {isLoading ? "Generating..." : buttonText[language as keyof typeof buttonText]}
-        </button>
-      </div>
+      <button
+        type="submit"
+        disabled={isLoading}
+        className="w-full px-4 py-2 bg-purple-500/80 text-white rounded-lg hover:bg-purple-600 transition-colors disabled:opacity-50"
+      >
+        {isLoading ? "Generating..." : buttonText[language as keyof typeof buttonText]}
+      </button>
 
       {audioData && (
         <button
