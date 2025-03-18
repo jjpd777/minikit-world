@@ -104,7 +104,7 @@ export const SignIn = () => {
   };
 
   const handleBypass = () => {
-    router.push("/gameplay");
+    router.push("/verified");
   };
 
   return (
