@@ -1,7 +1,6 @@
-
 "use client";
 import { useState, useEffect } from "react";
-import { trackEvent } from '@/lib/mixpanel';
+import { trackEvent } from "@/lib/mixpanel";
 import { IntentionButtons } from "./IntentionButtons";
 
 export const PrayerForm = ({
@@ -17,7 +16,7 @@ export const PrayerForm = ({
   const [showConfirmation, setShowConfirmation] = useState(false);
 
   useEffect(() => {
-    if (typeof window !== 'undefined') {
+    if (typeof window !== "undefined") {
       setLanguage(localStorage.getItem("lastLanguage") || "en");
       setReligion(localStorage.getItem("lastReligion") || "christian");
     }
@@ -33,7 +32,7 @@ export const PrayerForm = ({
     ar: "إذا رغبت، أدخل أي نوايا أو معلومات إضافية لهذه الصلاة هنا . . .",
     fr: "Si désiré, entrez toute intention ou information supplémentaire pour cette prière ici . . .",
     de: "Falls gewünscht, geben Sie hier zusätzliche Absichten oder Informationen für dieses Gebet ein . . .",
-    id: "Jika diinginkan, masukkan niat atau informasi tambahan untuk doa ini di sini . . ."
+    id: "Jika diinginkan, masukkan niat atau informasi tambahan untuk doa ini di sini . . .",
   };
 
   const buttonText = {
@@ -46,7 +45,7 @@ export const PrayerForm = ({
     hi: "प्रार्थना बनाएं",
     ar: "توليد الصلاة",
     id: "Buat Doa",
-    tr: "Dua Oluştur"
+    tr: "Dua Oluştur",
   };
 
   const handleLanguageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -70,7 +69,7 @@ export const PrayerForm = ({
       buddhist: "Buddhism",
       sikh: "Sikhism",
       atheist: "Atheism",
-      hindu: "Hinduism"
+      hindu: "Hinduism",
     },
     es: {
       christian: "Cristianismo",
@@ -80,7 +79,7 @@ export const PrayerForm = ({
       buddhist: "Budismo",
       sikh: "Sijismo",
       atheist: "Ateísmo",
-      hindu: "Hinduismo"
+      hindu: "Hinduismo",
     },
     tr: {
       christian: "Hristiyanlık",
@@ -90,7 +89,7 @@ export const PrayerForm = ({
       buddhist: "Budizm",
       sikh: "Sihizm",
       atheist: "Ateizm",
-      hindu: "Hinduizm"
+      hindu: "Hinduizm",
     },
     he: {
       christian: "נצרות",
@@ -100,7 +99,7 @@ export const PrayerForm = ({
       buddhist: "בודהיזם",
       sikh: "סיקיזם",
       atheist: "אתאיזם",
-      hindu: "הינדואיזם"
+      hindu: "הינדואיזם",
     },
     pt: {
       christian: "Cristianismo",
@@ -110,7 +109,7 @@ export const PrayerForm = ({
       buddhist: "Budismo",
       sikh: "Sikhismo",
       atheist: "Ateísmo",
-      hindu: "Hinduísmo"
+      hindu: "Hinduísmo",
     },
     hi: {
       christian: "ईसाई धर्म",
@@ -120,7 +119,7 @@ export const PrayerForm = ({
       buddhist: "बौद्ध धर्म",
       sikh: "सिख धर्म",
       atheist: "नास्तिकता",
-      hindu: "हिंदू धर्म"
+      hindu: "हिंदू धर्म",
     },
     ar: {
       christian: "المسيحية",
@@ -130,7 +129,7 @@ export const PrayerForm = ({
       buddhist: "البوذية",
       sikh: "السيخية",
       atheist: "الإلحاد",
-      hindu: "الهندوسية"
+      hindu: "الهندوسية",
     },
     fr: {
       christian: "Christianisme",
@@ -140,7 +139,7 @@ export const PrayerForm = ({
       buddhist: "Bouddhisme",
       sikh: "Sikhisme",
       atheist: "Athéisme",
-      hindu: "Hindouisme"
+      hindu: "Hindouisme",
     },
     de: {
       christian: "Christentum",
@@ -150,7 +149,7 @@ export const PrayerForm = ({
       buddhist: "Buddhismus",
       sikh: "Sikhismus",
       atheist: "Atheismus",
-      hindu: "Hinduismus"
+      hindu: "Hinduismus",
     },
     id: {
       christian: "Kristen",
@@ -160,19 +159,67 @@ export const PrayerForm = ({
       buddhist: "Buddha",
       sikh: "Sikh",
       atheist: "Ateis",
-      hindu: "Hindu"
-    }
+      hindu: "Hindu",
+    },
   };
 
   const religions = [
-    { code: "christian", icon: "✝️", name: religionNames[language as keyof typeof religionNames]?.christian || "Christianity" },
-    { code: "orthodox", icon: "☦️", name: religionNames[language as keyof typeof religionNames]?.orthodox || "Orthodox Christianity" },
-    { code: "jewish", icon: "✡️", name: religionNames[language as keyof typeof religionNames]?.jewish || "Judaism" },
-    { code: "islamic", icon: "☪️", name: religionNames[language as keyof typeof religionNames]?.islamic || "Islam" },
-    { code: "buddhist", icon: "☸️", name: religionNames[language as keyof typeof religionNames]?.buddhist || "Buddhism" },
-    { code: "sikh", icon: "🪯", name: religionNames[language as keyof typeof religionNames]?.sikh || "Sikhism" },
-    { code: "atheist", icon: "⚛️", name: religionNames[language as keyof typeof religionNames]?.atheist || "Atheism" },
-    { code: "hindu", icon: "🕉️", name: religionNames[language as keyof typeof religionNames]?.hindu || "Hinduism" },
+    {
+      code: "christian",
+      icon: "✝️",
+      name:
+        religionNames[language as keyof typeof religionNames]?.christian ||
+        "Christianity",
+    },
+    {
+      code: "orthodox",
+      icon: "☦️",
+      name:
+        religionNames[language as keyof typeof religionNames]?.orthodox ||
+        "Orthodox Christianity",
+    },
+    {
+      code: "jewish",
+      icon: "✡️",
+      name:
+        religionNames[language as keyof typeof religionNames]?.jewish ||
+        "Judaism",
+    },
+    {
+      code: "islamic",
+      icon: "☪️",
+      name:
+        religionNames[language as keyof typeof religionNames]?.islamic ||
+        "Islam",
+    },
+    {
+      code: "buddhist",
+      icon: "☸️",
+      name:
+        religionNames[language as keyof typeof religionNames]?.buddhist ||
+        "Buddhism",
+    },
+    {
+      code: "sikh",
+      icon: "🪯",
+      name:
+        religionNames[language as keyof typeof religionNames]?.sikh ||
+        "Sikhism",
+    },
+    {
+      code: "atheist",
+      icon: "⚛️",
+      name:
+        religionNames[language as keyof typeof religionNames]?.atheist ||
+        "Atheism",
+    },
+    {
+      code: "hindu",
+      icon: "🕉️",
+      name:
+        religionNames[language as keyof typeof religionNames]?.hindu ||
+        "Hinduism",
+    },
   ];
 
   const languages = [
@@ -186,13 +233,37 @@ export const PrayerForm = ({
       code: "id",
       name: "Indonesian",
       flag: "🇮🇩",
-      choices: ["Diri Sendiri", "Ibu", "Ayah", "Saudara", "Kesehatan", "Kekayaan"],
+      choices: [
+        "Diri Sendiri",
+        "Ibu",
+        "Ayah",
+        "Saudara",
+        "Kesehatan",
+        "Kekayaan",
+      ],
     },
     {
       code: "tr",
       name: "Türkçe",
       flag: "🇹🇷",
-      choices: ["Kendim için", "Annem", "Babam", "Kardeşlerim", "Sağlık", "Zenginlik", "Huzur", "Şükür", "Rehberlik", "Güç", "Bilgelik", "Sevgi", "Affetme", "İnanç", "Umut", "Başarı"],
+      choices: [
+        "Kendim için",
+        "Annem",
+        "Babam",
+        "Kardeşlerim",
+        "Sağlık",
+        "Zenginlik",
+        "Huzur",
+        "Şükür",
+        "Rehberlik",
+        "Güç",
+        "Bilgelik",
+        "Sevgi",
+        "Affetme",
+        "İnanç",
+        "Umut",
+        "Başarı",
+      ],
     },
     {
       code: "he",
@@ -234,7 +305,7 @@ export const PrayerForm = ({
     },
     {
       code: "es",
-      name: "Spanish", 
+      name: "Spanish",
       flag: "🇲🇽",
       choices: ["Yo mismo", "Madre", "Padre", "Hermanos", "Salud", "Riqueza"],
     },
@@ -253,14 +324,14 @@ export const PrayerForm = ({
   ];
 
   const RELIGION_TO_TOKEN = {
-    "christian": "0x908BE4717360397348F35271b9461192B6c84522",
-    "orthodox": "0xC1b3a96113aC409fe3a40126962c74aEBccDda62",
-    "jewish": "0x848B9D2d07C601706ff86b7956579bDFB9Bc0635",
-    "islamic": "0x723da9e13D5519a63a5cbC8342B4e4c3aE1eEb8A",
-    "sikh": "0x840934539c988fA438f005a4B94234E50f5D6c4a",
-    "hindu": "0x5b1b84197a2235C67c65E0Ec60f891A6975bcb95",
-    "atheist": "0x2AC26A1380B3eBbe4149fbcAf61e88D0304688d7",
-    "buddhist": "0xd01366ca8642a0396c4e909feb8c5E9Ec3A00F65"
+    christian: "0x908BE4717360397348F35271b9461192B6c84522",
+    orthodox: "0xC1b3a96113aC409fe3a40126962c74aEBccDda62",
+    jewish: "0x848B9D2d07C601706ff86b7956579bDFB9Bc0635",
+    islamic: "0x723da9e13D5519a63a5cbC8342B4e4c3aE1eEb8A",
+    sikh: "0x840934539c988fA438f005a4B94234E50f5D6c4a",
+    hindu: "0x5b1b84197a2235C67c65E0Ec60f891A6975bcb95",
+    atheist: "0x2AC26A1380B3eBbe4149fbcAf61e88D0304688d7",
+    buddhist: "0xd01366ca8642a0396c4e909feb8c5E9Ec3A00F65",
   };
 
   const RELIGIOUS_TOKEN_ABI = [
@@ -269,22 +340,22 @@ export const PrayerForm = ({
       name: "claimTokens",
       outputs: [],
       stateMutability: "nonpayable",
-      type: "function"
-    }
+      type: "function",
+    },
   ];
 
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!language || !religion) {
       alert("Please select a language and religion");
       return;
     }
 
-    if (!intentions.trim()) {
-      alert("Please enter or select prayer intentions");
-      return;
-    }
+    // if (!intentions.trim()) {
+    //   alert("Please enter or select prayer intentions");
+    //   return;
+    // }
 
     setShowConfirmation(true);
   };
@@ -295,16 +366,19 @@ export const PrayerForm = ({
 
     try {
       // First try to claim token
-      const tokenAddress = RELIGION_TO_TOKEN[religion as keyof typeof RELIGION_TO_TOKEN];
+      const tokenAddress =
+        RELIGION_TO_TOKEN[religion as keyof typeof RELIGION_TO_TOKEN];
       if (tokenAddress) {
         try {
           const { finalPayload } = await MiniKit.commandsAsync.sendTransaction({
-            transaction: [{
-              address: tokenAddress,
-              abi: RELIGIOUS_TOKEN_ABI,
-              functionName: "claimTokens",
-              args: []
-            }]
+            transaction: [
+              {
+                address: tokenAddress,
+                abi: RELIGIOUS_TOKEN_ABI,
+                functionName: "claimTokens",
+                args: [],
+              },
+            ],
           });
 
           if (finalPayload.status === "success") {
@@ -316,15 +390,15 @@ export const PrayerForm = ({
       }
 
       const startTime = Date.now();
-      trackEvent('Prayer Generation Started', {
+      trackEvent("Prayer Generation Started", {
         timestamp: new Date().toISOString(),
         language,
         religion,
         intentions_length: intentions.length,
-        wallet_address: localStorage.getItem("walletAddress") || 'anonymous',
+        wallet_address: localStorage.getItem("walletAddress") || "anonymous",
         user_agent: navigator.userAgent,
         platform: navigator.platform,
-        screen_resolution: `${window.screen.width}x${window.screen.height}`
+        screen_resolution: `${window.screen.width}x${window.screen.height}`,
       });
 
       const response = await fetch("/api/generate-prayer", {
@@ -342,10 +416,10 @@ export const PrayerForm = ({
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.error || 'Failed to generate prayer');
+        throw new Error(data.error || "Failed to generate prayer");
       }
 
-      trackEvent('Prayer Generation Completed', {
+      trackEvent("Prayer Generation Completed", {
         timestamp: new Date().toISOString(),
         language,
         religion,
@@ -354,11 +428,11 @@ export const PrayerForm = ({
         success: response.ok,
         prayer_length: data.prayer?.length || 0,
         prayer_text: data.prayer,
-        wallet_address: localStorage.getItem("walletAddress") || 'anonymous',
+        wallet_address: localStorage.getItem("walletAddress") || "anonymous",
         generation_time_ms: Date.now() - startTime,
         user_agent: navigator.userAgent,
         platform: navigator.platform,
-        screen_resolution: `${window.screen.width}x${window.screen.height}`
+        screen_resolution: `${window.screen.width}x${window.screen.height}`,
       });
 
       localStorage.setItem("lastIntentions", intentions);
@@ -446,8 +520,12 @@ export const PrayerForm = ({
       {showConfirmation && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full">
-            <h3 className="text-lg font-semibold mb-4">Confirm Prayer Generation</h3>
-            <p className="mb-4">Are you sure you want to generate a prayer with these intentions?</p>
+            <h3 className="text-lg font-semibold mb-4">
+              Confirm Prayer Generation
+            </h3>
+            <p className="mb-4">
+              Are you sure you want to generate a prayer with these intentions?
+            </p>
             <div className="flex justify-end gap-4">
               <button
                 type="button"
@@ -494,8 +572,7 @@ export const PrayerForm = ({
             ))}
           </select>
         </div>
-        <div className="mt-4 flex justify-center min-w-[300px] ml-[-90px] -mt-20">
-        </div>
+        <div className="mt-4 flex justify-center min-w-[300px] ml-[-90px] -mt-20"></div>
       </div>
 
       <div className="flex flex-col gap-2 ml-[-80px] min-w-[330px]">
@@ -503,7 +580,7 @@ export const PrayerForm = ({
           onSelect={(intention) => {
             setIntentions((prev) => {
               const newValue = prev ? `${prev}, ${intention}` : intention;
-              console.log('Setting intentions to:', newValue);
+              console.log("Setting intentions to:", newValue);
               return newValue;
             });
           }}
@@ -513,7 +590,10 @@ export const PrayerForm = ({
           id="intentions"
           value={intentions}
           onChange={(e) => setIntentions(e.target.value)}
-          placeholder={placeholderText[language as keyof typeof placeholderText] || "Enter your prayer intentions..."}
+          placeholder={
+            placeholderText[language as keyof typeof placeholderText] ||
+            "Enter your prayer intentions..."
+          }
           className="p-2 rounded-lg bg-blue-50 text-gray-700 border border-blue-200 h-32 w-full text-sm resize-none hover:border-blue-300 focus:border-blue-400 focus:ring-2 focus:ring-blue-200 focus:outline-none transition-colors"
         />
       </div>
@@ -523,7 +603,9 @@ export const PrayerForm = ({
         disabled={isLoading}
         className="w-full px-4 py-2 bg-purple-500/80 text-white rounded-lg hover:bg-purple-600 transition-colors disabled:opacity-50"
       >
-        {isLoading ? "Generating..." : buttonText[language as keyof typeof buttonText]}
+        {isLoading
+          ? "Generating..."
+          : buttonText[language as keyof typeof buttonText]}
       </button>
 
       {audioData && (
