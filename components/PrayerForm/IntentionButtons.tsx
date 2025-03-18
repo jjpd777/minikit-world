@@ -34,8 +34,21 @@ const commonIntentions = {
 
 export const IntentionButtons: React.FC<IntentionButtonsProps> = ({ onSelect, language }) => {
   const [selectedIntentions, setSelectedIntentions] = useState<string[]>([]);
-  const currentIntentions = intentions[language as keyof typeof intentions] || intentions.en;
-  const currentCommonIntentions = commonIntentions[language as keyof typeof commonIntentions] || commonIntentions.en;
+  
+  const langIntentions = {
+    en: ["Myself", "Mother", "Father", "Siblings", "Health", "Wealth"],
+    id: ["Diri Sendiri", "Ibu", "Ayah", "Saudara", "Kesehatan", "Kekayaan"],
+    tr: ["Kendim için", "Annem", "Babam", "Kardeşlerim", "Sağlık", "Zenginlik"],
+    he: ["עצמי", "אמא", "אבא", "אחים ואחיות", "בריאות", "עושר"],
+    pt: ["Eu mesmo", "Mãe", "Pai", "Irmãos", "Saúde", "Riqueza"],
+    fr: ["Moi-même", "Mère", "Père", "Frères et Sœurs", "Santé", "Richesse"],
+    de: ["Ich selbst", "Mutter", "Vater", "Geschwister", "Gesundheit", "Reichtum"],
+    es: ["Yo mismo", "Madre", "Padre", "Hermanos", "Salud", "Riqueza"],
+    hi: ["स्वयं", "माता", "पिता", "भाई-बहन", "स्वास्थ्य", "धन"],
+    ar: ["نفسي", "الأم", "الأب", "الإخوة", "الصحة", "الثروة"]
+  };
+  
+  const currentIntentions = langIntentions[language as keyof typeof langIntentions] || langIntentions.en;
 
   const handleSelect = (intention: string) => {
     setSelectedIntentions(prev => 

@@ -50,6 +50,7 @@ const buttonText = {
   const handleLanguageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const newLanguage = e.target.value;
     setLanguage(newLanguage);
+    setIntentions(''); // Clear intentions when language changes
     localStorage.setItem("lastLanguage", newLanguage);
   };
 
