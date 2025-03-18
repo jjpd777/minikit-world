@@ -25,9 +25,34 @@ export const IntentionButtons: React.FC<IntentionButtonsProps> = ({ onSelect, la
   };
 
   return (
-    <div className="w-full max-w-2xl mx-auto mb-4">
+    <div className="w-full max-w-2xl mx-auto mb-4 space-y-6">
       <div>
-        <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
+        <button 
+          onClick={() => setShowPrayerFor(!showPrayerFor)} 
+          className="text-base text-gray-700 mb-3 flex items-center gap-2"
+        >
+          {({
+            en: "Prayer For",
+            es: "Oración Para",
+            tr: "Dua İçin",
+            he: "תפילה עבור",
+            pt: "Oração Para",
+            hi: "प्रार्थना के लिए",
+            ar: "الصلاة من أجل",
+            fr: "Prière Pour",
+            de: "Gebet Für",
+            id: "Doa Untuk"
+          })[language] || "Prayer For"}
+          <svg 
+            className={`w-4 h-4 transform transition-transform ${showPrayerFor ? 'rotate-180' : ''}`} 
+            fill="none" 
+            stroke="currentColor" 
+            viewBox="0 0 24 24"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+          </svg>
+        </button>
+        <div className={`grid grid-cols-3 sm:grid-cols-5 gap-2 transition-all duration-300 ${showPrayerFor ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0 overflow-hidden'}`}>
           {currentIntentions.map((intention, index) => (
             <button
               key={index}
