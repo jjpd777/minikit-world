@@ -19,7 +19,6 @@ const intentions = {
 };
 
 export const IntentionButtons: React.FC<IntentionButtonsProps> = ({ onSelect, language }) => {
-  const [selectedIntentions, setSelectedIntentions] = useState<string[]>([]);
   const currentIntentions = intentions[language as keyof typeof intentions] || intentions.en;
   const commonIntentions = {
     en: ["Work", "Health", "Peace", "Gratitude", "Guidance", "Strength", "Wisdom", "Love", "Forgiveness", "Faith", "Hope", "Success"],
