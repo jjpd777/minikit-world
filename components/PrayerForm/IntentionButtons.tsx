@@ -46,7 +46,6 @@ export const IntentionButtons: React.FC<IntentionButtonsProps> = ({ onSelect, la
             onClick={(e) => {
               e.preventDefault();
               e.stopPropagation();
-              console.log('Button clicked:', intention);
               onSelect(intention);
             }}
             className="px-3 py-2 bg-purple-500/20 hover:bg-purple-500/30 
@@ -66,6 +65,7 @@ export const IntentionButtons: React.FC<IntentionButtonsProps> = ({ onSelect, la
               key={`common-${index}`}
               onClick={(e) => {
                 e.preventDefault();
+                e.stopPropagation();
                 onSelect(intention);
               }}
               className="px-3 py-2 bg-purple-500/20 hover:bg-purple-500/30 
