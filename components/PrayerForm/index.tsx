@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { trackEvent } from '@/lib/mixpanel';
 import { IntentionButtons } from "./IntentionButtons";
 
@@ -8,8 +8,15 @@ export const PrayerForm = ({
 }: {
   onPrayerGenerated: (prayer: string) => void;
 }) => {
-  const [language, setLanguage] = useState(() => localStorage.getItem("lastLanguage") || "en");
-  const [religion, setReligion] = useState(() => localStorage.getItem("lastReligion") || "christian");
+  const [language, setLanguage] = useState("en");
+  const [religion, setReligion] = useState("christian");
+  
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setLanguage(localStorage.getItem("lastLanguage") || "en");
+      setReligion(localStorage.getItem("lastReligion") || "christian");
+    }
+  }, []);
   const [intentions, setIntentions] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [audioData, setAudioData] = useState<string | null>(null);
