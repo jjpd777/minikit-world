@@ -21,7 +21,20 @@ export const PrayerForm = ({
   const [isLoading, setIsLoading] = useState(false);
   const [audioData, setAudioData] = useState<string | null>(null);
 
-  const buttonText = {
+  const placeholderText = {
+  en: "Enter your prayer intentions...",
+  es: "Ingresa cualquier intención o información adicional para esta oración aquí",
+  tr: "Bu dua için ek niyetleri veya bilgileri buraya girin",
+  he: "הזן כאן כל כוונה או מידע נוסף לתפילה זו",
+  pt: "Insira quaisquer intenções ou informações adicionais para esta oração aqui",
+  hi: "इस प्रार्थना के लिए कोई अतिरिक्त इरादे या जानकारी यहाँ दर्ज करें",
+  ar: "أدخل أي نوايا أو معلومات إضافية لهذه الصلاة هنا",
+  fr: "Entrez toute intention ou information supplémentaire pour cette prière ici",
+  de: "Geben Sie hier zusätzliche Absichten oder Informationen für dieses Gebet ein",
+  id: "Masukkan niat atau informasi tambahan untuk doa ini di sini"
+};
+
+const buttonText = {
     en: "Generate Prayer",
     he: "צור תפילה",
     pt: "Gerar Oração",
@@ -384,7 +397,7 @@ export const PrayerForm = ({
           id="intentions"
           value={intentions}
           onChange={(e) => setIntentions(e.target.value)}
-          placeholder="Enter your prayer intentions..."
+          placeholder={placeholderText[language as keyof typeof placeholderText] || "Enter your prayer intentions..."}
           className="p-2 rounded-lg bg-blue-50 text-gray-700 border border-blue-200 h-32 w-full text-lg resize-none hover:border-blue-300 focus:border-blue-400 focus:ring-2 focus:ring-blue-200 focus:outline-none transition-colors"
         />
       </div>
