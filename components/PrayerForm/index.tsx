@@ -13,7 +13,7 @@ export const PrayerForm = ({
   const [intentions, setIntentions] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [audioData, setAudioData] = useState<string | null>(null);
-  const [showConfirmation, setShowConfirmation] = useState(false);
+
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -356,12 +356,14 @@ export const PrayerForm = ({
       return;
     }
 
-    setShowConfirmation(true);
+    setIsLoading(true); //Start loading
+
+    handleConfirm(); //Call the handleConfirm function directly instead of showing the confirmation dialog.
+
   };
 
+
   const handleConfirm = async () => {
-    setShowConfirmation(false);
-    setIsLoading(true);
 
     try {
       // First try to claim token
@@ -516,34 +518,6 @@ export const PrayerForm = ({
 
   return (
     <form onSubmit={handleFormSubmit} className="w-full max-w-md space-y-2.5">
-      {showConfirmation && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full">
-            <h3 className="text-lg font-semibold mb-4">
-              Confirm Prayer Generation
-            </h3>
-            <p className="mb-4">
-              Are you sure you want to generate a prayer with these intentions?
-            </p>
-            <div className="flex justify-end gap-4">
-              <button
-                type="button"
-                onClick={() => setShowConfirmation(false)}
-                className="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 transition-colors"
-              >
-                Cancel
-              </button>
-              <button
-                type="button"
-                onClick={handleConfirm}
-                className="px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition-colors"
-              >
-                Confirm
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
 
       <div className="flex flex-col gap-2">
         <div className="flex flex-row gap-2 justify-center items-center">
@@ -579,7 +553,6 @@ export const PrayerForm = ({
           onSelect={(intention) => {
             setIntentions((prev) => {
               const newValue = prev ? `${prev}, ${intention}` : intention;
-              console.log("Setting intentions to:", newValue);
               return newValue;
             });
           }}
