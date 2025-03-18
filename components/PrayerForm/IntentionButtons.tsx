@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { intentions, commonIntentions } from './intentions';
 
@@ -19,7 +20,7 @@ export const IntentionButtons: React.FC<IntentionButtonsProps> = ({ onSelect, la
       : [...selectedIntentions, intention];
 
     setSelectedIntentions(newIntentions);
-    // onSelect(intention);  Removed this line to prevent prayer generation on intention select.
+    onSelect(intention);
     localStorage.setItem("selectedIntentions", JSON.stringify(newIntentions));
   };
 
