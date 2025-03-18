@@ -356,10 +356,8 @@ export const PrayerForm = ({
       return;
     }
 
-    setIsLoading(true); //Start loading
-
-    handleConfirm(); //Call the handleConfirm function directly instead of showing the confirmation dialog.
-
+    setIsLoading(true);
+    handleConfirm();
   };
 
 

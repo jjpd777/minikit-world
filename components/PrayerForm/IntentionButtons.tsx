@@ -15,7 +15,7 @@ export const IntentionButtons: React.FC<IntentionButtonsProps> = ({ onSelect, la
 
   const handleSelect = (intention: string, e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    e.stopPropagation();
+    e.stopPropagation(); // Prevent event bubbling
     const newIntentions = selectedIntentions.includes(intention)
       ? selectedIntentions.filter(i => i !== intention)
       : [...selectedIntentions, intention];
