@@ -283,8 +283,7 @@ const buttonText = {
     const hasSelectedButtons = selectedButtonIntentions.length > 0;
     const hasTextInput = intentions.trim().length > 0;
 
-    if (!hasSelectedButtons && !hasTextInput) {
-      alert("Please select intentions or enter text");
+    if (!hasSelectedButtons && !hasTextInput && !isLoading) {
       return;
     }
 
