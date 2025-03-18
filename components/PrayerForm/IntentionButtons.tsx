@@ -59,8 +59,7 @@ export const IntentionButtons: React.FC<IntentionButtonsProps> = ({ onSelect, la
         </div>
       </div>
       <div>
-        <h2 className="text-xl font-semibold text-black mb-3">Prayer Intentions</h2>
-        <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
+        <div className="grid grid-cols-3 sm:grid-cols-4 gap-2"> {/* Removed h2 element */}
           {currentCommonIntentions.map((intention, index) => (
             <button
               key={`common-${index}`}
