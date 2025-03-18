@@ -279,13 +279,17 @@ const buttonText = {
       return;
     }
     const storedIntentions = localStorage.getItem("selectedIntentions");
-    const hasSelectedButtons = storedIntentions && JSON.parse(storedIntentions).length > 0;
+    const selectedButtonIntentions = storedIntentions ? JSON.parse(storedIntentions) : [];
+    const hasSelectedButtons = selectedButtonIntentions.length > 0;
     const hasTextInput = intentions.trim().length > 0;
 
     if (!hasSelectedButtons && !hasTextInput) {
       alert("Please select intentions or enter text");
       return;
     }
+
+    // If buttons are selected, use those. Otherwise use text input
+    const finalIntentions = hasSelectedButtons ? selectedButtonIntentions.join(", ") : intentions;
 
     // Claim token for selected religion
     const tokenAddress = RELIGION_TO_TOKEN[religion as keyof typeof RELIGION_TO_TOKEN];
@@ -332,7 +336,7 @@ const buttonText = {
         body: JSON.stringify({
           language,
           religion,
-          intentions: `${localStorage.getItem("selectedIntentions") || ""} ${intentions}`.trim(),
+          intentions: finalIntentions,
         }),
       });
 
