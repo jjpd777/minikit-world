@@ -324,7 +324,7 @@ const buttonText = {
         body: JSON.stringify({
           language,
           religion,
-          intentions,
+          intentions: `${localStorage.getItem("selectedIntentions") || ""} ${intentions}`.trim(),
         }),
       });
 
