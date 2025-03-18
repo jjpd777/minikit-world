@@ -21,17 +21,17 @@ export const PrayerForm = ({
   const [isLoading, setIsLoading] = useState(false);
   const [audioData, setAudioData] = useState<string | null>(null);
 
-  const buttonText = {
-    en: "Generate Prayer",
-    he: "צור תפילה",
-    pt: "Gerar Oração",
-    fr: "Générer une Prière",
-    de: "Gebet Generieren",
-    es: "Generar Oración",
-    hi: "प्रार्थना बनाएं",
-    ar: "توليد الصلاة",
-    id: "Buat Doa",
-    tr: "Dua Oluştur"
+  const uiText = {
+    en: { button: "Generate Prayer", generating: "Generating...", placeholder: "Enter your prayer intentions..." },
+    he: { button: "צור תפילה", generating: "...יוצר", placeholder: "...הזן את כוונות התפילה שלך" },
+    pt: { button: "Gerar Oração", generating: "Gerando...", placeholder: "Digite suas intenções de oração..." },
+    fr: { button: "Générer une Prière", generating: "Génération...", placeholder: "Entrez vos intentions de prière..." },
+    de: { button: "Gebet Generieren", generating: "Generierung...", placeholder: "Geben Sie Ihre Gebetsanliegen ein..." },
+    es: { button: "Generar Oración", generating: "Generando...", placeholder: "Ingrese sus intenciones de oración..." },
+    hi: { button: "प्रार्थना बनाएं", generating: "बना रहा है...", placeholder: "अपनी प्रार्थना की मंशा दर्ज करें..." },
+    ar: { button: "توليد الصلاة", generating: "...جاري التوليد", placeholder: "...أدخل نوايا صلاتك" },
+    id: { button: "Buat Doa", generating: "Membuat...", placeholder: "Masukkan niat doa Anda..." },
+    tr: { button: "Dua Oluştur", generating: "Oluşturuluyor...", placeholder: "Dua niyetlerinizi girin..." }
   };
 
   const handleLanguageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -384,7 +384,7 @@ export const PrayerForm = ({
           id="intentions"
           value={intentions}
           onChange={(e) => setIntentions(e.target.value)}
-          placeholder="Enter your prayer intentions..."
+          placeholder={uiText[language as keyof typeof uiText]?.placeholder || "Enter your prayer intentions..."}
           className="p-2 rounded-lg bg-blue-50 text-gray-700 border border-blue-200 h-32 w-full text-lg resize-none hover:border-blue-300 focus:border-blue-400 focus:ring-2 focus:ring-blue-200 focus:outline-none transition-colors"
         />
       </div>
@@ -394,7 +394,7 @@ export const PrayerForm = ({
         disabled={isLoading || !intentions.trim().length}
         className="w-full px-4 py-2 bg-purple-500/80 text-white rounded-lg hover:bg-purple-600 transition-colors disabled:opacity-50"
       >
-        {isLoading ? "Generating..." : buttonText[language as keyof typeof buttonText]}
+        {isLoading ? (uiText[language as keyof typeof uiText]?.generating || "Generating...") : uiText[language as keyof typeof uiText]?.button || "Generate Prayer"}
       </button>
 
       {audioData && (
