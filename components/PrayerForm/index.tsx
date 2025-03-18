@@ -344,22 +344,22 @@ export const PrayerForm = ({
     },
   ];
 
-  const handleFormSubmit = (e: React.FormEvent) => {
+  const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    // Basic validation
     if (!language || !religion) {
       alert("Please select a language and religion");
       return;
     }
 
     if (!intentions.trim()) {
+      alert("Please enter or select some intentions");
       return;
     }
 
-    setIsLoading(true); //Start loading
-
-    handleConfirm(); //Call the handleConfirm function directly instead of showing the confirmation dialog.
-
+    setIsLoading(true);
+    await handleConfirm();
   };
 
 
@@ -551,9 +551,11 @@ export const PrayerForm = ({
       <div className="flex flex-col gap-2 ml-[-80px] min-w-[330px]">
         <IntentionButtons
           onSelect={(intention) => {
-            setIntentions((prev) => {
-              const newValue = prev ? `${prev}, ${intention}` : intention;
-              return newValue;
+            setIntentions(prev => {
+              // If intention already exists, don't add it again
+              if (prev.includes(intention)) return prev;
+              // Add intention with comma if there's existing text
+              return prev ? `${prev}, ${intention}` : intention;
             });
           }}
           language={language}
