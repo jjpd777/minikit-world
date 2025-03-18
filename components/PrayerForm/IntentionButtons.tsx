@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 
 interface IntentionButtonsProps {
@@ -73,8 +72,8 @@ export const IntentionButtons: React.FC<IntentionButtonsProps> = ({ onSelect, la
               }}
               className={`px-3 py-2 rounded-lg transition-colors text-sm text-white border
                 ${selectedIntentions.includes(intention)
-                  ? 'bg-purple-600/40 border-purple-600/50'
-                  : 'bg-purple-500/20 border-purple-500/30 hover:bg-purple-500/30 hover:border-purple-500/50'
+                  ? 'bg-purple-600/85 border-purple-600/50' // 15% darker
+                  : 'bg-purple-500/80 border-purple-500/30 hover:bg-purple-500/80 hover:border-purple-500/50' //20% darker
                 }`}
             >
               {intention}
@@ -82,7 +81,7 @@ export const IntentionButtons: React.FC<IntentionButtonsProps> = ({ onSelect, la
           ))}
         </div>
       </div>
-      
+
       <div>
         <h2 className="text-base text-gray-700 mb-3">
           {({
@@ -109,8 +108,8 @@ export const IntentionButtons: React.FC<IntentionButtonsProps> = ({ onSelect, la
               }}
               className={`px-3 py-2 rounded-lg transition-colors text-sm text-white border
                 ${selectedIntentions.includes(intention)
-                  ? 'bg-purple-600/40 border-purple-600/50'
-                  : 'bg-purple-500/20 border-purple-500/30 hover:bg-purple-500/30 hover:border-purple-500/50'
+                  ? 'bg-purple-600/85 border-purple-600/50' // 15% darker
+                  : 'bg-purple-500/80 border-purple-500/30 hover:bg-purple-500/80 hover:border-purple-500/50' //20% darker
                 }`}
             >
               {intention}
