@@ -121,6 +121,16 @@ export const SignIn = () => {
         <div className="absolute inset-0 rounded-full animate-pulse bg-purple-500/20 filter blur-xl"></div>
       </div>
 
+      <div className="relative w-full">
+        <button 
+          onClick={handleBypass} 
+          className="absolute top-0 right-0 p-2 bg-black text-white rounded-full hover:bg-gray-800 transition-colors"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+          </svg>
+        </button>
+      </div>
       <div className="flex flex-col gap-4">
         {bookmarkedFiles.length > 0 &&
           (!trackingComplete ? (
@@ -218,11 +228,7 @@ export const SignIn = () => {
               />
               {isVerifying ? "Verifying..." : "Verify with World ID"}
             </button>
-            <button onClick={handleBypass} className="ml-2 p-2 bg-black text-white rounded-full">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-              </svg>
-            </button>
+            
 
 
             {/* <button
