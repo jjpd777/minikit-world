@@ -22,16 +22,16 @@ export const PrayerForm = ({
   const [audioData, setAudioData] = useState<string | null>(null);
 
   const placeholderText = {
-  en: "Enter your prayer intentions...",
-  es: "Ingresa cualquier intención o información adicional para esta oración aquí",
-  tr: "Bu dua için ek niyetleri veya bilgileri buraya girin",
-  he: "הזן כאן כל כוונה או מידע נוסף לתפילה זו",
-  pt: "Insira quaisquer intenções ou informações adicionais para esta oração aqui",
-  hi: "इस प्रार्थना के लिए कोई अतिरिक्त इरादे या जानकारी यहाँ दर्ज करें",
-  ar: "أدخل أي نوايا أو معلومات إضافية لهذه الصلاة هنا",
-  fr: "Entrez toute intention ou information supplémentaire pour cette prière ici",
-  de: "Geben Sie hier zusätzliche Absichten oder Informationen für dieses Gebet ein",
-  id: "Masukkan niat atau informasi tambahan untuk doa ini di sini"
+  en: "Enter your prayer intentions . . .",
+  es: "Ingresa cualquier intención o información adicional para esta oración . . .",
+  tr: "Bu dua için ek niyetleri veya bilgileri buraya girin . . .",
+  he: "הזן כאן כל כוונה או מידע נוסף לתפילה זו . . .",
+  pt: "Insira quaisquer intenções ou informações adicionais para esta oração . . .",
+  hi: "इस प्रार्थना के लिए कोई अतिरिक्त इरादे या जानकारी यहाँ दर्ज करें . . .",
+  ar: "أدخل أي نوايا أو معلومات إضافية لهذه الصلاة هنا . . .",
+  fr: "Entrez toute intention ou information supplémentaire pour cette prière . . .",
+  de: "Geben Sie hier zusätzliche Absichten oder Informationen für dieses Gebet ein . . .",
+  id: "Masukkan niat atau informasi tambahan untuk doa ini di sini . . ."
 };
 
 const buttonText = {
@@ -398,7 +398,7 @@ const buttonText = {
           value={intentions}
           onChange={(e) => setIntentions(e.target.value)}
           placeholder={placeholderText[language as keyof typeof placeholderText] || "Enter your prayer intentions..."}
-          className="p-2 rounded-lg bg-blue-50 text-gray-700 border border-blue-200 h-32 w-full text-lg resize-none hover:border-blue-300 focus:border-blue-400 focus:ring-2 focus:ring-blue-200 focus:outline-none transition-colors"
+          className="p-2 rounded-lg bg-blue-50 text-gray-700 border border-blue-200 h-32 w-full text-sm resize-none hover:border-blue-300 focus:border-blue-400 focus:ring-2 focus:ring-blue-200 focus:outline-none transition-colors"
         />
       </div>
 
