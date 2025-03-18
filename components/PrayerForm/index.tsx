@@ -59,15 +59,118 @@ const buttonText = {
     localStorage.setItem("lastReligion", newReligion);
   };
 
+  const religionNames = {
+    en: {
+      christian: "Christianity",
+      orthodox: "Orthodox Christianity",
+      jewish: "Judaism",
+      islamic: "Islam",
+      buddhist: "Buddhism",
+      sikh: "Sikhism",
+      atheist: "Atheism",
+      hindu: "Hinduism"
+    },
+    es: {
+      christian: "Cristianismo",
+      orthodox: "Cristianismo Ortodoxo",
+      jewish: "Judaísmo",
+      islamic: "Islam",
+      buddhist: "Budismo",
+      sikh: "Sijismo",
+      atheist: "Ateísmo",
+      hindu: "Hinduismo"
+    },
+    tr: {
+      christian: "Hristiyanlık",
+      orthodox: "Ortodoks Hristiyanlık",
+      jewish: "Musevilik",
+      islamic: "İslam",
+      buddhist: "Budizm",
+      sikh: "Sihizm",
+      atheist: "Ateizm",
+      hindu: "Hinduizm"
+    },
+    he: {
+      christian: "נצרות",
+      orthodox: "נצרות אורתודוקסית",
+      jewish: "יהדות",
+      islamic: "איסלאם",
+      buddhist: "בודהיזם",
+      sikh: "סיקיזם",
+      atheist: "אתאיזם",
+      hindu: "הינדואיזם"
+    },
+    pt: {
+      christian: "Cristianismo",
+      orthodox: "Cristianismo Ortodoxo",
+      jewish: "Judaísmo",
+      islamic: "Islamismo",
+      buddhist: "Budismo",
+      sikh: "Sikhismo",
+      atheist: "Ateísmo",
+      hindu: "Hinduísmo"
+    },
+    hi: {
+      christian: "ईसाई धर्म",
+      orthodox: "रूढ़िवादी ईसाई धर्म",
+      jewish: "यहूदी धर्म",
+      islamic: "इस्लाम",
+      buddhist: "बौद्ध धर्म",
+      sikh: "सिख धर्म",
+      atheist: "नास्तिकता",
+      hindu: "हिंदू धर्म"
+    },
+    ar: {
+      christian: "المسيحية",
+      orthodox: "المسيحية الأرثوذكسية",
+      jewish: "اليهودية",
+      islamic: "الإسلام",
+      buddhist: "البوذية",
+      sikh: "السيخية",
+      atheist: "الإلحاد",
+      hindu: "الهندوسية"
+    },
+    fr: {
+      christian: "Christianisme",
+      orthodox: "Christianisme Orthodoxe",
+      jewish: "Judaïsme",
+      islamic: "Islam",
+      buddhist: "Bouddhisme",
+      sikh: "Sikhisme",
+      atheist: "Athéisme",
+      hindu: "Hindouisme"
+    },
+    de: {
+      christian: "Christentum",
+      orthodox: "Orthodoxes Christentum",
+      jewish: "Judentum",
+      islamic: "Islam",
+      buddhist: "Buddhismus",
+      sikh: "Sikhismus",
+      atheist: "Atheismus",
+      hindu: "Hinduismus"
+    },
+    id: {
+      christian: "Kristen",
+      orthodox: "Kristen Ortodoks",
+      jewish: "Yahudi",
+      islamic: "Islam",
+      buddhist: "Buddha",
+      sikh: "Sikh",
+      atheist: "Ateis",
+      hindu: "Hindu"
+    }
+  };
+
   const religions = [
-    { code: "christian", icon: "✝️", name: "Christianity" },
-    { code: "orthodox", icon: "☦️", name: "Orthodox Christianity" },
-    { code: "jewish", icon: "✡️", name: "Judaism" },
-    { code: "islamic", icon: "☪️", name: "Islam" },
-    { code: "buddhist", icon: "☸️", name: "Buddhism" },
-    { code: "sikh", icon: "🪯", name: "Sikhism" },
-    { code: "atheist", icon: "⚛️", name: "Atheism" },
-    { code: "hindu", icon: "🕉️", name: "Hinduism" },
+    { code: "christian", icon: "✝️", name: religionNames[language as keyof typeof religionNames]?.christian || "Christianity" },
+    { code: "orthodox", icon: "☦️", name: religionNames[language as keyof typeof religionNames]?.orthodox || "Orthodox Christianity" },
+    { code: "jewish", icon: "✡️", name: religionNames[language as keyof typeof religionNames]?.jewish || "Judaism" },
+    { code: "islamic", icon: "☪️", name: religionNames[language as keyof typeof religionNames]?.islamic || "Islam" },
+    { code: "buddhist", icon: "☸️", name: religionNames[language as keyof typeof religionNames]?.buddhist || "Buddhism" },
+    { code: "sikh", icon: "🪯", name: religionNames[language as keyof typeof religionNames]?.sikh || "Sikhism" },
+    { code: "atheist", icon: "⚛️", name: religionNames[language as keyof typeof religionNames]?.atheist || "Atheism" },
+    { code: "hindu", icon: "🕉️", name: religionNames[language as keyof typeof religionNames]?.hindu || "Hinduism" },
   ];
 
   const languages = [
