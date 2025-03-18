@@ -396,7 +396,7 @@ const buttonText = {
     } finally {
       setIsLoading(false);
     }
-  };
+  }; // Added correct closing
 
   const uploadAudio = async () => {
     if (!audioData) {
@@ -533,4 +533,4 @@ const buttonText = {
       )}
     </form>
   );
-};
+}; // Added proper closure
