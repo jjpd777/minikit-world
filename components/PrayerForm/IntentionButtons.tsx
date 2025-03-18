@@ -5,6 +5,19 @@ interface IntentionButtonsProps {
   language: string;
 }
 
+const sectionTitles = {
+  en: { prayerFor: "Prayer For", prayerIntentions: "Prayer Intentions" },
+  he: { prayerFor: "תפילה עבור", prayerIntentions: "כוונות תפילה" },
+  pt: { prayerFor: "Oração Para", prayerIntentions: "Intenções de Oração" },
+  fr: { prayerFor: "Prière Pour", prayerIntentions: "Intentions de Prière" },
+  de: { prayerFor: "Gebet Für", prayerIntentions: "Gebetsanliegen" },
+  es: { prayerFor: "Oración Por", prayerIntentions: "Intenciones de Oración" },
+  hi: { prayerFor: "प्रार्थना किसके लिए", prayerIntentions: "प्रार्थना का उद्देश्य" },
+  ar: { prayerFor: "صلاة من أجل", prayerIntentions: "نوايا الصلاة" },
+  id: { prayerFor: "Doa Untuk", prayerIntentions: "Niat Doa" },
+  tr: { prayerFor: "Dua İçin", prayerIntentions: "Dua Niyetleri" }
+};
+
 const intentions = {
   en: ["Myself", "Mother", "Father", "Sister", "Brother", "Family", "Friend", "Partner", "Humanity", "Enemies", "Community"],
   he: ["עצמי", "אמא", "אבא", "אחות", "אח", "משפחה", "חבר", "שותף", "האנושות", "אויבים", "הקהילה"],
@@ -38,7 +51,7 @@ export const IntentionButtons: React.FC<IntentionButtonsProps> = ({ onSelect, la
   return (
     <div className="w-full max-w-2xl mx-auto mb-4 space-y-6">
       <div>
-        <h2 className="text-xl font-semibold text-black mb-3">Prayer For</h2>
+        <h2 className="text-xl font-semibold text-black mb-3">{sectionTitles[language as keyof typeof sectionTitles]?.prayerFor || "Prayer For"}</h2>
         <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
           {currentIntentions.map((intention, index) => (
           <button
@@ -58,7 +71,7 @@ export const IntentionButtons: React.FC<IntentionButtonsProps> = ({ onSelect, la
         </div>
       </div>
       <div>
-        <h2 className="text-xl font-semibold text-black mb-3">Prayer Intentions</h2>
+        <h2 className="text-xl font-semibold text-black mb-3">{sectionTitles[language as keyof typeof sectionTitles]?.prayerIntentions || "Prayer Intentions"}</h2>
         <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
           {currentCommonIntentions.map((intention, index) => (
             <button
