@@ -23,15 +23,15 @@ export const PrayerForm = ({
 
   const placeholderText = {
   en: "Enter any additional intentions or information for this prayer here . . .",
-  es: "Ingresa cualquier intención o información adicional para esta oración . . .",
-  tr: "Bu dua için ek niyetleri veya bilgileri buraya girin . . .",
-  he: "הזן כאן כל כוונה או מידע נוסף לתפילה זו . . .",
-  pt: "Insira quaisquer intenções ou informações adicionais para esta oração . . .",
-  hi: "इस प्रार्थना के लिए कोई अतिरिक्त इरादे या जानकारी यहाँ दर्ज करें . . .",
-  ar: "أدخل أي نوايا أو معلومات إضافية لهذه الصلاة هنا . . .",
-  fr: "Entrez toute intention ou information supplémentaire pour cette prière . . .",
-  de: "Geben Sie hier zusätzliche Absichten oder Informationen für dieses Gebet ein . . .",
-  id: "Masukkan niat atau informasi tambahan untuk doa ini di sini . . ."
+  es: "Si lo deseas, ingresa cualquier intención o información adicional para esta oración aquí . . .",
+  tr: "İsterseniz, bu dua için ek niyetleri veya bilgileri buraya girin . . .",
+  he: "אם תרצה, הזן כאן כל כוונה או מידע נוסף לתפילה זו . . .",
+  pt: "Se desejar, insira quaisquer intenções ou informações adicionais para esta oração aqui . . .",
+  hi: "यदि इच्छित हो, तो इस प्रार्थना के लिए कोई अतिरिक्त इरादे या जानकारी यहाँ दर्ज करें . . .",
+  ar: "إذا رغبت، أدخل أي نوايا أو معلومات إضافية لهذه الصلاة هنا . . .",
+  fr: "Si désiré, entrez toute intention ou information supplémentaire pour cette prière ici . . .",
+  de: "Falls gewünscht, geben Sie hier zusätzliche Absichten oder Informationen für dieses Gebet ein . . .",
+  id: "Jika diinginkan, masukkan niat atau informasi tambahan untuk doa ini di sini . . ."
 };
 
 const buttonText = {
