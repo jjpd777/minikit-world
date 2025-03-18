@@ -1,3 +1,4 @@
+
 "use client";
 import { useState, useEffect } from "react";
 import { trackEvent } from '@/lib/mixpanel';
@@ -10,6 +11,10 @@ export const PrayerForm = ({
 }) => {
   const [language, setLanguage] = useState("en");
   const [religion, setReligion] = useState("christian");
+  const [intentions, setIntentions] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [audioData, setAudioData] = useState<string | null>(null);
+  const [showConfirmation, setShowConfirmation] = useState(false);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -17,24 +22,21 @@ export const PrayerForm = ({
       setReligion(localStorage.getItem("lastReligion") || "christian");
     }
   }, []);
-  const [intentions, setIntentions] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const [audioData, setAudioData] = useState<string | null>(null);
 
   const placeholderText = {
-  en: "If desired enter any additional intentions or information for this prayer here . . .",
-  es: "Si lo deseas, ingresa cualquier intención o información adicional para esta oración aquí . . .",
-  tr: "İsterseniz, bu dua için ek niyetleri veya bilgileri buraya girin . . .",
-  he: "אם תרצה, הזן כאן כל כוונה או מידע נוסף לתפילה זו . . .",
-  pt: "Se desejar, insira quaisquer intenções ou informações adicionais para esta oração aqui . . .",
-  hi: "यदि इच्छित हो, तो इस प्रार्थना के लिए कोई अतिरिक्त इरादे या जानकारी यहाँ दर्ज करें . . .",
-  ar: "إذا رغبت، أدخل أي نوايا أو معلومات إضافية لهذه الصلاة هنا . . .",
-  fr: "Si désiré, entrez toute intention ou information supplémentaire pour cette prière ici . . .",
-  de: "Falls gewünscht, geben Sie hier zusätzliche Absichten oder Informationen für dieses Gebet ein . . .",
-  id: "Jika diinginkan, masukkan niat atau informasi tambahan untuk doa ini di sini . . ."
-};
+    en: "If desired enter any additional intentions or information for this prayer here . . .",
+    es: "Si lo deseas, ingresa cualquier intención o información adicional para esta oración aquí . . .",
+    tr: "İsterseniz, bu dua için ek niyetleri veya bilgileri buraya girin . . .",
+    he: "אם תרצה, הזן כאן כל כוונה או מידע נוסף לתפילה זו . . .",
+    pt: "Se desejar, insira quaisquer intenções ou informações adicionais para esta oração aqui . . .",
+    hi: "यदि इच्छित हो, तो इस प्रार्थना के लिए कोई अतिरिक्त इरादे या जानकारी यहाँ दर्ज करें . . .",
+    ar: "إذا رغبت، أدخل أي نوايا أو معلومات إضافية لهذه الصلاة هنا . . .",
+    fr: "Si désiré, entrez toute intention ou information supplémentaire pour cette prière ici . . .",
+    de: "Falls gewünscht, geben Sie hier zusätzliche Absichten oder Informationen für dieses Gebet ein . . .",
+    id: "Jika diinginkan, masukkan niat atau informasi tambahan untuk doa ini di sini . . ."
+  };
 
-const buttonText = {
+  const buttonText = {
     en: "Generate Prayer",
     he: "צור תפילה",
     pt: "Gerar Oração",
@@ -250,7 +252,6 @@ const buttonText = {
     },
   ];
 
-
   const RELIGION_TO_TOKEN = {
     "christian": "0x908BE4717360397348F35271b9461192B6c84522",
     "orthodox": "0xC1b3a96113aC409fe3a40126962c74aEBccDda62",
@@ -272,10 +273,9 @@ const buttonText = {
     }
   ];
 
-  const handleGeneratePrayer = async (e: React.FormEvent) => {
+  const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Validate inputs
     if (!language || !religion) {
       alert("Please select a language and religion");
       return;
@@ -287,6 +287,11 @@ const buttonText = {
       return;
     }
 
+    setShowConfirmation(true);
+  };
+
+  const handleConfirm = async () => {
+    setShowConfirmation(false);
     setIsLoading(true);
 
     try {
@@ -308,13 +313,10 @@ const buttonText = {
           }
         } catch (error) {
           console.error("Failed to claim token:", error);
-          // Continue with prayer generation even if token claim fails
         }
       }
 
-    try {
       const startTime = Date.now();
-      // Track prayer generation attempt
       trackEvent('Prayer Generation Started', {
         timestamp: new Date().toISOString(),
         language,
@@ -334,7 +336,7 @@ const buttonText = {
         body: JSON.stringify({
           language,
           religion,
-          intentions: finalIntentions,
+          intentions,
         }),
       });
 
@@ -344,12 +346,11 @@ const buttonText = {
         throw new Error(data.error || 'Failed to generate prayer');
       }
 
-      // Track successful prayer generation with enhanced data
       trackEvent('Prayer Generation Completed', {
         timestamp: new Date().toISOString(),
         language,
         religion,
-        intentions: intentions,
+        intentions,
         response_status: response.status,
         success: response.ok,
         prayer_length: data.prayer?.length || 0,
@@ -361,12 +362,10 @@ const buttonText = {
         screen_resolution: `${window.screen.width}x${window.screen.height}`
       });
 
-      // Store values for WhatsApp tracking
       localStorage.setItem("lastIntentions", intentions);
       localStorage.setItem("lastReligion", religion);
       localStorage.setItem("lastLanguage", language);
 
-      // Track prayer generation event after getting response
       const storedWalletAddress = localStorage.getItem("walletAddress") || "";
       await fetch("/api/track-prayer", {
         method: "POST",
@@ -385,7 +384,6 @@ const buttonText = {
 
       onPrayerGenerated(data.prayer);
 
-      // Store audio data
       if (data.audio) {
         const audioUrl = `data:audio/mpeg;base64,${data.audio}`;
         setAudioData(audioUrl);
@@ -396,7 +394,7 @@ const buttonText = {
     } finally {
       setIsLoading(false);
     }
-  }
+  };
 
   const uploadAudio = async () => {
     if (!audioData) {
@@ -405,7 +403,6 @@ const buttonText = {
     }
 
     try {
-      // Convert base64 to blob
       const base64Data = audioData.split(",")[1];
       const binaryString = atob(base64Data);
       const byteArray = new Uint8Array(binaryString.length);
@@ -446,7 +443,32 @@ const buttonText = {
   };
 
   return (
-    <form onSubmit={handleGeneratePrayer} className="w-full max-w-md space-y-2.5">
+    <form onSubmit={handleFormSubmit} className="w-full max-w-md space-y-2.5">
+      {showConfirmation && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full">
+            <h3 className="text-lg font-semibold mb-4">Confirm Prayer Generation</h3>
+            <p className="mb-4">Are you sure you want to generate a prayer with these intentions?</p>
+            <div className="flex justify-end gap-4">
+              <button
+                type="button"
+                onClick={() => setShowConfirmation(false)}
+                className="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={handleConfirm}
+                className="px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition-colors"
+              >
+                Confirm
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="flex flex-col gap-2">
         <div className="flex flex-row gap-2 justify-center items-center">
           <select
@@ -474,24 +496,6 @@ const buttonText = {
           </select>
         </div>
         <div className="mt-4 flex justify-center min-w-[300px] ml-[-90px] -mt-20">
-          {/* <div className="grid grid-cols-3 gap-x-10 gap-y-4 px-4">
-            {languages
-              .find((lang) => lang.code === language)
-              ?.choices.map((choice, index) => (
-                <button
-                  key={index}
-                  type="button"
-                  onClick={() =>
-                    setIntentions((prev) =>
-                      prev ? `${prev}, ${choice}` : choice,
-                    )
-                  }
-                  className="p-2 min-w-[90px] w-full rounded-lg border border-gray-700 bg-gray-800 text-white hover:border-purple-400/50 transition-colors text-sm"
-                >
-                  {choice}
-                </button>
-              ))}
-          </div> */}
         </div>
       </div>
 
