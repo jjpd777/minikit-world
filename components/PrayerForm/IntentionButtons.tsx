@@ -62,7 +62,7 @@ export const IntentionButtons: React.FC<IntentionButtonsProps> = ({ onSelect, la
             id: "Doa Untuk"
           })[language] || "Prayer For"}
         </h2>
-        <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
+        <div className="intention-buttons-grid">
           {currentIntentions.map((intention, index) => (
             <button
               key={index}
@@ -71,11 +71,7 @@ export const IntentionButtons: React.FC<IntentionButtonsProps> = ({ onSelect, la
                 e.stopPropagation();
                 handleSelect(intention);
               }}
-              className={`px-3 py-2 rounded-lg transition-colors text-sm text-white border
-                ${selectedIntentions.includes(intention)
-                  ? 'bg-purple-700/65 border-purple-700/50'
-                  : 'bg-purple-500/35 border-purple-500/30 hover:bg-purple-500/50 hover:border-purple-500/50'
-                }`}
+              className="intention-button border border-gray-700 bg-gray-800 text-white hover:border-purple-400/50"
             >
               {intention}
             </button>
@@ -98,7 +94,7 @@ export const IntentionButtons: React.FC<IntentionButtonsProps> = ({ onSelect, la
             id: "Niat Doa"
           })[language] || "Prayer Intentions"}
         </h2>
-        <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
+        <div className="intention-buttons-grid">
           {currentCommonIntentions.map((intention, index) => (
             <button
               key={index}
@@ -107,11 +103,7 @@ export const IntentionButtons: React.FC<IntentionButtonsProps> = ({ onSelect, la
                 e.stopPropagation();
                 handleSelect(intention);
               }}
-              className={`px-3 py-2 rounded-lg transition-colors text-sm text-white border
-                ${selectedIntentions.includes(intention)
-                  ? 'bg-purple-700/65 border-purple-700/50'
-                  : 'bg-purple-500/35 border-purple-500/30 hover:bg-purple-500/50 hover:border-purple-500/50'
-                }`}
+              className="intention-button border border-gray-700 bg-gray-800 text-white hover:border-purple-400/50"
             >
               {intention}
             </button>
