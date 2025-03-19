@@ -72,13 +72,15 @@ export const SignIn = () => {
       const url = URL.createObjectURL(blob);
       setSelectedAudioFile(url);
 
-      // Simple Mixpanel tracking
-      trackEvent("Revisit of Audio Bookmark", {
+      // Track bookmark revisit in Mixpanel
+      trackEvent("Bookmark Revisited", {
         timestamp: new Date().toISOString(),
-        path: gsPath
+        storage_path: gsPath,
+        wallet_address: localStorage.getItem("walletAddress") || "anonymous"
       });
     } catch (error) {
       console.error("Error playing audio file:", error);
+      console.error("Failed to play audio");
     }
   };
 
