@@ -79,6 +79,76 @@ export const PrayerForm = ({
       atheist: "الإلحاد",
       hindu: "الهندوسية"
     },
+    hi: {
+      christian: "ईसाई धर्म",
+      orthodox: "रूढ़िवादी ईसाई धर्म",
+      jewish: "यहूदी धर्म",
+      islamic: "इस्लाम",
+      buddhist: "बौद्ध धर्म",
+      sikh: "सिख धर्म",
+      atheist: "नास्तिकता",
+      hindu: "हिंदू धर्म"
+    },
+    id: {
+      christian: "Kristen",
+      orthodox: "Kristen Ortodoks",
+      jewish: "Yahudi",
+      islamic: "Islam",
+      buddhist: "Buddha",
+      sikh: "Sikh",
+      atheist: "Ateisme",
+      hindu: "Hindu"
+    },
+    tr: {
+      christian: "Hristiyanlık",
+      orthodox: "Ortodoks Hristiyanlık",
+      jewish: "Yahudilik",
+      islamic: "İslam",
+      buddhist: "Budizm",
+      sikh: "Sihizm",
+      atheist: "Ateizm",
+      hindu: "Hinduizm"
+    },
+    pt: {
+      christian: "Cristianismo",
+      orthodox: "Cristianismo Ortodoxo",
+      jewish: "Judaísmo",
+      islamic: "Islamismo",
+      buddhist: "Budismo",
+      sikh: "Sikhismo",
+      atheist: "Ateísmo",
+      hindu: "Hinduísmo"
+    },
+    fr: {
+      christian: "Christianisme",
+      orthodox: "Christianisme Orthodoxe",
+      jewish: "Judaïsme",
+      islamic: "Islam",
+      buddhist: "Bouddhisme",
+      sikh: "Sikhisme",
+      atheist: "Athéisme",
+      hindu: "Hindouisme"
+    },
+    de: {
+      christian: "Christentum",
+      orthodox: "Orthodoxes Christentum",
+      jewish: "Judentum",
+      islamic: "Islam",
+      buddhist: "Buddhismus",
+      sikh: "Sikhismus",
+      atheist: "Atheismus",
+      hindu: "Hinduismus"
+    },
+    es: {
+      christian: "Cristianismo",
+      orthodox: "Cristianismo Ortodoxo",
+      jewish: "Judaísmo",
+      islamic: "Islam",
+      buddhist: "Budismo",
+      sikh: "Sijismo",
+      atheist: "Ateísmo",
+      hindu: "Hinduismo"
+    },
     ms: {
       christian: "Kristian",
       orthodox: "Kristian Ortodoks",
