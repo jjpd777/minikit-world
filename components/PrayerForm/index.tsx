@@ -48,16 +48,72 @@ export const PrayerForm = ({
     localStorage.setItem("lastReligion", newReligion);
   };
 
+  const religionTranslations = {
+    en: {
+      christian: "Christianity",
+      orthodox: "Orthodox Christianity",
+      jewish: "Judaism",
+      islamic: "Islam",
+      buddhist: "Buddhism",
+      sikh: "Sikhism",
+      atheist: "Atheism",
+      hindu: "Hinduism"
+    },
+    he: {
+      christian: "נצרות",
+      orthodox: "נצרות אורתודוקסית",
+      jewish: "יהדות",
+      islamic: "איסלאם",
+      buddhist: "בודהיזם",
+      sikh: "סיקיזם",
+      atheist: "אתאיזם",
+      hindu: "הינדואיזם"
+    },
+    ar: {
+      christian: "المسيحية",
+      orthodox: "المسيحية الأرثوذكسية",
+      jewish: "اليهودية",
+      islamic: "الإسلام",
+      buddhist: "البوذية",
+      sikh: "السيخية",
+      atheist: "الإلحاد",
+      hindu: "الهندوسية"
+    },
+    ms: {
+      christian: "Kristian",
+      orthodox: "Kristian Ortodoks",
+      jewish: "Yahudi",
+      islamic: "Islam",
+      buddhist: "Buddha",
+      sikh: "Sikh",
+      atheist: "Ateis",
+      hindu: "Hindu"
+    },
+    sw: {
+      christian: "Ukristo",
+      orthodox: "Ukristo wa Orthodox",
+      jewish: "Uyahudi",
+      islamic: "Uislamu",
+      buddhist: "Ubudha",
+      sikh: "Usiki",
+      atheist: "Ukanaji Mungu",
+      hindu: "Uhindu"
+    }
+  };
+
   const religions = [
-    { code: "christian", icon: "✝️", name: "Christianity" },
-    { code: "orthodox", icon: "☦️", name: "Orthodox Christianity" },
-    { code: "jewish", icon: "✡️", name: "Judaism" },
-    { code: "islamic", icon: "☪️", name: "Islam" },
-    { code: "buddhist", icon: "☸️", name: "Buddhism" },
-    { code: "sikh", icon: "🪯", name: "Sikhism" },
-    { code: "atheist", icon: "⚛️", name: "Atheism" },
-    { code: "hindu", icon: "🕉️", name: "Hinduism" },
-  ];
+    { code: "christian", icon: "✝️" },
+    { code: "orthodox", icon: "☦️" },
+    { code: "jewish", icon: "✡️" },
+    { code: "islamic", icon: "☪️" },
+    { code: "buddhist", icon: "☸️" },
+    { code: "sikh", icon: "🪯" },
+    { code: "atheist", icon: "⚛️" },
+    { code: "hindu", icon: "🕉️" },
+  ].map(rel => ({
+    ...rel,
+    name: religionTranslations[language as keyof typeof religionTranslations]?.[rel.code as keyof typeof religionTranslations['en']] || religionTranslations['en'][rel.code as keyof typeof religionTranslations['en']]
+  }));
 
   const languages = [
     {
