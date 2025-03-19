@@ -11,7 +11,7 @@ const sectionTitles = {
   pt: { prayerFor: "Oração Para", prayerIntentions: "Intenções de Oração" },
   fr: { prayerFor: "Prière Pour", prayerIntentions: "Intentions de Prière" },
   de: { prayerFor: "Gebet Für", prayerIntentions: "Gebetsanliegen" },
-  es: { prayerFor: "Oración Por", prayerIntentions: "Intenciones de Oración" },
+  es: { prayerFor: "Oración Por", prayerIntenciones: "Intenciones de Oración" },
   hi: { prayerFor: "प्रार्थना किसके लिए", prayerIntentions: "प्रार्थना का उद्देश्य" },
   ar: { prayerFor: "صلاة من أجل", prayerIntentions: "نوايا الصلاة" },
   id: { prayerFor: "Doa Untuk", prayerIntentions: "Niat Doa" },
@@ -50,27 +50,27 @@ export const IntentionButtons: React.FC<IntentionButtonsProps> = ({ onSelect, la
 
   return (
     <div className="w-full max-w-2xl mx-auto mb-4 space-y-6">
-      <div>
+      <div className="custom-scrollbar h-[200px] overflow-y-auto"> {/* Added fixed height and overflow-y-auto */}
         <h2 className="text-xl font-semibold text-blue-400 mb-3">{sectionTitles[language as keyof typeof sectionTitles]?.prayerFor || "Prayer For"}</h2>
         <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
           {currentIntentions.map((intention, index) => (
-          <button
-            key={index}
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              onSelect(intention);
-            }}
-            className="px-3 py-2 bg-purple-500/20 hover:bg-purple-500/30 
-                     rounded-lg transition-colors text-sm text-white
-                     border border-purple-500/30 hover:border-purple-500/50"
-          >
-            {intention}
-          </button>
-        ))}
+            <button
+              key={index}
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                onSelect(intention);
+              }}
+              className="px-3 py-2 bg-purple-500/20 hover:bg-purple-500/30 
+                       rounded-lg transition-colors text-sm text-white
+                       border border-purple-500/30 hover:border-purple-500/50"
+            >
+              {intention}
+            </button>
+          ))}
         </div>
       </div>
-      <div>
+      <div className="custom-scrollbar h-[200px] overflow-y-auto"> {/* Added fixed height and overflow-y-auto */}
         <h2 className="text-xl font-semibold text-blue-400 mb-3">{sectionTitles[language as keyof typeof sectionTitles]?.prayerIntentions || "Prayer Intentions"}</h2>
         <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
           {currentCommonIntentions.map((intention, index) => (
@@ -90,6 +90,22 @@ export const IntentionButtons: React.FC<IntentionButtonsProps> = ({ onSelect, la
           ))}
         </div>
       </div>
+      <style jsx>{`
+        .custom-scrollbar::-webkit-scrollbar {
+          width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+          background: rgba(255, 255, 255, 0.1);
+          border-radius: 3px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+          background: rgba(255, 255, 255, 0.2);
+          border-radius: 3px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+          background: rgba(255, 255, 255, 0.3);
+        }
+      `}</style>
     </div>
   );
 };
