@@ -5,6 +5,13 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { WalletAuth } from "../WalletAuth";
 
+// Assume this function exists for Mixpanel integration
+const trackEvent = (eventName: string, properties: any) => {
+  // Your Mixpanel tracking logic here
+  console.log(`Mixpanel event triggered: ${eventName}`, properties);
+};
+
+
 export const SignIn = () => {
   const [isVerifying, setIsVerifying] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
@@ -133,54 +140,6 @@ export const SignIn = () => {
         </button>
       </div>
       <div className="flex flex-col gap-4">
-        {bookmarkedFiles.length > 0 && (
-          <div className="w-full max-w-md">
-            <div className="max-h-80 overflow-y-auto bg-purple-900/20 p-4 rounded-lg">
-              {[...bookmarkedFiles]
-                .reverse()
-                .slice(currentPage * filesPerPage, (currentPage + 1) * filesPerPage)
-                .map((file, index) => {
-                  const globalIndex = bookmarkedFiles.length - (currentPage * filesPerPage + index);
-                  return (
-                    <div
-                      key={index}
-                      onClick={() => playAudioFile(file)}
-                      className="text-white text-sm mb-2 p-2 bg-purple-800/20 rounded cursor-pointer hover:bg-purple-700/20"
-                    >
-                      🎵 Prayer #{globalIndex}
-                    </div>
-                  );
-                })}
-            </div>
-            {selectedAudioFile && (
-              <audio
-                controls
-                src={selectedAudioFile}
-                className="mt-4 w-full"
-                autoPlay
-              />
-            )}
-            <div className="flex justify-between mt-4">
-              <button
-                onClick={() => setCurrentPage(prev => Math.max(0, prev - 1))}
-                disabled={currentPage === 0}
-                className="px-4 py-2 bg-purple-400/80 text-white rounded-lg disabled:opacity-50"
-              >
-                Previous
-              </button>
-              <span className="text-white">
-                Page {currentPage + 1} of {Math.ceil(bookmarkedFiles.length / filesPerPage)}
-              </span>
-              <button
-                onClick={() => setCurrentPage(prev => Math.min(Math.ceil(bookmarkedFiles.length / filesPerPage) - 1, prev + 1))}
-                disabled={currentPage >= Math.ceil(bookmarkedFiles.length / filesPerPage) - 1}
-                className="px-4 py-2 bg-purple-400/80 text-white rounded-lg disabled:opacity-50"
-              >
-                Next
-              </button>
-            </div>
-          </div>
-        )}
         {!walletAddress ? (
           <WalletAuth onAddressChange={handleAddressChange} />
         ) : (
@@ -253,29 +212,9 @@ export const SignIn = () => {
               />
               {isVerifying ? "Verifying..." : "Verify with World ID"}
             </button>
-            
 
-
-            {/* <button
-              onClick={handleTestingTokens}
-              className="px-6 py-3 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 transition-all duration-200 flex items-center justify-center gap-2"
-            >
-              Test Religious Tokens
-            </button> */}
-
-            {/* <button
-              onClick={() => {
-                localStorage.removeItem('walletAddress');
-                setWalletAddress('');
-                handleAddressChange(''); // Call to update the state consistently
-              }}
-              className="px-4 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 text-sm"
-            >
-              Clear Storage
-            </button> */}
-
-            {/* {bookmarkedFiles.length > 0 && (
-              <div className="mt-4 w-full">
+            {bookmarkedFiles.length > 0 && (
+              <div className="w-full max-w-md">
                 <div className="max-h-80 overflow-y-auto bg-purple-900/20 p-4 rounded-lg">
                   {[...bookmarkedFiles]
                     .reverse()
@@ -285,7 +224,14 @@ export const SignIn = () => {
                       return (
                         <div
                           key={index}
-                          onClick={() => playAudioFile(file)}
+                          onClick={() => {
+                            playAudioFile(file);
+                            trackEvent("Revisit of Audio Bookmark", {
+                              audioPath: file,
+                              timestamp: new Date().toISOString(),
+                              wallet_address: localStorage.getItem("walletAddress") || "anonymous"
+                            });
+                          }}
                           className="text-white text-sm mb-2 p-2 bg-purple-800/20 rounded cursor-pointer hover:bg-purple-700/20"
                         >
                           🎵 Prayer #{globalIndex}
@@ -321,7 +267,7 @@ export const SignIn = () => {
                   </button>
                 </div>
               </div>
-            )} */}
+            )}
 
             {audioUrl && (
               <audio controls src={audioUrl} className="mt-4 w-full" />
