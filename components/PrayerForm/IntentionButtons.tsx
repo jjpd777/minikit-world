@@ -58,14 +58,14 @@ export const IntentionButtons: React.FC<IntentionButtonsProps> = ({ onSelect, la
         <div className="grid grid-cols-6 gap-1">
           {currentIntentions.map((intention, index) => (
             <button
+              title={intention}
               key={index}
               onClick={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
                 onSelect(intention);
               }}
-              className="px-2 py-1 bg-purple-500/20 hover:bg-purple-500/30 rounded-lg transition-colors text-xs text-white border border-purple-500/30 hover:border-purple-500/50"
-              title={intention}
+              className="px-2 py-1 bg-purple-500/20 hover:bg-purple-500/30 rounded-lg transition-colors text-xs text-white border border-purple-500/30 hover:border-purple-500/50 overflow-hidden"
             >
               {intention.length > 8 ? intention.slice(0, 8) + '...' : intention}
             </button>
@@ -84,8 +84,8 @@ export const IntentionButtons: React.FC<IntentionButtonsProps> = ({ onSelect, la
                 e.stopPropagation();
                 onSelect(intention);
               }}
-              className="px-2 py-1 bg-purple-500/20 hover:bg-purple-500/30 rounded-lg transition-colors text-xs text-white border border-purple-500/30 hover:border-purple-500/50"
               title={intention}
+              className="px-2 py-1 bg-purple-500/20 hover:bg-purple-500/30 rounded-lg transition-colors text-xs text-white border border-purple-500/30 hover:border-purple-500/50 overflow-hidden"
             >
               {intention.length > 8 ? intention.slice(0, 8) + '...' : intention}
             </button>
