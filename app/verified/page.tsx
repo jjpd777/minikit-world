@@ -10,6 +10,19 @@ import ReactConfetti from "react-confetti";
 
 // AWESOME PROGRESS
 
+function canGenerateAudio() {
+  const generations = JSON.parse(localStorage.getItem('audioGenerations') || '[]');
+  const last24Hours = Date.now() - 24 * 60 * 60 * 1000;
+  const recentGenerations = generations.filter((timestamp: number) => timestamp > last24Hours);
+  return recentGenerations.length < 3;
+}
+
+function trackAudioGeneration() {
+  const generations = JSON.parse(localStorage.getItem('audioGenerations') || '[]');
+  generations.push(Date.now());
+  localStorage.setItem('audioGenerations', JSON.stringify(generations));
+}
+
 export default function VerifiedPage() {
   const [prayer, setPrayer] = useState("");
   const [showPrayer, setShowPrayer] = useState(false);
@@ -249,6 +262,7 @@ export default function VerifiedPage() {
                         );
                         setStoragePath(uploadData.gsPath);
                         setHasGeneratedAudio(true);
+                        trackAudioGeneration();
 
                         // Track successful audio generation
                         trackEvent("Audio Prayer Generation Completed", {
@@ -301,10 +315,11 @@ export default function VerifiedPage() {
                       setIsGeneratingAudio(false);
                     }
                   }}
-                  disabled={isGeneratingAudio || hasGeneratedAudio}
+                  disabled={isGeneratingAudio || hasGeneratedAudio || !canGenerateAudio()}
                   className="flex-1 px-4 py-2 bg-white text-purple-600 border border-purple-600 rounded-lg hover:bg-purple-Li50 transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
+                  title={!canGenerateAudio() ? "You've reached your limit of 3 prayers per 24 hours" : ""}
                 >
-                  {isGeneratingAudio ? "✨" : hasGeneratedAudio ? "" : "✨"}
+                  {isGeneratingAudio ? "✨" : hasGeneratedAudio ? "" : canGenerateAudio() ? "✨" : "Out of credits"}
                 </button>
               )}
             </div>
