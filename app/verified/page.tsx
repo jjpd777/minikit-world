@@ -359,9 +359,9 @@ export default function VerifiedPage() {
                   <button
                     onClick={generateAudio}
                     disabled={isGeneratingAudio || hasGeneratedAudio}
-                    className="flex-1 px-9 py-2 bg-white text-purple-600 border border-purple-600 rounded-lg hover:bg-purple-Li50 transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
+                    className="flex-1 px-9 py-2 bg-white text-purple-600 border border-purple-600 rounded-lg hover:bg-purple-Li50 transition-colors flex items-center justify-center gap-3 min-w-[120px] disabled:opacity-50"
                   >
-                    {isGeneratingAudio ? "..." : hasGeneratedAudio ? "" : "🗣️✨"}
+                    {isGeneratingAudio ? "..." : hasGeneratedAudio ? "" : "🗣️ ✨"}
                   </button>
                 )}
               </div>
