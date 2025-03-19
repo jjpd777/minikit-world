@@ -351,17 +351,24 @@ export const PrayerForm = ({
           }]
         });
 
-        if (response?.finalPayload?.status === "success") {
-          console.log("Token claimed successfully for religion:", religion);
-          alert("Tokens claimed successfully!");
-          // Optional: Track successful claim
-          trackEvent('Token Claim Success', {
-            religion,
-            tokenAddress,
-            transactionId: response.finalPayload.transaction_id
-          });
+        if (response?.finalPayload) {
+          console.log("Token claim response:", response.finalPayload);
+          if (response.finalPayload.status === "success" || response.finalPayload.transaction_id) {
+            console.log("Token claimed successfully for religion:", religion);
+            alert("Tokens claimed successfully!");
+            // Optional: Track successful claim
+            trackEvent('Token Claim Success', {
+              religion,
+              tokenAddress,
+              transactionId: response.finalPayload.transaction_id
+            });
+          } else {
+            console.error("Transaction response:", response.finalPayload);
+            throw new Error("Transaction failed: " + JSON.stringify(response.finalPayload));
+          }
         } else {
-          throw new Error("Transaction failed or invalid response");
+          console.error("Invalid response:", response);
+          throw new Error("Invalid response from MiniKit");
         }
       } catch (error) {
         console.error("Failed to claim token:", error);
