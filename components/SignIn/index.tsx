@@ -73,7 +73,7 @@ export const SignIn = () => {
       setSelectedAudioFile(url);
 
       // Track bookmark revisit in Mixpanel
-      trackEvent("Bookmark Revisited", {
+      trackEvent("Revisit of Audio Bookmark", {
         timestamp: new Date().toISOString(),
         storage_path: gsPath,
         wallet_address: localStorage.getItem("walletAddress") || "anonymous"
