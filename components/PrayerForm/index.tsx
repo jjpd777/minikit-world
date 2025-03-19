@@ -33,7 +33,8 @@ export const PrayerForm = ({
     id: { button: "Buat Doa", generating: "Membuat...", placeholder: "Masukkan niat doa Anda..." },
     tr: { button: "Dua Oluştur", generating: "Oluşturuluyor...", placeholder: "Dua niyetlerinizi girin..." },
     ms: { button: "Jana Doa", generating: "Menjana...", placeholder: "Masukkan niat doa anda..." },
-    sw: { button: "Tengeneza Sala", generating: "Inatengeneza...", placeholder: "Ingiza nia zako za sala..." }
+    sw: { button: "Tengeneza Sala", generating: "Inatengeneza...", placeholder: "Ingiza nia zako za sala..." },
+    ja: { button: "祈りを生成", generating: "生成中...", placeholder: "祈りの意図を入力してください..." }
   };
 
   const handleLanguageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -168,6 +169,16 @@ export const PrayerForm = ({
       sikh: "Usiki",
       atheist: "Ukanaji Mungu",
       hindu: "Uhindu"
+    },
+    ja: {
+      christian: "キリスト教",
+      orthodox: "正教会",
+      jewish: "ユダヤ教",
+      islamic: "イスラム教",
+      buddhist: "仏教",
+      sikh: "シク教",
+      atheist: "無神論",
+      hindu: "ヒンドゥー教"
     }
   };
 
@@ -271,6 +282,12 @@ export const PrayerForm = ({
       name: "Swahili",
       flag: "🇹🇿",
       choices: ["Mimi", "Mama", "Baba", "Ndugu", "Afya", "Utajiri"],
+    },
+    {
+      code: "ja",
+      name: "Japanese",
+      flag: "🇯🇵",
+      choices: ["自分", "母", "父", "兄弟姉妹", "健康", "富"],
     },
   ];
 
