@@ -14,6 +14,7 @@ const languageMap: { [key: string]: string } = {
   de: "German",
   he: "Hebrew",
   ms: "Malay (Bahasa Melayu)",
+  ja: "Japanese",
 };
 
 const religionPrompts: { [key: string]: string } = {
@@ -48,6 +49,7 @@ export async function POST(request: NextRequest) {
       language === 'tr' ? 'The prayer MUST be written in Turkish.' :
       language === 'sw' ? 'The prayer MUST be written in Swahili.' :
       language === 'ms' ? 'The prayer MUST be written in Malay (Bahasa Melayu). Use proper Malay language structure and religious terminology.' :
+      language === 'ja' ? 'The prayer MUST be written in Japanese. Use proper Japanese language structure, kanji, and religious terminology. Do not use romaji or English.' :
       `The prayer should be in ${languageMap[language] || "English"}.`
     }`;
 
