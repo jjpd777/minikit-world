@@ -59,7 +59,9 @@ export default function VerifiedPage() {
     }
   };
 
-  const checkAudioLimit = () => {
+  const checkAudioLimit = (force = false) => {
+    if (force) return true;
+    
     const generations = JSON.parse(localStorage.getItem('audioGenerations') || '[]');
     const last24Hours = Date.now() - 24 * 60 * 60 * 1000;
     const recentGenerations = generations.filter((timestamp: number) => timestamp > last24Hours);
@@ -80,8 +82,8 @@ export default function VerifiedPage() {
     return !hasReachedLimit;
   };
 
-  const generateAudio = async () => {
-    if (!checkAudioLimit()) {
+  const generateAudio = async (force = false) => {
+    if (!checkAudioLimit(force)) {
       setNotification({ message: 'You have reached your limit of 3 prayers in 24 hours', type: 'warning' });
       return;
     }
@@ -348,11 +350,24 @@ export default function VerifiedPage() {
               </div>
 
               {notification && (
-                <Notification
-                  message={notification.message}
-                  type={notification.type}
-                  onClose={() => setNotification(null)}
-                />
+                <div className="relative">
+                  <Notification
+                    message={notification.message}
+                    type={notification.type}
+                    onClose={() => setNotification(null)}
+                  />
+                  {notification.type === 'warning' && (
+                    <button
+                      onClick={() => {
+                        setNotification(null);
+                        generateAudio(true);
+                      }}
+                      className="mt-2 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
+                    >
+                      Force Generation
+                    </button>
+                  )}
+                </div>
               )}
 
               {audioUrl && (
