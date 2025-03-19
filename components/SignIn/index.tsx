@@ -72,15 +72,21 @@ export const SignIn = () => {
       const url = URL.createObjectURL(blob);
       setSelectedAudioFile(url);
 
-      // Track bookmark revisit in Mixpanel
-      trackEvent("Revisit of Audio Bookmark", {
-        timestamp: new Date().toISOString(),
-        storage_path: gsPath,
-        wallet_address: localStorage.getItem("walletAddress") || "anonymous"
+      // Track prayer revisit like we track prayer generation
+      const storedWalletAddress = localStorage.getItem("walletAddress") || "";
+      await fetch("/api/track-prayer", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          walletAddress: storedWalletAddress,
+          source: "bookmark_revisit",
+          voice_generation: true
+        }),
       });
     } catch (error) {
       console.error("Error playing audio file:", error);
-      console.error("Failed to play audio");
     }
   };
 
