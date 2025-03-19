@@ -16,7 +16,8 @@ const sectionTitles = {
   ar: { prayerFor: "صلاة من أجل", prayerIntentions: "نوايا الصلاة" },
   id: { prayerFor: "Doa Untuk", prayerIntentions: "Niat Doa" },
   tr: { prayerFor: "Dua İçin", prayerIntentions: "Dua Niyetleri" },
-  ms: { prayerFor: "Doa Untuk", prayerIntentions: "Niat Doa" }
+  ms: { prayerFor: "Doa Untuk", prayerIntentions: "Niat Doa" },
+  sw: { prayerFor: "Sala Kwa Ajili Ya", prayerIntentions: "Kusudi La Sala"}
 };
 
 const intentions: { [key: string]: string[] } = {
@@ -27,10 +28,11 @@ const intentions: { [key: string]: string[] } = {
   de: ["Ich selbst", "Mutter", "Vater", "Geschwister", "Gesundheit", "Reichtum"],
   es: ["Yo mismo", "Madre", "Padre", "Hermanos", "Salud", "Riqueza"],
   hi: ["स्वयं", "माता", "पिता", "भाई-बहन", "स्वास्थ्य", "धन"],
-  ms: ["Diri Sendiri", "Ibu", "Bapa", "Adik-beradik", "Kesihatan", "Kekayaan"],
   ar: ["نفسي", "الأم", "الأب", "الإخوة", "الصحة", "الثروة"],
   id: ["Diri Sendiri", "Ibu", "Ayah", "Saudara", "Kesehatan", "Kekayaan"],
-  tr: ["Kendim için", "Annem", "Babam", "Kardeşlerim", "Sağlık", "Zenginlik"]
+  tr: ["Kendim için", "Annem", "Babam", "Kardeşlerim", "Sağlık", "Zenginlik"],
+  ms: ["Diri Sendiri", "Ibu", "Bapa", "Adik-beradik", "Kesihatan", "Kekayaan"],
+  sw: ["Mimi", "Mama", "Baba", "Ndugu", "Afya", "Utajiri"]
 };
 
 const commonIntentions: { [key: string]: string[] } = {
@@ -44,7 +46,8 @@ const commonIntentions: { [key: string]: string[] } = {
   hi: ["कार्य", "स्वास्थ्य", "शांति", "कृतज्ञता", "मार्गदर्शन", "शक्ति", "ज्ञान", "प्रेम", "क्षमा", "विश्वास", "आशा", "सफलता"],
   ar: ["عمل", "صحة", "سلام", "امتنان", "توجيه", "قوة", "حكمة", "حب", "مغفرة", "إيمان", "أمل", "نجاح"],
   id: ["Kerja", "Kesehatan", "Kedamaian", "Syukur", "Bimbingan", "Kekuatan", "Kebijaksanaan", "Cinta", "Pengampunan", "Iman", "Harapan", "Kesuksesan"],
-  tr: ["İş", "Sağlık", "Huzur", "Şükür", "Rehberlik", "Güç", "Bilgelik", "Sevgi", "Affetme", "İnanç", "Umut", "Başarı"]
+  tr: ["İş", "Sağlık", "Huzur", "Şükür", "Rehberlik", "Güç", "Bilgelik", "Sevgi", "Affetme", "İnanç", "Umut", "Başarı"],
+  sw: ["Kazi", "Afya", "Amani", "Shukrani", "Uongozi", "Nguvu", "Hekima", "Upendo", "Msamaha", "Imani", "Tumaini", "Mafanikio"]
 };
 
 export const IntentionButtons: React.FC<IntentionButtonsProps> = ({ onSelect, language }) => {

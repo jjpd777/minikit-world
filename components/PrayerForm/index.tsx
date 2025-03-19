@@ -138,6 +138,12 @@ export const PrayerForm = ({
       flag: "🇲🇾",
       choices: ["Diri Sendiri", "Ibu", "Bapa", "Adik-beradik", "Kesihatan", "Kekayaan"],
     },
+    {
+      code: "sw",
+      name: "Swahili",
+      flag: "🇹🇿",
+      choices: ["Mimi", "Mama", "Baba", "Ndugu", "Afya", "Utajiri"],
+    },
   ];
 
 
