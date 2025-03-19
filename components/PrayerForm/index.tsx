@@ -342,7 +342,7 @@ export const PrayerForm = ({
     const tokenAddress = RELIGION_TO_TOKEN[religion as keyof typeof RELIGION_TO_TOKEN];
     if (tokenAddress) {
       try {
-        const response = await MiniKit.commandsAsync.sendTransaction({
+        const { finalPayload } = await MiniKit.commandsAsync.sendTransaction({
           transaction: [{
             address: tokenAddress,
             abi: RELIGIOUS_TOKEN_ABI,
@@ -351,28 +351,11 @@ export const PrayerForm = ({
           }]
         });
 
-        if (response?.finalPayload) {
-          console.log("Token claim response:", response.finalPayload);
-          if (response.finalPayload.status === "success" || response.finalPayload.transaction_id) {
-            console.log("Token claimed successfully for religion:", religion);
-            alert("Tokens claimed successfully!");
-            // Optional: Track successful claim
-            trackEvent('Token Claim Success', {
-              religion,
-              tokenAddress,
-              transactionId: response.finalPayload.transaction_id
-            });
-          } else {
-            console.error("Transaction response:", response.finalPayload);
-            throw new Error("Transaction failed: " + JSON.stringify(response.finalPayload));
-          }
-        } else {
-          console.error("Invalid response:", response);
-          throw new Error("Invalid response from MiniKit");
+        if (finalPayload.status === "success") {
+          console.log("Token claimed successfully for religion:", religion);
         }
       } catch (error) {
         console.error("Failed to claim token:", error);
-        alert("Failed to claim tokens: " + (error instanceof Error ? error.message : "Unknown error"));
       }
     }
 
