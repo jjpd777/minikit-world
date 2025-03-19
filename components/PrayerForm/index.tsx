@@ -31,7 +31,9 @@ export const PrayerForm = ({
     hi: { button: "प्रार्थना बनाएं", generating: "बना रहा है...", placeholder: "अपनी प्रार्थना की मंशा दर्ज करें..." },
     ar: { button: "توليد الصلاة", generating: "...جاري التوليد", placeholder: "...أدخل نوايا صلاتك" },
     id: { button: "Buat Doa", generating: "Membuat...", placeholder: "Masukkan niat doa Anda..." },
-    tr: { button: "Dua Oluştur", generating: "Oluşturuluyor...", placeholder: "Dua niyetlerinizi girin..." }
+    tr: { button: "Dua Oluştur", generating: "Oluşturuluyor...", placeholder: "Dua niyetlerinizi girin..." },
+    ms: { button: "Jana Doa", generating: "Menjana...", placeholder: "Masukkan niat doa anda..." },
+    sw: { button: "Tengeneza Sala", generating: "Inatengeneza...", placeholder: "Ingiza nia zako za sala..." }
   };
 
   const handleLanguageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
