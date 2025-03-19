@@ -48,12 +48,12 @@ export default function VerifiedPage() {
       });
 
       console.log("Audio bookmarked:", storagePath);
-      alert("Audio bookmarked successfully!");
+      // alert("Audio bookmarked successfully!");
       setIsBookmarked(true);
       setShowConfetti(true);
       setTimeout(() => setShowConfetti(false), 8000);
     } else {
-      alert("This audio is already bookmarked!");
+      // alert("This audio is already bookmarked!");
     }
   };
 
