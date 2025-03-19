@@ -125,7 +125,7 @@ export const SignIn = () => {
           priority
           className="mb-8 animate-glow"
         />
-        <div className="absolute inset-0 rounded-full animate-pulse bg-purple-500/20 filter blur-xl"></div>
+        <div className="absolute inset-0 rounded-full animate-pulse bg-blue-500/20 filter blur-xl"></div>
       </div>
 
       <div className="relative w-full">

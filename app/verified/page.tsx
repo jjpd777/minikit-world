@@ -249,12 +249,23 @@ export default function VerifiedPage() {
         />
       )}
       {!showPrayer ? (
-        <PrayerForm
-          onPrayerGenerated={(newPrayer) => {
-            setPrayer(newPrayer);
-            setShowPrayer(true);
-          }}
-        />
+        <div className="w-full max-w-md">
+          <button
+            onClick={() => window.history.back()}
+            className="mb-6 p-2 rounded-full bg-blue-500/30 hover:bg-blue-500/50 transition-all"
+            aria-label="Go back"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+          </button>
+          <PrayerForm
+            onPrayerGenerated={(newPrayer) => {
+              setPrayer(newPrayer);
+              setShowPrayer(true);
+            }}
+          />
+        </div>
       ) : (
         <div className="flex flex-col items-center gap-4 w-full max-w-[800px]">
           <div className="w-full min-w-[300px] h-[500px] overflow-y-auto p-8 rounded-xl bg-blue-100/50 shadow-lg border border-blue-200">
