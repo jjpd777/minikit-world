@@ -24,13 +24,6 @@ export const PrayerForm = ({
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const chunksRef = useRef<Blob[]>([]);
 
-  const checkPrayerLimit = () => {
-    const generations = JSON.parse(localStorage.getItem('prayerGenerations') || '[]');
-    const last24Hours = Date.now() - 24 * 60 * 60 * 1000;
-    const recentGenerations = generations.filter((timestamp: number) => timestamp > last24Hours);
-    return recentGenerations.length >= 5;
-  };
-
   useEffect(() => {
     setShowRateLimitCard(checkPrayerLimit());
   }, []);
