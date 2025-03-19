@@ -133,30 +133,54 @@ export const SignIn = () => {
         </button>
       </div>
       <div className="flex flex-col gap-4">
-        {bookmarkedFiles.length > 0 &&
-          (!trackingComplete ? (
-            <button
-              onClick={handlePlayGame}
-              className="px-6 py-3 bg-white text-purple-600 border-2 border-purple-600 rounded-xl hover:bg-purple-50 transition-colors duration-200 flex items-center gap-2"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5"
-                viewBox="0 0 20 20"
-                fill="currentColor"
+        {bookmarkedFiles.length > 0 && (
+          <div className="w-full max-w-md">
+            <div className="max-h-80 overflow-y-auto bg-purple-900/20 p-4 rounded-lg">
+              {[...bookmarkedFiles]
+                .reverse()
+                .slice(currentPage * filesPerPage, (currentPage + 1) * filesPerPage)
+                .map((file, index) => {
+                  const globalIndex = bookmarkedFiles.length - (currentPage * filesPerPage + index);
+                  return (
+                    <div
+                      key={index}
+                      onClick={() => playAudioFile(file)}
+                      className="text-white text-sm mb-2 p-2 bg-purple-800/20 rounded cursor-pointer hover:bg-purple-700/20"
+                    >
+                      🎵 Prayer #{globalIndex}
+                    </div>
+                  );
+                })}
+            </div>
+            {selectedAudioFile && (
+              <audio
+                controls
+                src={selectedAudioFile}
+                className="mt-4 w-full"
+                autoPlay
+              />
+            )}
+            <div className="flex justify-between mt-4">
+              <button
+                onClick={() => setCurrentPage(prev => Math.max(0, prev - 1))}
+                disabled={currentPage === 0}
+                className="px-4 py-2 bg-purple-400/80 text-white rounded-lg disabled:opacity-50"
               >
-                <path d="M5 4a2 2 0 012-2h6a2 2 0 012 2v14l-5-2.5L5 18V4z" />
-              </svg>
-              Bookmarks
-            </button>
-          ) : (
-            <button
-              onClick={handleStartGame}
-              className="px-6 py-3 bg-purple-600 text-white rounded-xl hover:bg-purple-700 transition-colors duration-200 animate-pulse"
-            >
-              Let's Go
-            </button>
-          ))}
+                Previous
+              </button>
+              <span className="text-white">
+                Page {currentPage + 1} of {Math.ceil(bookmarkedFiles.length / filesPerPage)}
+              </span>
+              <button
+                onClick={() => setCurrentPage(prev => Math.min(Math.ceil(bookmarkedFiles.length / filesPerPage) - 1, prev + 1))}
+                disabled={currentPage >= Math.ceil(bookmarkedFiles.length / filesPerPage) - 1}
+                className="px-4 py-2 bg-purple-400/80 text-white rounded-lg disabled:opacity-50"
+              >
+                Next
+              </button>
+            </div>
+          </div>
+        )}
         {!walletAddress ? (
           <WalletAuth onAddressChange={handleAddressChange} />
         ) : (
