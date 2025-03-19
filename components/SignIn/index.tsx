@@ -54,27 +54,26 @@ export const SignIn = () => {
     }
   };
 
-  const playAudioFile = async (file: string) => {
+  const playAudioFile = async (gsPath: string) => {
     try {
-      setSelectedAudioFile(null);
-      const response = await fetch(`/api/upload-audio?file=${file}`);
-      if (!response.ok) throw new Error("Failed to fetch audio");
+      const filePath = gsPath.replace(/^gs:\/\/[^/]+\//, "");
+      const response = await fetch(
+        `/api/upload-audio?file=${encodeURIComponent(filePath)}`,
+        {
+          method: "GET",
+        },
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch audio file");
+      }
+
       const blob = await response.blob();
       const url = URL.createObjectURL(blob);
       setSelectedAudioFile(url);
-
-      // Track bookmark click in Mixpanel
-      trackEvent("Revisit of Audio Bookmark", {
-        timestamp: new Date().toISOString(),
-        storage_path: file,
-        wallet_address: localStorage.getItem("walletAddress") || "anonymous",
-        user_agent: navigator.userAgent,
-        platform: navigator.platform,
-        screen_resolution: `${window.screen.width}x${window.screen.height}`
-      });
     } catch (error) {
-      console.error("Error playing audio:", error);
-      alert("Failed to play audio");
+      console.error("Error playing audio file:", error);
+      alert("Failed to play audio file");
     }
   };
 
