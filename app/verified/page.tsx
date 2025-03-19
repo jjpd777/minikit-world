@@ -63,7 +63,21 @@ export default function VerifiedPage() {
     const generations = JSON.parse(localStorage.getItem('audioGenerations') || '[]');
     const last24Hours = Date.now() - 24 * 60 * 60 * 1000;
     const recentGenerations = generations.filter((timestamp: number) => timestamp > last24Hours);
-    return recentGenerations.length < 3;
+    const hasReachedLimit = recentGenerations.length >= 3;
+    
+    if (hasReachedLimit) {
+      trackEvent("Audio Generation Limit Reached", {
+        timestamp: new Date().toISOString(),
+        wallet_address: localStorage.getItem("walletAddress") || "anonymous",
+        generations_count: recentGenerations.length,
+        generations_timestamps: recentGenerations,
+        user_agent: navigator.userAgent,
+        platform: navigator.platform,
+        screen_resolution: `${window.screen.width}x${window.screen.height}`
+      });
+    }
+    
+    return !hasReachedLimit;
   };
 
   const generateAudio = async () => {
