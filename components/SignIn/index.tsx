@@ -71,9 +71,14 @@ export const SignIn = () => {
       const blob = await response.blob();
       const url = URL.createObjectURL(blob);
       setSelectedAudioFile(url);
+
+      // Simple Mixpanel tracking
+      trackEvent("Revisit of Audio Bookmark", {
+        timestamp: new Date().toISOString(),
+        path: gsPath
+      });
     } catch (error) {
       console.error("Error playing audio file:", error);
-      alert("Failed to play audio file");
     }
   };
 
