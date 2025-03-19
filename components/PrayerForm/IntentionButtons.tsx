@@ -15,7 +15,8 @@ const sectionTitles = {
   hi: { prayerFor: "प्रार्थना किसके लिए", prayerIntentions: "प्रार्थना का उद्देश्य" },
   ar: { prayerFor: "صلاة من أجل", prayerIntentions: "نوايا الصلاة" },
   id: { prayerFor: "Doa Untuk", prayerIntentions: "Niat Doa" },
-  tr: { prayerFor: "Dua İçin", prayerIntentions: "Dua Niyetleri" }
+  tr: { prayerFor: "Dua İçin", prayerIntentions: "Dua Niyetleri" },
+  ms: { prayerFor: "Doa Untuk", prayerIntentions: "Niat Doa" }
 };
 
 const intentions: { [key: string]: string[] } = {
@@ -26,6 +27,7 @@ const intentions: { [key: string]: string[] } = {
   de: ["Ich selbst", "Mutter", "Vater", "Geschwister", "Gesundheit", "Reichtum"],
   es: ["Yo mismo", "Madre", "Padre", "Hermanos", "Salud", "Riqueza"],
   hi: ["स्वयं", "माता", "पिता", "भाई-बहन", "स्वास्थ्य", "धन"],
+  ms: ["Diri Sendiri", "Ibu", "Bapa", "Adik-beradik", "Kesihatan", "Kekayaan"],
   ar: ["نفسي", "الأم", "الأب", "الإخوة", "الصحة", "الثروة"],
   id: ["Diri Sendiri", "Ibu", "Ayah", "Saudara", "Kesehatan", "Kekayaan"],
   tr: ["Kendim için", "Annem", "Babam", "Kardeşlerim", "Sağlık", "Zenginlik"]
@@ -38,6 +40,7 @@ const commonIntentions: { [key: string]: string[] } = {
   fr: ["Travail", "Santé", "Paix", "Gratitude", "Guidance", "Force", "Sagesse", "Amour", "Pardon", "Foi", "Espoir", "Succès"],
   de: ["Arbeit", "Gesundheit", "Frieden", "Dankbarkeit", "Führung", "Kraft", "Weisheit", "Liebe", "Vergebung", "Glaube", "Hoffnung", "Erfolg"],
   es: ["Trabajo", "Salud", "Paz", "Gratitud", "Guía", "Fuerza", "Sabiduría", "Amor", "Perdón", "Fe", "Esperanza", "Éxito"],
+  ms: ["Kerja", "Kesihatan", "Keamanan", "Syukur", "Bimbingan", "Kekuatan", "Kebijaksanaan", "Kasih", "Kemaafan", "Iman", "Harapan", "Kejayaan"],
   hi: ["कार्य", "स्वास्थ्य", "शांति", "कृतज्ञता", "मार्गदर्शन", "शक्ति", "ज्ञान", "प्रेम", "क्षमा", "विश्वास", "आशा", "सफलता"],
   ar: ["عمل", "صحة", "سلام", "امتنان", "توجيه", "قوة", "حكمة", "حب", "مغفرة", "إيمان", "أمل", "نجاح"],
   id: ["Kerja", "Kesehatan", "Kedamaian", "Syukur", "Bimbingan", "Kekuatan", "Kebijaksanaan", "Cinta", "Pengampunan", "Iman", "Harapan", "Kesuksesan"],
