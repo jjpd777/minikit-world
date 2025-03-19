@@ -96,7 +96,7 @@ export default function VerifiedPage() {
         // Reset if 24h passed since first generation
         localStorage.setItem('voiceGenerations', JSON.stringify([Date.now()]));
       } else if (voiceGens.length >= 5) {
-        setNotification({ message: 'Limit reached for voice-gen', type: 'warning' });
+        setNotification({ message: '24 hour limit reached for voice-gen', type: 'warning' });
         return;
       } else {
         // Add new timestamp
@@ -373,7 +373,7 @@ export default function VerifiedPage() {
                     type={notification.type}
                     onClose={() => setNotification(null)}
                   />
-                  {notification.type === 'warning' && (
+                  {notification.type === 'warning' && !(
                     <button
                       onClick={() => {
                         setNotification(null);
