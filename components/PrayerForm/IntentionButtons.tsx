@@ -17,7 +17,8 @@ const sectionTitles = {
   id: { prayerFor: "Doa Untuk", prayerIntentions: "Niat Doa" },
   tr: { prayerFor: "Dua İçin", prayerIntentions: "Dua Niyetleri" },
   ms: { prayerFor: "Doa Untuk", prayerIntentions: "Niat Doa" },
-  sw: { prayerFor: "Sala Kwa Ajili Ya", prayerIntentions: "Kusudi La Sala"}
+  sw: { prayerFor: "Sala Kwa Ajili Ya", prayerIntentions: "Kusudi La Sala"},
+  ja: { prayerFor: "祈りの対象", prayerIntentions: "祈りの意図" }
 };
 
 const intentions: { [key: string]: string[] } = {
@@ -32,7 +33,8 @@ const intentions: { [key: string]: string[] } = {
   id: ["Diri Sendiri", "Ibu", "Ayah", "Saudara", "Kesehatan", "Kekayaan"],
   tr: ["Kendim için", "Annem", "Babam", "Kardeşlerim", "Sağlık", "Zenginlik"],
   ms: ["Diri Sendiri", "Ibu", "Bapa", "Adik-beradik", "Kesihatan", "Kekayaan"],
-  sw: ["Mimi", "Mama", "Baba", "Ndugu", "Afya", "Utajiri"]
+  sw: ["Mimi", "Mama", "Baba", "Ndugu", "Afya", "Utajiri"],
+  ja: ["自分自身", "母", "父", "兄弟姉妹", "健康", "富"]
 };
 
 const commonIntentions: { [key: string]: string[] } = {
