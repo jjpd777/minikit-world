@@ -20,6 +20,7 @@ export const PrayerForm = ({
   const [intentions, setIntentions] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [audioData, setAudioData] = useState<string | null>(null);
+  const [isCollapsed, setIsCollapsed] = useState(true);
 
   const uiText = {
     en: { button: "Generate Prayer", generating: "Generating...", placeholder: "Enter your prayer intentions..." },
@@ -322,12 +323,19 @@ export const PrayerForm = ({
   return (
     <form onSubmit={handleSubmit} className="w-full max-w-md space-y-4">
       <div className="flex flex-col gap-2">
-        <div className="flex flex-row gap-2 justify-center items-center">
-          <select
-            value={language}
-            onChange={handleLanguageChange}
-            className="w-20 p-3 rounded-lg border border-blue-200 bg-blue-50 text-gray-700 hover:border-blue-300 focus:border-blue-400 focus:ring-2 focus:ring-blue-200 focus:outline-none transition-colors text-lg"
-          >
+        <button 
+          onClick={() => setIsCollapsed(!isCollapsed)}
+          className="w-full px-4 py-2 bg-purple-500/20 text-white rounded-lg hover:bg-purple-500/30 transition-colors mb-2"
+        >
+          {isCollapsed ? "Show Intentions ↓" : "Hide Intentions ↑"}
+        </button>
+        <div className={`transition-all duration-300 ${isCollapsed ? 'h-0 overflow-hidden' : 'h-auto'}`}>
+          <div className="flex flex-row gap-2 justify-center items-center">
+            <select
+              value={language}
+              onChange={handleLanguageChange}
+              className="w-20 p-3 rounded-lg border border-blue-200 bg-blue-50 text-gray-700 hover:border-blue-300 focus:border-blue-400 focus:ring-2 focus:ring-blue-200 focus:outline-none transition-colors text-lg"
+            >
             {languages.map((lang) => (
               <option key={lang.code} value={lang.code}>
                 {lang.flag}
