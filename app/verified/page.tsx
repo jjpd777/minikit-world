@@ -249,10 +249,10 @@ export default function VerifiedPage() {
         />
       )}
       {!showPrayer ? (
-        <div className="w-full max-w-md">
+        <div className="w-full max-w-md relative">
           <button
             onClick={() => window.history.back()}
-            className="mb-6 p-2 rounded-full bg-blue-500/30 hover:bg-blue-500/50 transition-all"
+            className="absolute -top-16 -left-4 p-2 rounded-full bg-blue-500/30 hover:bg-blue-500/50 transition-all"
             aria-label="Go back"
           >
             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
