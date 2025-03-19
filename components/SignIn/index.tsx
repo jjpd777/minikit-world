@@ -6,10 +6,7 @@ import { useRouter } from "next/navigation";
 import { WalletAuth } from "../WalletAuth";
 
 // Assume this function exists for Mixpanel integration
-const trackEvent = (eventName: string, properties: any) => {
-  // Your Mixpanel tracking logic here
-  console.log(`Mixpanel event triggered: ${eventName}`, properties);
-};
+import { trackEvent } from '@/lib/mixpanel';
 
 
 export const SignIn = () => {
