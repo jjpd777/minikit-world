@@ -132,6 +132,12 @@ export const PrayerForm = ({
       flag: "🇦🇪",
       choices: ["نفسي", "الأم", "الأب", "الإخوة", "الصحة", "الثروة"],
     },
+    {
+      code: "ms",
+      name: "Malay",
+      flag: "🇲🇾",
+      choices: ["Diri Sendiri", "Ibu", "Bapa", "Adik-beradik", "Kesihatan", "Kekayaan"],
+    },
   ];
 
 
