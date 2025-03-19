@@ -501,7 +501,7 @@ export const PrayerForm = ({
           <select
             value={language}
             onChange={handleLanguageChange}
-            className="flex flex-row items-center gap-1 p-3 rounded-lg border border-blue-200 bg-blue-50 text-gray-700 hover:border-blue-300 focus:border-blue-400 focus:ring-2 focus:ring-blue-200 focus:outline-none transition-colors text-lg"
+            className="w-20 p-3 rounded-lg border border-blue-200 bg-blue-50 text-gray-700 hover:border-blue-300 focus:border-blue-400 focus:ring-2 focus:ring-blue-200 focus:outline-none transition-colors text-lg"
           >
             {languages.map((lang) => (
               <option key={lang.code} value={lang.code}>
