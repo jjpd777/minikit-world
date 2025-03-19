@@ -47,7 +47,8 @@ const commonIntentions: { [key: string]: string[] } = {
   ar: ["عمل", "صحة", "سلام", "امتنان", "توجيه", "قوة", "حكمة", "حب", "مغفرة", "إيمان", "أمل", "نجاح"],
   id: ["Kerja", "Kesehatan", "Kedamaian", "Syukur", "Bimbingan", "Kekuatan", "Kebijaksanaan", "Cinta", "Pengampunan", "Iman", "Harapan", "Kesuksesan"],
   tr: ["İş", "Sağlık", "Huzur", "Şükür", "Rehberlik", "Güç", "Bilgelik", "Sevgi", "Affetme", "İnanç", "Umut", "Başarı"],
-  sw: ["Kazi", "Afya", "Amani", "Shukrani", "Uongozi", "Nguvu", "Hekima", "Upendo", "Msamaha", "Imani", "Tumaini", "Mafanikio"]
+  sw: ["Kazi", "Afya", "Amani", "Shukrani", "Uongozi", "Nguvu", "Hekima", "Upendo", "Msamaha", "Imani", "Tumaini", "Mafanikio"],
+  ja: ["仕事", "健康", "平和", "感謝", "導き", "力", "知恵", "愛", "許し", "信仰", "希望", "成功"]
 };
 
 export const IntentionButtons: React.FC<IntentionButtonsProps> = ({ onSelect, language }) => {
