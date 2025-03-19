@@ -10,7 +10,7 @@ export const PrayerForm = ({
 }) => {
   const [language, setLanguage] = useState("en");
   const [religion, setReligion] = useState("christian");
-  
+
   useEffect(() => {
     if (typeof window !== 'undefined') {
       setLanguage(localStorage.getItem("lastLanguage") || "en");
@@ -20,6 +20,20 @@ export const PrayerForm = ({
   const [intentions, setIntentions] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [audioData, setAudioData] = useState<string | null>(null);
+  const [showRateLimitCard, setShowRateLimitCard] = useState(false);
+  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+  const chunksRef = useRef<Blob[]>([]);
+
+  const checkPrayerLimit = () => {
+    const generations = JSON.parse(localStorage.getItem('prayerGenerations') || '[]');
+    const last24Hours = Date.now() - 24 * 60 * 60 * 1000;
+    const recentGenerations = generations.filter((timestamp: number) => timestamp > last24Hours);
+    return recentGenerations.length >= 5;
+  };
+
+  useEffect(() => {
+    setShowRateLimitCard(checkPrayerLimit());
+  }, []);
 
   const uiText = {
     en: { button: "Generate Prayer", generating: "Generating...", placeholder: "Enter your prayer intentions..." },
@@ -301,7 +315,7 @@ export const PrayerForm = ({
     const last24Hours = Date.now() - 24 * 60 * 60 * 1000;
     const recentGenerations = generations.filter((timestamp: number) => timestamp > last24Hours);
     const hasReachedLimit = recentGenerations.length >= 5;
-    
+
     if (hasReachedLimit) {
       trackEvent("Prayer Generation Limit Reached", {
         timestamp: new Date().toISOString(),
@@ -313,7 +327,7 @@ export const PrayerForm = ({
         screen_resolution: `${window.screen.width}x${window.screen.height}`
       });
     }
-    
+
     return !hasReachedLimit;
   };
 
@@ -384,7 +398,7 @@ export const PrayerForm = ({
       });
 
       const data = await response.json();
-      
+
       if (!response.ok) {
         throw new Error(data.error || 'Failed to generate prayer');
       }
@@ -562,7 +576,7 @@ export const PrayerForm = ({
 
       <button
         type="submit"
-        disabled={isLoading || !intentions.trim().length}
+        disabled={isLoading || !intentions.trim().length || showRateLimitCard}
         className="w-full px-4 py-2 bg-purple-500/80 text-white rounded-lg hover:bg-purple-600 transition-colors disabled:opacity-50"
       >
         {isLoading ? (uiText[language as keyof typeof uiText]?.generating || "Generating...") : uiText[language as keyof typeof uiText]?.button || "Generate Prayer"}
@@ -575,6 +589,11 @@ export const PrayerForm = ({
         >
           Upload Audio
         </button>
+      )}
+      {showRateLimitCard && (
+        <div className="mt-4 p-4 bg-yellow-200 rounded-lg border border-yellow-400 text-yellow-800">
+          You have reached the prayer generation limit for the day. Please try again tomorrow.
+        </div>
       )}
     </form>
   );
