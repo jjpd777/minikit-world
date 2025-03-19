@@ -83,9 +83,26 @@ export default function VerifiedPage() {
   };
 
   const generateAudio = async (force = false) => {
-    if (!checkAudioLimit(force)) {
-      setNotification({ message: 'You have reached your limit of 3 prayers in 24 hours', type: 'warning' });
-      return;
+    const voiceGens = JSON.parse(localStorage.getItem('voiceGenerations') || '[]');
+    if (voiceGens.length === 0) {
+      // First generation, store timestamp
+      localStorage.setItem('voiceGenerations', JSON.stringify([Date.now()]));
+    } else {
+      const firstGenTime = voiceGens[0];
+      const timeSinceFirst = Date.now() - firstGenTime;
+      const hasExpired = timeSinceFirst > 24 * 60 * 60 * 1000;
+
+      if (hasExpired) {
+        // Reset if 24h passed since first generation
+        localStorage.setItem('voiceGenerations', JSON.stringify([Date.now()]));
+      } else if (voiceGens.length >= 5) {
+        setNotification({ message: 'Limit reached for voice-gen', type: 'warning' });
+        return;
+      } else {
+        // Add new timestamp
+        voiceGens.push(Date.now());
+        localStorage.setItem('voiceGenerations', JSON.stringify(voiceGens));
+      }
     }
     setIsGeneratingAudio(true);
     const startTime = Date.now();

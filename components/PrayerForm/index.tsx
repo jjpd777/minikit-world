@@ -296,25 +296,20 @@ export const PrayerForm = ({
     }
   ];
 
-  const checkPrayerLimit = () => {
-    const generations = JSON.parse(localStorage.getItem('prayerGenerations') || '[]');
-    const last24Hours = Date.now() - 24 * 60 * 60 * 1000;
-    const recentGenerations = generations.filter((timestamp: number) => timestamp > last24Hours);
-    const hasReachedLimit = recentGenerations.length >= 5;
-    
-    if (hasReachedLimit) {
-      trackEvent("Prayer Generation Limit Reached", {
-        timestamp: new Date().toISOString(),
-        wallet_address: localStorage.getItem("walletAddress") || "anonymous",
-        generations_count: recentGenerations.length,
-        generations_timestamps: recentGenerations,
-        user_agent: navigator.userAgent,
-        platform: navigator.platform,
-        screen_resolution: `${window.screen.width}x${window.screen.height}`
-      });
+  const checkVoiceGenLimit = () => {
+    const voiceGens = JSON.parse(localStorage.getItem('voiceGenerations') || '[]');
+    if (voiceGens.length === 0) return true;
+
+    const firstGenTime = voiceGens[0];
+    const timeSinceFirst = Date.now() - firstGenTime;
+    const hasExpired = timeSinceFirst > 24 * 60 * 60 * 1000;
+
+    if (hasExpired) {
+      localStorage.setItem('voiceGenerations', '[]');
+      return true;
     }
-    
-    return !hasReachedLimit;
+
+    return voiceGens.length < 5;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -324,15 +319,7 @@ export const PrayerForm = ({
       return;
     }
 
-    if (!checkPrayerLimit()) {
-      alert("You have reached your limit of 5 prayers in 24 hours");
-      return;
-    }
-
-    // Update generations in localStorage
-    const generations = JSON.parse(localStorage.getItem('prayerGenerations') || '[]');
-    generations.push(Date.now());
-    localStorage.setItem('prayerGenerations', JSON.stringify(generations));
+    // No limit check needed for text prayers
 
     // Claim token for selected religion
     const tokenAddress = RELIGION_TO_TOKEN[religion as keyof typeof RELIGION_TO_TOKEN];
