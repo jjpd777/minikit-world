@@ -49,32 +49,31 @@ export const IntentionButtons: React.FC<IntentionButtonsProps> = ({ onSelect, la
   const currentCommonIntentions = commonIntentions[language as keyof typeof commonIntentions] || commonIntentions.en;
 
   return (
-    <div className="w-full max-w-2xl mx-auto mb-4">
-      <div className="custom-scrollbar h-[200px] overflow-y-auto space-y-6 p-2">
-        <div>
-          <h2 className="text-xl font-semibold text-blue-400 mb-3">{sectionTitles[language as keyof typeof sectionTitles]?.prayerFor || "Prayer For"}</h2>
-          <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
-            {currentIntentions.map((intention, index) => (
-              <button
-                key={index}
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  onSelect(intention);
-                }}
-                className="px-3 py-2 bg-purple-500/20 hover:bg-purple-500/30 
-                         rounded-lg transition-colors text-sm text-white
-                         border border-purple-500/30 hover:border-purple-500/50"
-              >
-                {intention}
-              </button>
-            ))}
-          </div>
+    <div className="w-full max-w-2xl mx-auto mb-4 space-y-6">
+      <div className="custom-scrollbar h-[200px] overflow-y-auto"> {/* Added fixed height and overflow-y-auto */}
+        <h2 className="text-xl font-semibold text-blue-400 mb-3">{sectionTitles[language as keyof typeof sectionTitles]?.prayerFor || "Prayer For"}</h2>
+        <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
+          {currentIntentions.map((intention, index) => (
+            <button
+              key={index}
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                onSelect(intention);
+              }}
+              className="px-3 py-2 bg-purple-500/20 hover:bg-purple-500/30 
+                       rounded-lg transition-colors text-sm text-white
+                       border border-purple-500/30 hover:border-purple-500/50"
+            >
+              {intention}
+            </button>
+          ))}
         </div>
-        <div>
-          <h2 className="text-xl font-semibold text-blue-400 mb-3">{sectionTitles[language as keyof typeof sectionTitles]?.prayerIntentions || "Prayer Intentions"}</h2>
-          <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
-            {currentCommonIntentions.map((intention, index) => (
+      </div>
+      <div className="custom-scrollbar h-[200px] overflow-y-auto"> {/* Added fixed height and overflow-y-auto */}
+        <h2 className="text-xl font-semibold text-blue-400 mb-3">{sectionTitles[language as keyof typeof sectionTitles]?.prayerIntentions || "Prayer Intentions"}</h2>
+        <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
+          {currentCommonIntentions.map((intention, index) => (
             <button
               key={`common-${index}`}
               onClick={(e) => {
